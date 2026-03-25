@@ -110,3 +110,13 @@ python -m devtools.evalbench.runner --suite all
 ```
 
 The web UI now includes an in-page pipeline debug panel for assistant results. It shows the routed intent, tool steps, retrieval candidates, and score summaries without leaving the browser.
+
+To switch semantic indexing from the local mock provider to BigModel embeddings, set:
+
+```bash
+export COMMERCE_AGENT_EMBEDDING_PROVIDER=bigmodel
+export BIGMODEL_API_KEY=YOUR_API_KEY
+export BIGMODEL_EMBEDDING_MODEL=embedding-3
+export BIGMODEL_EMBEDDING_DIMENSIONS=1024
+commerce-agent-build-semantic-indexes
+```

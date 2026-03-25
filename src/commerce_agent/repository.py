@@ -26,7 +26,7 @@ from typing import Protocol
 
 import psycopg
 
-from .embeddings import DeterministicEmbeddingProvider, vector_literal
+from .embeddings import get_embedding_provider, vector_literal
 from .catalog import Catalog
 from .models import ParsedSearchQuery, ProductSearchHit, VisionAnalysis
 from .search_parser import SearchParser
@@ -160,7 +160,7 @@ class PostgresSearchRepository:
     ) -> None:
         self.database_url = database_url or os.getenv("DATABASE_URL", DEFAULT_DATABASE_URL)
         self.parser = parser or SearchParser()
-        self.embedding_provider = DeterministicEmbeddingProvider()
+        self.embedding_provider = get_embedding_provider()
 
     def search_text(self, query: str, limit: int = 5) -> tuple[ParsedSearchQuery, list[ProductSearchHit]]:
         """Parse one text query, run hybrid retrieval, and return product cards."""
@@ -216,6 +216,7 @@ class PostgresSearchRepository:
         params: dict[str, object] = {
             "query_text": query_text,
             "vector": vector,
+            "embedding_model": self.embedding_provider.model_name,
             "candidate_limit": max(limit * 5, 20),
             "limit": limit,
         }
@@ -258,7 +259,7 @@ class PostgresSearchRepository:
                     pe.product_id,
                     1 - (pe.embedding <=> %(vector)s::vector) AS semantic_score
                 FROM product_embeddings pe
-                WHERE pe.embedding_type = 'text'
+                WHERE pe.embedding_type = 'text' AND pe.model_name = %(embedding_model)s
                 ORDER BY pe.embedding <=> %(vector)s::vector
                 LIMIT %(candidate_limit)s
             ),
@@ -328,7 +329,7 @@ class PostgresSearchRepository:
                     pe.product_id,
                     1 - (pe.embedding <=> %(image_vector)s::vector) AS image_score
                 FROM product_embeddings pe
-                WHERE pe.embedding_type = 'image'
+                WHERE pe.embedding_type = 'image' AND pe.model_name = %(embedding_model)s
                 ORDER BY pe.embedding <=> %(image_vector)s::vector
                 LIMIT %(limit)s
             )
@@ -372,7 +373,14 @@ class PostgresSearchRepository:
             LIMIT %(limit)s
         """
         with conn.cursor() as cur:
-            cur.execute(sql, {"image_vector": image_vector, "limit": limit})
+            cur.execute(
+                sql,
+                {
+                    "image_vector": image_vector,
+                    "limit": limit,
+                    "embedding_model": self.embedding_provider.model_name,
+                },
+            )
             return cur.fetchall()
 
     def _search_multimodal_rows(
@@ -390,6 +398,7 @@ class PostgresSearchRepository:
             "query_text": query_text,
             "text_vector": text_vector,
             "image_vector": image_vector,
+            "embedding_model": self.embedding_provider.model_name,
             "candidate_limit": max(limit * 5, 20),
             "limit": limit,
         }
@@ -426,7 +435,7 @@ class PostgresSearchRepository:
                     pe.product_id,
                     1 - (pe.embedding <=> %(text_vector)s::vector) AS text_score
                 FROM product_embeddings pe
-                WHERE pe.embedding_type = 'text'
+                WHERE pe.embedding_type = 'text' AND pe.model_name = %(embedding_model)s
                 ORDER BY pe.embedding <=> %(text_vector)s::vector
                 LIMIT %(candidate_limit)s
             ),
@@ -435,7 +444,7 @@ class PostgresSearchRepository:
                     pe.product_id,
                     1 - (pe.embedding <=> %(image_vector)s::vector) AS image_score
                 FROM product_embeddings pe
-                WHERE pe.embedding_type = 'image'
+                WHERE pe.embedding_type = 'image' AND pe.model_name = %(embedding_model)s
                 ORDER BY pe.embedding <=> %(image_vector)s::vector
                 LIMIT %(candidate_limit)s
             ),

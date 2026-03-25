@@ -39,6 +39,15 @@ docker compose exec -T postgres psql \
   -f /work/db/migrations/0001_initial_schema.sql
 ```
 
+If you are upgrading an existing local database from the older 1536-d mock vectors, apply:
+
+```bash
+docker compose exec -T postgres psql \
+  -U commerce_agent \
+  -d commerce_agent \
+  -f /work/db/migrations/0002_embedding_dimension_1024.sql
+```
+
 Build the local tiny seed bundle:
 
 ```bash
@@ -78,6 +87,17 @@ commerce-agent-build-image-embeddings
 Build both local semantic indexes in one step:
 
 ```bash
+commerce-agent-build-semantic-indexes
+commerce-agent-semantic-index-status
+```
+
+Build semantic indexes with BigModel embeddings:
+
+```bash
+export COMMERCE_AGENT_EMBEDDING_PROVIDER=bigmodel
+export BIGMODEL_API_KEY=YOUR_API_KEY
+export BIGMODEL_EMBEDDING_MODEL=embedding-3
+export BIGMODEL_EMBEDDING_DIMENSIONS=1024
 commerce-agent-build-semantic-indexes
 commerce-agent-semantic-index-status
 ```

@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS product_embeddings (
     embedding_type TEXT NOT NULL CHECK (embedding_type IN ('text', 'image', 'multimodal')),
     model_name TEXT NOT NULL,
     model_version TEXT,
-    embedding VECTOR(1536) NOT NULL,
+    embedding VECTOR(1024) NOT NULL,
     source_text TEXT,
     source_image_url TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()

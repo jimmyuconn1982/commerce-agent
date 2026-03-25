@@ -7,7 +7,7 @@ Inputs:
 - local database connection settings
 
 Outputs:
-- deterministic embedding vectors for local development
+- deterministic or API-backed embedding vectors
 - upserted text and image embeddings inside PostgreSQL
 
 Role:
@@ -15,20 +15,22 @@ Role:
 - keep embedding generation isolated from repository query logic
 
 Upgrade path:
-- replace the deterministic provider with OpenAI or another embedding backend
+- switch providers through environment variables without changing the pipeline
 - add multimodal embedding jobs later
 """
 
 import hashlib
+import json
 import math
 import os
 from dataclasses import dataclass
+from urllib.request import Request, urlopen
 
 import psycopg
 
 from .seed_data import DEFAULT_DATABASE_URL
 
-EMBEDDING_DIMENSION = 1536
+EMBEDDING_DIMENSION = 1024
 TEXT_EMBEDDING_ID_BASE = 823450000000000000
 IMAGE_EMBEDDING_ID_BASE = 823460000000000000
 
@@ -43,6 +45,10 @@ class SemanticIndexBuildResult:
 
 class DeterministicEmbeddingProvider:
     """Local deterministic embedding provider for development and tests."""
+
+    model_name = "deterministic-local"
+    model_version = "v1"
+    dimensions = EMBEDDING_DIMENSION
 
     def embed_text(self, text: str) -> list[float]:
         """Convert text into a stable development embedding."""
@@ -69,14 +75,76 @@ class DeterministicEmbeddingProvider:
         return [round(value / norm, 8) for value in values]
 
 
-def build_text_embeddings(database_url: str | None = None) -> int:
+class BigModelEmbeddingProvider:
+    """BigModel embedding provider using the official HTTP embeddings API."""
+
+    def __init__(
+        self,
+        api_key: str | None = None,
+        *,
+        base_url: str | None = None,
+        model_name: str | None = None,
+        dimensions: int | None = None,
+    ) -> None:
+        self.api_key = api_key or os.getenv("BIGMODEL_API_KEY", "")
+        if not self.api_key:
+            raise ValueError("BIGMODEL_API_KEY is required when COMMERCE_AGENT_EMBEDDING_PROVIDER=bigmodel")
+        self.base_url = (base_url or os.getenv("BIGMODEL_BASE_URL") or "https://open.bigmodel.cn/api/paas/v4").rstrip("/")
+        self.model_name = model_name or os.getenv("BIGMODEL_EMBEDDING_MODEL") or "embedding-3"
+        self.dimensions = int(os.getenv("BIGMODEL_EMBEDDING_DIMENSIONS") or dimensions or EMBEDDING_DIMENSION)
+        self.model_version = f"dim-{self.dimensions}"
+
+    def embed_text(self, text: str) -> list[float]:
+        """Create one text embedding through BigModel."""
+        return self._embed(text)
+
+    def embed_image_reference(self, image_ref: str) -> list[float]:
+        """Embed image-search text proxies through the same BigModel endpoint."""
+        return self._embed(image_ref)
+
+    def _embed(self, text: str) -> list[float]:
+        body = json.dumps(
+            {
+                "model": self.model_name,
+                "input": text,
+                "dimensions": self.dimensions,
+            }
+        ).encode("utf-8")
+        request = Request(
+            f"{self.base_url}/embeddings",
+            data=body,
+            headers={
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+                "User-Agent": "commerce-agent/0.1",
+            },
+            method="POST",
+        )
+        with urlopen(request) as response:
+            payload = json.loads(response.read().decode("utf-8"))
+        return payload["data"][0]["embedding"]
+
+
+def get_embedding_provider() -> DeterministicEmbeddingProvider | BigModelEmbeddingProvider:
+    """Resolve the active embedding provider from environment settings."""
+    provider_name = (os.getenv("COMMERCE_AGENT_EMBEDDING_PROVIDER") or "deterministic").strip().lower()
+    if provider_name == "bigmodel":
+        return BigModelEmbeddingProvider()
+    return DeterministicEmbeddingProvider()
+
+
+def build_text_embeddings(
+    database_url: str | None = None,
+    provider: DeterministicEmbeddingProvider | BigModelEmbeddingProvider | None = None,
+) -> int:
     """Build and upsert text embeddings for all products."""
-    provider = DeterministicEmbeddingProvider()
+    provider = provider or get_embedding_provider()
     database_url = database_url or os.getenv("DATABASE_URL", DEFAULT_DATABASE_URL)
     count = 0
 
     with psycopg.connect(database_url) as conn:
         with conn.cursor() as cur:
+            cur.execute("DELETE FROM product_embeddings WHERE embedding_type = 'text'")
             cur.execute(
                 """
                 SELECT
@@ -108,18 +176,15 @@ def build_text_embeddings(database_url: str | None = None) -> int:
                         embedding, source_text, source_image_url
                     )
                     VALUES (
-                        %(id)s, %(product_id)s, 'text', 'deterministic-local', 'v1',
+                        %(id)s, %(product_id)s, 'text', %(model_name)s, %(model_version)s,
                         %(embedding)s::vector, %(source_text)s, NULL
                     )
-                    ON CONFLICT (product_id, embedding_type, model_name) DO UPDATE
-                    SET model_version = EXCLUDED.model_version,
-                        embedding = EXCLUDED.embedding,
-                        source_text = EXCLUDED.source_text,
-                        source_image_url = EXCLUDED.source_image_url
                     """,
                     {
                         "id": TEXT_EMBEDDING_ID_BASE + index,
                         "product_id": product_id,
+                        "model_name": provider.model_name,
+                        "model_version": provider.model_version,
                         "embedding": vector_literal(embedding),
                         "source_text": source_text,
                     },
@@ -129,14 +194,18 @@ def build_text_embeddings(database_url: str | None = None) -> int:
     return count
 
 
-def build_image_embeddings(database_url: str | None = None) -> int:
+def build_image_embeddings(
+    database_url: str | None = None,
+    provider: DeterministicEmbeddingProvider | BigModelEmbeddingProvider | None = None,
+) -> int:
     """Build and upsert image embeddings for products with primary media."""
-    provider = DeterministicEmbeddingProvider()
+    provider = provider or get_embedding_provider()
     database_url = database_url or os.getenv("DATABASE_URL", DEFAULT_DATABASE_URL)
     count = 0
 
     with psycopg.connect(database_url) as conn:
         with conn.cursor() as cur:
+            cur.execute("DELETE FROM product_embeddings WHERE embedding_type = 'image'")
             cur.execute(
                 """
                 SELECT
@@ -161,18 +230,15 @@ def build_image_embeddings(database_url: str | None = None) -> int:
                         embedding, source_text, source_image_url
                     )
                     VALUES (
-                        %(id)s, %(product_id)s, 'image', 'deterministic-local', 'v1',
+                        %(id)s, %(product_id)s, 'image', %(model_name)s, %(model_version)s,
                         %(embedding)s::vector, NULL, %(source_image_url)s
                     )
-                    ON CONFLICT (product_id, embedding_type, model_name) DO UPDATE
-                    SET model_version = EXCLUDED.model_version,
-                        embedding = EXCLUDED.embedding,
-                        source_text = EXCLUDED.source_text,
-                        source_image_url = EXCLUDED.source_image_url
                     """,
                     {
                         "id": IMAGE_EMBEDDING_ID_BASE + index,
                         "product_id": product_id,
+                        "model_name": provider.model_name,
+                        "model_version": provider.model_version,
                         "embedding": vector_literal(embedding),
                         "source_image_url": image_url,
                     },
@@ -182,12 +248,16 @@ def build_image_embeddings(database_url: str | None = None) -> int:
     return count
 
 
-def build_semantic_indexes(database_url: str | None = None) -> SemanticIndexBuildResult:
+def build_semantic_indexes(
+    database_url: str | None = None,
+    provider: DeterministicEmbeddingProvider | BigModelEmbeddingProvider | None = None,
+) -> SemanticIndexBuildResult:
     """Build both text and image semantic indexes with the local mock provider."""
     database_url = database_url or os.getenv("DATABASE_URL", DEFAULT_DATABASE_URL)
+    provider = provider or get_embedding_provider()
     return SemanticIndexBuildResult(
-        text_embeddings_built=build_text_embeddings(database_url),
-        image_embeddings_built=build_image_embeddings(database_url),
+        text_embeddings_built=build_text_embeddings(database_url, provider=provider),
+        image_embeddings_built=build_image_embeddings(database_url, provider=provider),
     )
 
 
