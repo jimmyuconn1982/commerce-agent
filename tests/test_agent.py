@@ -55,6 +55,66 @@ class StubSearchRepository(SearchRepository):
             ],
         )
 
+    def search_image(self, image_analysis: VisionAnalysis, limit: int = 5):
+        from commerce_agent.models import ProductSearchHit
+
+        self.queries.append((f"image:{image_analysis.summary}", limit))
+        return [
+            ProductSearchHit(
+                product_id=723450000000000005,
+                title="Standing Desk",
+                short_description="Electric standing desk with programmable height presets.",
+                primary_image_url="images/standing-desk.jpg",
+                price=416.5,
+                currency="USD",
+                seller_name="Home Office Co",
+                seller_rating=4.5,
+                review_count=189,
+                inventory_count=55,
+                product_url="https://example.com/products/723450000000000005",
+                category_name="furniture",
+                keyword_score=0.0,
+                semantic_score=1.0,
+                match_score=1.0,
+            )
+        ]
+
+    def search_multimodal(self, query: str, image_analysis: VisionAnalysis, limit: int = 5):
+        from commerce_agent.models import ParsedSearchQuery, ProductSearchHit
+
+        self.queries.append((f"multimodal:{query}:{image_analysis.summary}", limit))
+        return (
+            ParsedSearchQuery(
+                raw_query=query,
+                normalized_query=query.lower(),
+                remaining_query=query.lower(),
+                category_hints=[],
+                attribute_hints=[],
+                min_price=None,
+                max_price=None,
+                sort=None,
+            ),
+            [
+                ProductSearchHit(
+                    product_id=723450000000000006,
+                    title="Mechanical Keyboard",
+                    short_description="Tactile mechanical keyboard with hot-swappable switches.",
+                    primary_image_url="images/mechanical-keyboard.jpg",
+                    price=150.0,
+                    currency="USD",
+                    seller_name="Home Office Co",
+                    seller_rating=4.5,
+                    review_count=197,
+                    inventory_count=62,
+                    product_url="https://example.com/products/723450000000000006",
+                    category_name="electronics",
+                    keyword_score=0.9,
+                    semantic_score=0.8,
+                    match_score=0.85,
+                )
+            ],
+        )
+
 
 def test_text_search_ranks_direct_match_first() -> None:
     agent = CommerceAgent(
@@ -68,7 +128,8 @@ def test_text_search_ranks_direct_match_first() -> None:
 
 def test_image_search_matches_visual_description() -> None:
     agent = CommerceAgent(
-        vision_analyzer=FakeVisionAnalyzer("wood top office desk", ["desk", "office"])
+        vision_analyzer=FakeVisionAnalyzer("wood top office desk", ["desk", "office"]),
+        search_repository=StubSearchRepository(),
     )
     analysis, results = agent.image_search("tests/fixtures/desk.png", limit=3)
     assert analysis.summary == "wood top office desk"
@@ -78,7 +139,8 @@ def test_image_search_matches_visual_description() -> None:
 
 def test_multimodal_search_blends_text_and_image_intent() -> None:
     agent = CommerceAgent(
-        vision_analyzer=FakeVisionAnalyzer("raised keys desk", ["keyboard", "desk"])
+        vision_analyzer=FakeVisionAnalyzer("raised keys desk", ["keyboard", "desk"]),
+        search_repository=StubSearchRepository(),
     )
     analysis, results = agent.multimodal_search(
         text_query="office",
@@ -131,7 +193,8 @@ def test_chat_pipeline_does_not_touch_catalog_search() -> None:
 
 def test_multimodal_pipeline_uses_explicit_multimodal_branch() -> None:
     agent = CommerceAgent(
-        vision_analyzer=FakeVisionAnalyzer("raised keys desk", ["keyboard", "desk"])
+        vision_analyzer=FakeVisionAnalyzer("raised keys desk", ["keyboard", "desk"]),
+        search_repository=StubSearchRepository(),
     )
     result = agent.run_pipeline(prompt="office", image_path="tests/fixtures/keyboard.png", limit=3)
     assert result.intent == "multimodal-search"
@@ -177,4 +240,30 @@ def test_text_search_path_uses_search_repository() -> None:
     result = agent.run_pipeline(prompt="keyboard", limit=3)
     assert repository.queries == [("keyboard", 3)]
     assert result.intent == "text-search"
+    assert result.matches[0].id == 723450000000000006
+
+
+def test_image_search_path_uses_search_repository() -> None:
+    repository = StubSearchRepository()
+    agent = CommerceAgent(
+        vision_analyzer=FakeVisionAnalyzer("wood top office desk", ["desk", "office"]),
+        search_repository=repository,
+    )
+
+    result = agent.run_pipeline(prompt="", image_path="tests/fixtures/desk.png", limit=3)
+    assert repository.queries == [("image:wood top office desk", 3)]
+    assert result.intent == "image-search"
+    assert result.matches[0].id == 723450000000000005
+
+
+def test_multimodal_search_path_uses_search_repository() -> None:
+    repository = StubSearchRepository()
+    agent = CommerceAgent(
+        vision_analyzer=FakeVisionAnalyzer("raised keys desk", ["keyboard", "desk"]),
+        search_repository=repository,
+    )
+
+    result = agent.run_pipeline(prompt="office", image_path="tests/fixtures/keyboard.png", limit=3)
+    assert repository.queries == [("multimodal:office:raised keys desk", 3)]
+    assert result.intent == "multimodal-search"
     assert result.matches[0].id == 723450000000000006

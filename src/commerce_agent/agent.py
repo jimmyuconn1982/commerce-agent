@@ -87,8 +87,7 @@ class CommerceAgent:
         """Analyze one image and return visually matched products."""
         analysis = self.tools.analyze_image(AnalyzeImageInput(image_path=Path(image_path)))
         retrieval = self.tools.image_search(ImageSearchInput(image_analysis=analysis, limit=limit))
-        rerank = self.tools.rerank(RerankInput(candidates=retrieval.candidates, strategy="image-score"))
-        return analysis, [candidate.product for candidate in rerank.candidates_after[:limit]]
+        return analysis, [candidate.product for candidate in retrieval.candidates[:limit]]
 
     def multimodal_search(
         self,
@@ -108,8 +107,7 @@ class CommerceAgent:
                 limit=limit,
             )
         )
-        rerank = self.tools.rerank(RerankInput(candidates=retrieval.candidates, strategy="blended-score"))
-        return analysis, [candidate.product for candidate in rerank.candidates_after[:limit]]
+        return analysis, [candidate.product for candidate in retrieval.candidates[:limit]]
 
     def chat(self, prompt: str, image_path: str | Path | None = None) -> str:
         """Return a conversational reply without querying the product catalog."""
@@ -187,6 +185,47 @@ class CommerceAgent:
             query_text=parsed.remaining_query or parsed.normalized_query or text_query,
             text_tokens=sorted((parsed.remaining_query or parsed.normalized_query).split()),
             image_tokens=[],
+            candidates=candidates,
+            limit=limit,
+        )
+
+    def retrieve_image_candidates(
+        self,
+        *,
+        image_analysis: VisionAnalysis,
+        category: str | None = None,
+        limit: int = 5,
+    ) -> RetrievalTrace:
+        """Retrieve image-search candidates from the configured search repository."""
+        hits = self.search_repository.search_image(image_analysis, limit=limit)
+        candidates = [self._candidate_from_search_hit(hit) for hit in hits]
+        if category:
+            candidates = [candidate for candidate in candidates if candidate.product.category == category]
+        return RetrievalTrace(
+            query_text="",
+            text_tokens=[],
+            image_tokens=sorted((f"{image_analysis.summary} {' '.join(image_analysis.tags)}").split()),
+            candidates=candidates,
+            limit=limit,
+        )
+
+    def retrieve_multimodal_candidates(
+        self,
+        *,
+        text_query: str,
+        image_analysis: VisionAnalysis,
+        category: str | None = None,
+        limit: int = 5,
+    ) -> RetrievalTrace:
+        """Retrieve multimodal candidates from the configured search repository."""
+        parsed, hits = self.search_repository.search_multimodal(text_query, image_analysis, limit=limit)
+        candidates = [self._candidate_from_search_hit(hit) for hit in hits]
+        if category:
+            candidates = [candidate for candidate in candidates if candidate.product.category == category]
+        return RetrievalTrace(
+            query_text=parsed.remaining_query or parsed.normalized_query or text_query,
+            text_tokens=sorted((parsed.remaining_query or parsed.normalized_query).split()),
+            image_tokens=sorted((f"{image_analysis.summary} {' '.join(image_analysis.tags)}").split()),
             candidates=candidates,
             limit=limit,
         )

@@ -168,7 +168,7 @@ class CommerceTools:
 
     def image_search(self, data: ImageSearchInput) -> RetrievalTrace:
         """Retrieve candidates from image-derived signals only."""
-        return self.agent.retrieve_candidates(
+        return self.agent.retrieve_image_candidates(
             image_analysis=data.image_analysis,
             category=data.category,
             limit=data.limit,
@@ -176,7 +176,7 @@ class CommerceTools:
 
     def multimodal_search(self, data: MultimodalSearchInput) -> RetrievalTrace:
         """Retrieve candidates from blended text and image signals."""
-        return self.agent.retrieve_candidates(
+        return self.agent.retrieve_multimodal_candidates(
             text_query=data.text_query,
             image_analysis=data.image_analysis,
             category=data.category,
@@ -259,17 +259,20 @@ class CommerceTools:
         data.steps.append(
             ToolCallTrace(
                 tool_name="image_search",
-                thought="Use visual features for image-only search.",
+                thought="Use the configured image-search repository for retrieval.",
                 input_summary=f"summary={data.image_analysis.summary if data.image_analysis else ''}",
                 observation_summary=f"candidates={len(retrieval.candidates)}",
             )
         )
-        rerank = self.rerank(RerankInput(candidates=retrieval.candidates, strategy="image-score"))
         return self._complete_search_path(
             intent="image-search",
             prompt="",
             retrieval=retrieval,
-            rerank=rerank,
+            rerank=RerankTrace(
+                strategy="repository-order",
+                candidates_before=list(retrieval.candidates),
+                candidates_after=list(retrieval.candidates),
+            ),
             steps=data.steps,
             limit=data.limit,
         )
@@ -287,17 +290,20 @@ class CommerceTools:
         data.steps.append(
             ToolCallTrace(
                 tool_name="multimodal_search",
-                thought="Combine text and visual signals for multimodal retrieval.",
+                thought="Use the configured multimodal repository for retrieval.",
                 input_summary=f"text={data.prompt!r}; has_image={data.image_analysis is not None}",
                 observation_summary=f"candidates={len(retrieval.candidates)}",
             )
         )
-        rerank = self.rerank(RerankInput(candidates=retrieval.candidates, strategy="blended-score"))
         return self._complete_search_path(
             intent="multimodal-search",
             prompt=data.prompt,
             retrieval=retrieval,
-            rerank=rerank,
+            rerank=RerankTrace(
+                strategy="repository-order",
+                candidates_before=list(retrieval.candidates),
+                candidates_after=list(retrieval.candidates),
+            ),
             steps=data.steps,
             limit=data.limit,
         )
