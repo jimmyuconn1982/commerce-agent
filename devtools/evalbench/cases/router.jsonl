@@ -1,0 +1,4 @@
+{"id":"router_001","prompt":"What can you do?","has_image":false,"expected_intent":"chat"}
+{"id":"router_002","prompt":"compact keyboard under 200","has_image":false,"expected_intent":"text-search"}
+{"id":"router_003","prompt":"","has_image":true,"expected_intent":"image-search"}
+{"id":"router_004","prompt":"office desk","has_image":true,"expected_intent":"multimodal-search"}

@@ -1,0 +1,2 @@
+{"id":"text_001","prompt":"compact keyboard under 200","expected_intent":"text-search","expected_top_product_id":723450000000000006}
+{"id":"text_002","prompt":"water bottle","expected_intent":"text-search","expected_top_product_id":723450000000000004}

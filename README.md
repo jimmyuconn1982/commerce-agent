@@ -104,4 +104,5 @@ commerce-agent-build-image-embeddings
 commerce-agent-build-semantic-indexes
 commerce-agent-semantic-index-status
 commerce-agent-db-text-search "compact keyboard under 200"
+python -m devtools.evalbench.runner --suite all
 ```

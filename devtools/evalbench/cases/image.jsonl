@@ -1,0 +1,2 @@
+{"id":"image_001","prompt":"","image_mock_response":"summary: wood top office desk\ntags: desk, office, wood, adjustable, furniture","expected_intent":"image-search","expected_top_product_id":723450000000000006}
+{"id":"image_002","prompt":"","image_mock_response":"summary: compact keyboard on desk\ntags: keyboard, desk, compact, office, keys","expected_intent":"image-search","expected_top_product_id":723450000000000003}

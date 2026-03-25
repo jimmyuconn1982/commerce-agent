@@ -1,0 +1,2 @@
+{"id":"e2e_001","prompt":"compact keyboard under 200","expected_intent":"text-search","expected_top_product_id":723450000000000006}
+{"id":"e2e_002","prompt":"office","image_mock_response":"summary: wood top office desk\ntags: desk, office, wood, adjustable, furniture","expected_intent":"multimodal-search","expected_top_product_id":723450000000000005}
