@@ -1,0 +1,399 @@
+{
+  "categories": [
+    {
+      "id": 723460000000000001,
+      "name": "apparel",
+      "parent_id": null
+    },
+    {
+      "id": 723460000000000002,
+      "name": "electronics",
+      "parent_id": null
+    },
+    {
+      "id": 723460000000000003,
+      "name": "footwear",
+      "parent_id": null
+    },
+    {
+      "id": 723460000000000004,
+      "name": "furniture",
+      "parent_id": null
+    },
+    {
+      "id": 723460000000000005,
+      "name": "outdoors",
+      "parent_id": null
+    }
+  ],
+  "products": [
+    {
+      "id": 723450000000000001,
+      "sku": "sku-723450000000000001",
+      "title": "Trail Running Shoes",
+      "short_description": "Lightweight trail shoes with stable grip for mixed terrain.",
+      "long_description": "Lightweight trail shoes with stable grip for mixed terrain. Low-cut running shoe with rugged sole, dark upper, and outdoor styling.",
+      "brand": "Trail Running",
+      "category_id": 723460000000000003,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "running",
+          "trail",
+          "breathable"
+        ],
+        "image_tags": [
+          "shoe",
+          "outdoor",
+          "mesh",
+          "sport"
+        ]
+      }
+    },
+    {
+      "id": 723450000000000002,
+      "sku": "sku-723450000000000002",
+      "title": "Everyday Hoodie",
+      "short_description": "Midweight cotton hoodie for daily wear.",
+      "long_description": "Midweight cotton hoodie for daily wear. Relaxed fit hoodie with drawstrings, front pocket, and minimalist style.",
+      "brand": "Everyday Hoodie",
+      "category_id": 723460000000000001,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "casual",
+          "cotton",
+          "layering"
+        ],
+        "image_tags": [
+          "hoodie",
+          "sweatshirt",
+          "casual",
+          "soft"
+        ]
+      }
+    },
+    {
+      "id": 723450000000000003,
+      "sku": "sku-723450000000000003",
+      "title": "Wireless Earbuds",
+      "short_description": "Compact earbuds with active noise cancellation.",
+      "long_description": "Compact earbuds with active noise cancellation. Small in-ear earbuds seated in a rounded charging case with glossy finish.",
+      "brand": "Wireless Earbuds",
+      "category_id": 723460000000000002,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "audio",
+          "bluetooth",
+          "portable"
+        ],
+        "image_tags": [
+          "earbuds",
+          "charging case",
+          "audio",
+          "compact"
+        ]
+      }
+    },
+    {
+      "id": 723450000000000004,
+      "sku": "sku-723450000000000004",
+      "title": "Insulated Water Bottle",
+      "short_description": "Double-wall bottle that keeps drinks cold for 24 hours.",
+      "long_description": "Double-wall bottle that keeps drinks cold for 24 hours. Tall stainless steel bottle with screw top and matte powder-coated finish.",
+      "brand": "Insulated Water",
+      "category_id": 723460000000000005,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "hydration",
+          "steel",
+          "travel"
+        ],
+        "image_tags": [
+          "bottle",
+          "metal",
+          "travel",
+          "outdoor"
+        ]
+      }
+    },
+    {
+      "id": 723450000000000005,
+      "sku": "sku-723450000000000005",
+      "title": "Standing Desk",
+      "short_description": "Electric standing desk with programmable height presets.",
+      "long_description": "Electric standing desk with programmable height presets. Rectangular desk with wooden top, metal legs, and clean home-office profile.",
+      "brand": "Standing Desk",
+      "category_id": 723460000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "office",
+          "ergonomic",
+          "adjustable"
+        ],
+        "image_tags": [
+          "desk",
+          "office",
+          "wood top",
+          "adjustable"
+        ]
+      }
+    },
+    {
+      "id": 723450000000000006,
+      "sku": "sku-723450000000000006",
+      "title": "Mechanical Keyboard",
+      "short_description": "Tactile mechanical keyboard with hot-swappable switches.",
+      "long_description": "Tactile mechanical keyboard with hot-swappable switches. Compact keyboard with raised keycaps, angled body, and desktop setup aesthetic.",
+      "brand": "Mechanical Keyboard",
+      "category_id": 723460000000000002,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "keyboard",
+          "office",
+          "gaming"
+        ],
+        "image_tags": [
+          "keyboard",
+          "keys",
+          "desk",
+          "rgb"
+        ]
+      }
+    }
+  ],
+  "product_media": [
+    {
+      "id": 723480000000000001,
+      "product_id": 723450000000000001,
+      "media_type": "image",
+      "url": "images/trail-running-shoes.jpg",
+      "thumbnail_url": "images/trail-running-shoes.jpg",
+      "sort_order": 0,
+      "alt_text": "Trail Running Shoes",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723480000000000002,
+      "product_id": 723450000000000002,
+      "media_type": "image",
+      "url": "images/everyday-hoodie.jpg",
+      "thumbnail_url": "images/everyday-hoodie.jpg",
+      "sort_order": 0,
+      "alt_text": "Everyday Hoodie",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723480000000000003,
+      "product_id": 723450000000000003,
+      "media_type": "image",
+      "url": "images/wireless-earbuds.jpg",
+      "thumbnail_url": "images/wireless-earbuds.jpg",
+      "sort_order": 0,
+      "alt_text": "Wireless Earbuds",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723480000000000004,
+      "product_id": 723450000000000004,
+      "media_type": "image",
+      "url": "images/insulated-water-bottle.jpg",
+      "thumbnail_url": "images/insulated-water-bottle.jpg",
+      "sort_order": 0,
+      "alt_text": "Insulated Water Bottle",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723480000000000005,
+      "product_id": 723450000000000005,
+      "media_type": "image",
+      "url": "images/standing-desk.jpg",
+      "thumbnail_url": "images/standing-desk.jpg",
+      "sort_order": 0,
+      "alt_text": "Standing Desk",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723480000000000006,
+      "product_id": 723450000000000006,
+      "media_type": "image",
+      "url": "images/mechanical-keyboard.jpg",
+      "thumbnail_url": "images/mechanical-keyboard.jpg",
+      "sort_order": 0,
+      "alt_text": "Mechanical Keyboard",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    }
+  ],
+  "sellers": [
+    {
+      "id": 723470000000000001,
+      "seller_code": "urban-hub",
+      "name": "Urban Hub",
+      "rating": 4.7,
+      "seller_url": "https://example.com/sellers/urban-hub",
+      "location": "San Francisco, CA",
+      "is_verified": true
+    },
+    {
+      "id": 723470000000000002,
+      "seller_code": "trail-works",
+      "name": "Trail Works",
+      "rating": 4.6,
+      "seller_url": "https://example.com/sellers/trail-works",
+      "location": "Denver, CO",
+      "is_verified": true
+    },
+    {
+      "id": 723470000000000003,
+      "seller_code": "home-office-co",
+      "name": "Home Office Co",
+      "rating": 4.5,
+      "seller_url": "https://example.com/sellers/home-office-co",
+      "location": "Seattle, WA",
+      "is_verified": true
+    }
+  ],
+  "product_offers": [
+    {
+      "id": 723490000000000001,
+      "product_id": 723450000000000001,
+      "seller_id": 723470000000000001,
+      "price": 92.5,
+      "currency": "USD",
+      "inventory_count": 27,
+      "product_url": "https://example.com/products/723450000000000001",
+      "shipping_info": "Standard shipping in 3-5 business days",
+      "is_active": true
+    },
+    {
+      "id": 723490000000000002,
+      "product_id": 723450000000000002,
+      "seller_id": 723470000000000002,
+      "price": 66.0,
+      "currency": "USD",
+      "inventory_count": 34,
+      "product_url": "https://example.com/products/723450000000000002",
+      "shipping_info": "Standard shipping in 3-5 business days",
+      "is_active": true
+    },
+    {
+      "id": 723490000000000003,
+      "product_id": 723450000000000003,
+      "seller_id": 723470000000000003,
+      "price": 139.5,
+      "currency": "USD",
+      "inventory_count": 41,
+      "product_url": "https://example.com/products/723450000000000003",
+      "shipping_info": "Standard shipping in 3-5 business days",
+      "is_active": true
+    },
+    {
+      "id": 723490000000000004,
+      "product_id": 723450000000000004,
+      "seller_id": 723470000000000001,
+      "price": 53.0,
+      "currency": "USD",
+      "inventory_count": 48,
+      "product_url": "https://example.com/products/723450000000000004",
+      "shipping_info": "Standard shipping in 3-5 business days",
+      "is_active": true
+    },
+    {
+      "id": 723490000000000005,
+      "product_id": 723450000000000005,
+      "seller_id": 723470000000000002,
+      "price": 416.5,
+      "currency": "USD",
+      "inventory_count": 55,
+      "product_url": "https://example.com/products/723450000000000005",
+      "shipping_info": "Standard shipping in 3-5 business days",
+      "is_active": true
+    },
+    {
+      "id": 723490000000000006,
+      "product_id": 723450000000000006,
+      "seller_id": 723470000000000003,
+      "price": 150.0,
+      "currency": "USD",
+      "inventory_count": 62,
+      "product_url": "https://example.com/products/723450000000000006",
+      "shipping_info": "Standard shipping in 3-5 business days",
+      "is_active": true
+    }
+  ],
+  "product_review_stats": [
+    {
+      "product_id": 723450000000000001,
+      "average_rating": 4.7,
+      "review_count": 197
+    },
+    {
+      "product_id": 723450000000000002,
+      "average_rating": 4.4,
+      "review_count": 184
+    },
+    {
+      "product_id": 723450000000000003,
+      "average_rating": 4.6,
+      "review_count": 193
+    },
+    {
+      "product_id": 723450000000000004,
+      "average_rating": 4.8,
+      "review_count": 201
+    },
+    {
+      "product_id": 723450000000000005,
+      "average_rating": 4.5,
+      "review_count": 189
+    },
+    {
+      "product_id": 723450000000000006,
+      "average_rating": 4.7,
+      "review_count": 197
+    }
+  ],
+  "product_search_documents": [
+    {
+      "product_id": 723450000000000001,
+      "search_text": "Trail Running Shoes footwear Lightweight trail shoes with stable grip for mixed terrain. running trail breathable shoe outdoor mesh sport Low-cut running shoe with rugged sole, dark upper, and outdoor styling."
+    },
+    {
+      "product_id": 723450000000000002,
+      "search_text": "Everyday Hoodie apparel Midweight cotton hoodie for daily wear. casual cotton layering hoodie sweatshirt casual soft Relaxed fit hoodie with drawstrings, front pocket, and minimalist style."
+    },
+    {
+      "product_id": 723450000000000003,
+      "search_text": "Wireless Earbuds electronics Compact earbuds with active noise cancellation. audio bluetooth portable earbuds charging case audio compact Small in-ear earbuds seated in a rounded charging case with glossy finish."
+    },
+    {
+      "product_id": 723450000000000004,
+      "search_text": "Insulated Water Bottle outdoors Double-wall bottle that keeps drinks cold for 24 hours. hydration steel travel bottle metal travel outdoor Tall stainless steel bottle with screw top and matte powder-coated finish."
+    },
+    {
+      "product_id": 723450000000000005,
+      "search_text": "Standing Desk furniture Electric standing desk with programmable height presets. office ergonomic adjustable desk office wood top adjustable Rectangular desk with wooden top, metal legs, and clean home-office profile."
+    },
+    {
+      "product_id": 723450000000000006,
+      "search_text": "Mechanical Keyboard electronics Tactile mechanical keyboard with hot-swappable switches. keyboard office gaming keyboard keys desk rgb Compact keyboard with raised keycaps, angled body, and desktop setup aesthetic."
+    }
+  ],
+  "product_embeddings": []
+}

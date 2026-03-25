@@ -16,6 +16,7 @@ The current setup provides:
 - PostgreSQL + `pgvector`
 - extension bootstrap
 - initial relational schema
+- tiny-seed generation and loading entrypoints
 - indexes for:
   - keyword search
   - trigram fallback search
@@ -38,8 +39,20 @@ docker compose exec -T postgres psql \
   -f /work/db/migrations/0001_initial_schema.sql
 ```
 
+Build the local tiny seed bundle:
+
+```bash
+commerce-agent-build-tiny-seed
+```
+
+Load the tiny seed bundle:
+
+```bash
+commerce-agent-load-seed
+```
+
 ## Next Steps
 
-- add seed-data staging tables
+- add seed-data staging tables for public sources
 - add import scripts for public and synthetic test data
 - connect the backend repository layer to PostgreSQL

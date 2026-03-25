@@ -99,3 +99,20 @@ The first seed implementation should load:
 - 1 primary image per product
 - 1 text embedding placeholder per product
 - 1 image embedding placeholder for products with images
+
+## Current Implementation Status
+
+The repository now includes:
+
+- a deterministic `tiny_seed` builder based on the MVP catalog
+- a PostgreSQL loader for:
+  - `categories`
+  - `products`
+  - `product_media`
+  - `sellers`
+  - `product_offers`
+  - `product_review_stats`
+  - `product_search_documents`
+
+The first loader intentionally skips `product_embeddings`.
+Embeddings will be built in a later step after the core seed path is stable.

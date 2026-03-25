@@ -93,3 +93,10 @@ docker compose exec -T postgres psql \
 ```
 
 The database workspace lives in [db/README.md](db/README.md).
+
+Build and load the tiny local seed:
+
+```bash
+commerce-agent-build-tiny-seed
+commerce-agent-load-seed
+```
