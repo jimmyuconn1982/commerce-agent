@@ -1,0 +1,68 @@
+[
+  {
+    "id": "sku-1001",
+    "name": "Trail Running Shoes",
+    "category": "footwear",
+    "rating": 4.7,
+    "tags": ["running", "trail", "breathable"],
+    "description": "Lightweight trail shoes with stable grip for mixed terrain.",
+    "image_url": "images/trail-running-shoes.jpg",
+    "image_tags": ["shoe", "outdoor", "mesh", "sport"],
+    "visual_description": "Low-cut running shoe with rugged sole, dark upper, and outdoor styling."
+  },
+  {
+    "id": "sku-1002",
+    "name": "Everyday Hoodie",
+    "category": "apparel",
+    "rating": 4.4,
+    "tags": ["casual", "cotton", "layering"],
+    "description": "Midweight cotton hoodie for daily wear.",
+    "image_url": "images/everyday-hoodie.jpg",
+    "image_tags": ["hoodie", "sweatshirt", "casual", "soft"],
+    "visual_description": "Relaxed fit hoodie with drawstrings, front pocket, and minimalist style."
+  },
+  {
+    "id": "sku-1003",
+    "name": "Wireless Earbuds",
+    "category": "electronics",
+    "rating": 4.6,
+    "tags": ["audio", "bluetooth", "portable"],
+    "description": "Compact earbuds with active noise cancellation.",
+    "image_url": "images/wireless-earbuds.jpg",
+    "image_tags": ["earbuds", "charging case", "audio", "compact"],
+    "visual_description": "Small in-ear earbuds seated in a rounded charging case with glossy finish."
+  },
+  {
+    "id": "sku-1004",
+    "name": "Insulated Water Bottle",
+    "category": "outdoors",
+    "rating": 4.8,
+    "tags": ["hydration", "steel", "travel"],
+    "description": "Double-wall bottle that keeps drinks cold for 24 hours.",
+    "image_url": "images/insulated-water-bottle.jpg",
+    "image_tags": ["bottle", "metal", "travel", "outdoor"],
+    "visual_description": "Tall stainless steel bottle with screw top and matte powder-coated finish."
+  },
+  {
+    "id": "sku-1005",
+    "name": "Standing Desk",
+    "category": "furniture",
+    "rating": 4.5,
+    "tags": ["office", "ergonomic", "adjustable"],
+    "description": "Electric standing desk with programmable height presets.",
+    "image_url": "images/standing-desk.jpg",
+    "image_tags": ["desk", "office", "wood top", "adjustable"],
+    "visual_description": "Rectangular desk with wooden top, metal legs, and clean home-office profile."
+  },
+  {
+    "id": "sku-1006",
+    "name": "Mechanical Keyboard",
+    "category": "electronics",
+    "rating": 4.7,
+    "tags": ["keyboard", "office", "gaming"],
+    "description": "Tactile mechanical keyboard with hot-swappable switches.",
+    "image_url": "images/mechanical-keyboard.jpg",
+    "image_tags": ["keyboard", "keys", "desk", "rgb"],
+    "visual_description": "Compact keyboard with raised keycaps, angled body, and desktop setup aesthetic."
+  }
+]

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Commerce Agent</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="sidebar-top">
+          <button id="new-chat-btn" class="new-chat-btn">+ New chat</button>
+        </div>
+        <div id="chat-list" class="chat-list"></div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div class="wordmark">Commerce Agent</div>
+        </header>
+        <section id="messages" class="messages"></section>
+
+        <section class="composer-card">
+          <div id="attachment-preview" class="attachment-preview hidden"></div>
+          <div class="composer-row">
+            <div class="attach-group">
+              <button id="attach-toggle" class="attach-toggle" type="button" aria-label="Add attachment">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z"></path>
+                </svg>
+              </button>
+              <div id="attach-popover" class="attach-popover hidden">
+                <button id="attach-image-btn" class="attach-option" type="button">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M19 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 12H5V7h14zm-8-2 2.5-3.2 1.8 2.2 2.7-3.5L19 15zM8.5 10.5A1.5 1.5 0 1 0 7 9a1.5 1.5 0 0 0 1.5 1.5z"></path>
+                  </svg>
+                  <span>Upload image</span>
+                </button>
+                <button id="attach-url-btn" class="attach-option" type="button">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M10.59 13.41a1.996 1.996 0 0 0 2.82 0l3.59-3.59a2 2 0 1 0-2.83-2.82l-1.29 1.29-1.41-1.41 1.29-1.29a4 4 0 0 1 5.66 5.66l-3.59 3.59a4 4 0 0 1-5.66 0l-.71-.71 1.41-1.41zm2.82-2.82a1.996 1.996 0 0 0-2.82 0L7 14.17A2 2 0 0 0 9.83 17l1.29-1.29 1.41 1.41-1.29 1.29a4 4 0 1 1-5.66-5.66l3.59-3.59a4 4 0 0 1 5.66 0l.71.71-1.41 1.41z"></path>
+                  </svg>
+                  <span>Use image URL</span>
+                </button>
+              </div>
+            </div>
+            <div class="composer-shell">
+              <textarea id="prompt-input" rows="1" placeholder="Message Commerce Agent"></textarea>
+              <button id="send-btn" class="send-btn" aria-label="Send">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 5l6 6h-4v8h-4v-8H6l6-6z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="composer-tools">
+            <div class="tools-left">
+              <input id="image-input" type="file" accept="image/*" hidden />
+              <label id="url-chip" class="url-field hidden">
+                <span>URL</span>
+                <input id="image-url-input" type="url" placeholder="https://example.com/image.jpg" />
+              </label>
+            </div>
+
+            <div class="tools-right">
+              <button id="sim-user-toggle" class="sim-user-toggle" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm0 2c-4.42 0-8 1.79-8 4v1h16v-1c0-2.21-3.58-4-8-4z"></path>
+                </svg>
+                <span>Simulated user</span>
+              </button>
+              <div id="user-popover" class="user-popover hidden">
+                <div id="user-list" class="user-list"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="composer-meta">
+            <span class="muted small">Enter to send, Shift+Enter for newline. Intent is routed automatically.</span>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <template id="message-template">
+      <article class="message">
+        <div class="message-body"></div>
+      </article>
+    </template>
+
+    <template id="search-results-template">
+      <div class="search-results"></div>
+    </template>
+
+    <script src="/assets/app.js" type="module"></script>
+  </body>
+</html>
