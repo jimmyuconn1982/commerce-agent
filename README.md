@@ -99,6 +99,8 @@ Build and load the tiny local seed:
 ```bash
 commerce-agent-build-tiny-seed
 commerce-agent-load-seed
+commerce-agent-build-public-seed
+commerce-agent-load-seed --seed-path db/seeds/public_seed_50.json --truncate-first
 commerce-agent-build-text-embeddings
 commerce-agent-build-image-embeddings
 commerce-agent-build-semantic-indexes
@@ -106,3 +108,5 @@ commerce-agent-semantic-index-status
 commerce-agent-db-text-search "compact keyboard under 200"
 python -m devtools.evalbench.runner --suite all
 ```
+
+The web UI now includes an in-page pipeline debug panel for assistant results. It shows the routed intent, tool steps, retrieval candidates, and score summaries without leaving the browser.

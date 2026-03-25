@@ -214,6 +214,10 @@ class HeuristicRouter:
             search_score += 2
             reasons.append("short keyword query")
 
+        if search_score == 0 and chat_score == 0 and 1 < len(tokens) <= 4:
+            search_score += 2
+            reasons.append("short noun-like query")
+
         if not catalog_hits and not attribute_hits and not product_hint_hits and len(tokens) > 8:
             chat_score += 2
             reasons.append("long non-product prompt")

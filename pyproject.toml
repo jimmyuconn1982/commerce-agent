@@ -20,6 +20,7 @@ dependencies = [
 commerce-agent = "commerce_agent.cli:main"
 commerce-agent-web = "commerce_agent.web:main"
 commerce-agent-build-tiny-seed = "commerce_agent.seed_data:build_tiny_seed_cli"
+commerce-agent-build-public-seed = "commerce_agent.seed_data:build_public_seed_cli"
 commerce-agent-load-seed = "commerce_agent.seed_data:load_seed_data_cli"
 commerce-agent-build-text-embeddings = "commerce_agent.embeddings:build_text_embeddings_cli"
 commerce-agent-build-image-embeddings = "commerce_agent.embeddings:build_image_embeddings_cli"

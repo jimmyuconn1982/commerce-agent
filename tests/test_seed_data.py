@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 from commerce_agent.catalog import Catalog
-from commerce_agent.seed_data import build_tiny_seed, write_tiny_seed
+from commerce_agent.seed_data import build_public_seed, build_tiny_seed, write_public_seed, write_tiny_seed
 
 
 def test_build_tiny_seed_matches_catalog_shape() -> None:
@@ -27,3 +27,71 @@ def test_write_tiny_seed_writes_json_bundle(tmp_path: Path) -> None:
     assert "products" in payload
     assert "product_search_documents" in payload
     assert payload["products"][0]["id"] > 0
+
+
+def test_build_public_seed_keeps_media_and_search_docs_on_same_product() -> None:
+    products = [
+        {
+            "id": 101,
+            "title": "Camera Backpack",
+            "description": "Water-resistant backpack for mirrorless camera kits.",
+            "category": "bags",
+            "price": 129.99,
+            "rating": 4.6,
+            "stock": 18,
+            "tags": ["camera", "travel", "backpack"],
+            "brand": "Northwind",
+            "sku": "NOR-CAM-101",
+            "shippingInformation": "Ships in 48 hours",
+            "availabilityStatus": "In Stock",
+            "images": ["https://cdn.example.com/camera-backpack.webp"],
+            "thumbnail": "https://cdn.example.com/camera-backpack-thumb.webp",
+            "reviews": [{"rating": 5}, {"rating": 4}],
+        }
+    ]
+
+    bundle = build_public_seed(products)
+
+    assert len(bundle.products) == 1
+    assert len(bundle.product_media) == 1
+    assert len(bundle.product_search_documents) == 1
+    assert bundle.product_media[0]["product_id"] == bundle.products[0]["id"]
+    assert bundle.product_search_documents[0]["product_id"] == bundle.products[0]["id"]
+    assert bundle.product_media[0]["url"] == "https://cdn.example.com/camera-backpack.webp"
+    assert "Camera Backpack" in bundle.product_search_documents[0]["search_text"]
+
+
+def test_write_public_seed_writes_public_bundle(tmp_path: Path, monkeypatch) -> None:
+    from commerce_agent import seed_data
+
+    monkeypatch.setattr(
+        seed_data,
+        "fetch_dummyjson_products",
+        lambda limit=50, skip=0: [
+            {
+                "id": 1,
+                "title": "Desk Lamp",
+                "description": "Adjustable LED desk lamp.",
+                "category": "home-decoration",
+                "price": 39.99,
+                "rating": 4.4,
+                "stock": 25,
+                "tags": ["lamp", "led", "desk"],
+                "brand": "Glow",
+                "sku": "GLO-DESK-1",
+                "shippingInformation": "Ships today",
+                "availabilityStatus": "In Stock",
+                "images": ["https://cdn.example.com/desk-lamp.webp"],
+                "thumbnail": "https://cdn.example.com/desk-lamp-thumb.webp",
+                "reviews": [{"rating": 5}],
+            }
+        ],
+    )
+    seed_path = tmp_path / "public_seed.json"
+
+    write_public_seed(seed_path, limit=1)
+
+    payload = json.loads(seed_path.read_text(encoding="utf-8"))
+    assert len(payload["products"]) == 1
+    assert len(payload["product_media"]) == 1
+    assert payload["product_media"][0]["product_id"] == payload["products"][0]["id"]

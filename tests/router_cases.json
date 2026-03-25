@@ -20,6 +20,11 @@
     "expected_intent": "text-search"
   },
   {
+    "prompt": "mascara beauty",
+    "has_image": false,
+    "expected_intent": "text-search"
+  },
+  {
     "prompt": "",
     "has_image": true,
     "expected_intent": "image-search"

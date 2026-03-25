@@ -45,10 +45,22 @@ Build the local tiny seed bundle:
 commerce-agent-build-tiny-seed
 ```
 
+Build a public 50-product seed bundle with image URLs and matching search text:
+
+```bash
+commerce-agent-build-public-seed
+```
+
 Load the tiny seed bundle:
 
 ```bash
 commerce-agent-load-seed
+```
+
+Replace the current database contents with the public bundle:
+
+```bash
+commerce-agent-load-seed --seed-path db/seeds/public_seed_50.json --truncate-first
 ```
 
 Build text embeddings:
@@ -80,4 +92,4 @@ commerce-agent-db-text-search "compact keyboard under 200"
 
 - add seed-data staging tables for public sources
 - add import scripts for public and synthetic test data
-- connect the backend agent paths to the PostgreSQL repository
+- connect the real embedding and vision providers last

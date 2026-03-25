@@ -1,0 +1,3288 @@
+{
+  "categories": [
+    {
+      "id": 723560000000000001,
+      "name": "beauty",
+      "parent_id": null
+    },
+    {
+      "id": 723560000000000002,
+      "name": "fragrances",
+      "parent_id": null
+    },
+    {
+      "id": 723560000000000003,
+      "name": "furniture",
+      "parent_id": null
+    },
+    {
+      "id": 723560000000000004,
+      "name": "groceries",
+      "parent_id": null
+    },
+    {
+      "id": 723560000000000005,
+      "name": "home decoration",
+      "parent_id": null
+    },
+    {
+      "id": 723560000000000006,
+      "name": "kitchen accessories",
+      "parent_id": null
+    }
+  ],
+  "products": [
+    {
+      "id": 723550000000000001,
+      "sku": "BEA-ESS-ESS-001",
+      "title": "Essence Mascara Lash Princess",
+      "short_description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
+      "long_description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula. Essence Mascara Lash Princess product image for beauty. Visual hints: beauty, mascara, essence, lash.",
+      "brand": "Essence",
+      "category_id": 723560000000000001,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "beauty",
+          "mascara"
+        ],
+        "image_tags": [
+          "beauty",
+          "mascara",
+          "essence",
+          "lash",
+          "princess"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 1
+      }
+    },
+    {
+      "id": 723550000000000002,
+      "sku": "BEA-GLA-EYE-002",
+      "title": "Eyeshadow Palette with Mirror",
+      "short_description": "The Eyeshadow Palette with Mirror offers a versatile range of eyeshadow shades for creating stunning eye looks. With a built-in mirror, it's convenient for on-the-go makeup application.",
+      "long_description": "The Eyeshadow Palette with Mirror offers a versatile range of eyeshadow shades for creating stunning eye looks. With a built-in mirror, it's convenient for on-the-go makeup application. Eyeshadow Palette with Mirror product image for beauty. Visual hints: beauty, eyeshadow, palette, with.",
+      "brand": "Glamour Beauty",
+      "category_id": 723560000000000001,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "beauty",
+          "eyeshadow"
+        ],
+        "image_tags": [
+          "beauty",
+          "eyeshadow",
+          "palette",
+          "with",
+          "mirror"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 2
+      }
+    },
+    {
+      "id": 723550000000000003,
+      "sku": "BEA-VEL-POW-003",
+      "title": "Powder Canister",
+      "short_description": "The Powder Canister is a finely milled setting powder designed to set makeup and control shine. With a lightweight and translucent formula, it provides a smooth and matte finish.",
+      "long_description": "The Powder Canister is a finely milled setting powder designed to set makeup and control shine. With a lightweight and translucent formula, it provides a smooth and matte finish. Powder Canister product image for beauty. Visual hints: beauty, face powder, powder, canister.",
+      "brand": "Velvet Touch",
+      "category_id": 723560000000000001,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "beauty",
+          "face powder"
+        ],
+        "image_tags": [
+          "beauty",
+          "face powder",
+          "powder",
+          "canister"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 3
+      }
+    },
+    {
+      "id": 723550000000000004,
+      "sku": "BEA-CHI-LIP-004",
+      "title": "Red Lipstick",
+      "short_description": "The Red Lipstick is a classic and bold choice for adding a pop of color to your lips. With a creamy and pigmented formula, it provides a vibrant and long-lasting finish.",
+      "long_description": "The Red Lipstick is a classic and bold choice for adding a pop of color to your lips. With a creamy and pigmented formula, it provides a vibrant and long-lasting finish. Red Lipstick product image for beauty. Visual hints: beauty, lipstick, red.",
+      "brand": "Chic Cosmetics",
+      "category_id": 723560000000000001,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "beauty",
+          "lipstick"
+        ],
+        "image_tags": [
+          "beauty",
+          "lipstick",
+          "red"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 4
+      }
+    },
+    {
+      "id": 723550000000000005,
+      "sku": "BEA-NAI-NAI-005",
+      "title": "Red Nail Polish",
+      "short_description": "The Red Nail Polish offers a rich and glossy red hue for vibrant and polished nails. With a quick-drying formula, it provides a salon-quality finish at home.",
+      "long_description": "The Red Nail Polish offers a rich and glossy red hue for vibrant and polished nails. With a quick-drying formula, it provides a salon-quality finish at home. Red Nail Polish product image for beauty. Visual hints: beauty, nail polish, red, nail.",
+      "brand": "Nail Couture",
+      "category_id": 723560000000000001,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "beauty",
+          "nail polish"
+        ],
+        "image_tags": [
+          "beauty",
+          "nail polish",
+          "red",
+          "nail",
+          "polish"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 5
+      }
+    },
+    {
+      "id": 723550000000000006,
+      "sku": "FRA-CAL-CAL-006",
+      "title": "Calvin Klein CK One",
+      "short_description": "CK One by Calvin Klein is a classic unisex fragrance, known for its fresh and clean scent. It's a versatile fragrance suitable for everyday wear.",
+      "long_description": "CK One by Calvin Klein is a classic unisex fragrance, known for its fresh and clean scent. It's a versatile fragrance suitable for everyday wear. Calvin Klein CK One product image for fragrances. Visual hints: fragrances, perfumes, calvin, klein.",
+      "brand": "Calvin Klein",
+      "category_id": 723560000000000002,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "fragrances",
+          "perfumes"
+        ],
+        "image_tags": [
+          "fragrances",
+          "perfumes",
+          "calvin",
+          "klein",
+          "one"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 6
+      }
+    },
+    {
+      "id": 723550000000000007,
+      "sku": "FRA-CHA-CHA-007",
+      "title": "Chanel Coco Noir Eau De",
+      "short_description": "Coco Noir by Chanel is an elegant and mysterious fragrance, featuring notes of grapefruit, rose, and sandalwood. Perfect for evening occasions.",
+      "long_description": "Coco Noir by Chanel is an elegant and mysterious fragrance, featuring notes of grapefruit, rose, and sandalwood. Perfect for evening occasions. Chanel Coco Noir Eau De product image for fragrances. Visual hints: fragrances, perfumes, chanel, coco.",
+      "brand": "Chanel",
+      "category_id": 723560000000000002,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "fragrances",
+          "perfumes"
+        ],
+        "image_tags": [
+          "fragrances",
+          "perfumes",
+          "chanel",
+          "coco",
+          "noir",
+          "eau"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 7
+      }
+    },
+    {
+      "id": 723550000000000008,
+      "sku": "FRA-DIO-DIO-008",
+      "title": "Dior J'adore",
+      "short_description": "J'adore by Dior is a luxurious and floral fragrance, known for its blend of ylang-ylang, rose, and jasmine. It embodies femininity and sophistication.",
+      "long_description": "J'adore by Dior is a luxurious and floral fragrance, known for its blend of ylang-ylang, rose, and jasmine. It embodies femininity and sophistication. Dior J'adore product image for fragrances. Visual hints: fragrances, perfumes, dior, adore.",
+      "brand": "Dior",
+      "category_id": 723560000000000002,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "fragrances",
+          "perfumes"
+        ],
+        "image_tags": [
+          "fragrances",
+          "perfumes",
+          "dior",
+          "adore"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 8
+      }
+    },
+    {
+      "id": 723550000000000009,
+      "sku": "FRA-DOL-DOL-009",
+      "title": "Dolce Shine Eau de",
+      "short_description": "Dolce Shine by Dolce & Gabbana is a vibrant and fruity fragrance, featuring notes of mango, jasmine, and blonde woods. It's a joyful and youthful scent.",
+      "long_description": "Dolce Shine by Dolce & Gabbana is a vibrant and fruity fragrance, featuring notes of mango, jasmine, and blonde woods. It's a joyful and youthful scent. Dolce Shine Eau de product image for fragrances. Visual hints: fragrances, perfumes, dolce, shine.",
+      "brand": "Dolce & Gabbana",
+      "category_id": 723560000000000002,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "fragrances",
+          "perfumes"
+        ],
+        "image_tags": [
+          "fragrances",
+          "perfumes",
+          "dolce",
+          "shine",
+          "eau"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 9
+      }
+    },
+    {
+      "id": 723550000000000010,
+      "sku": "FRA-GUC-GUC-010",
+      "title": "Gucci Bloom Eau de",
+      "short_description": "Gucci Bloom by Gucci is a floral and captivating fragrance, with notes of tuberose, jasmine, and Rangoon creeper. It's a modern and romantic scent.",
+      "long_description": "Gucci Bloom by Gucci is a floral and captivating fragrance, with notes of tuberose, jasmine, and Rangoon creeper. It's a modern and romantic scent. Gucci Bloom Eau de product image for fragrances. Visual hints: fragrances, perfumes, gucci, bloom.",
+      "brand": "Gucci",
+      "category_id": 723560000000000002,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "fragrances",
+          "perfumes"
+        ],
+        "image_tags": [
+          "fragrances",
+          "perfumes",
+          "gucci",
+          "bloom",
+          "eau"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 10
+      }
+    },
+    {
+      "id": 723550000000000011,
+      "sku": "FUR-ANN-ANN-011",
+      "title": "Annibale Colombo Bed",
+      "short_description": "The Annibale Colombo Bed is a luxurious and elegant bed frame, crafted with high-quality materials for a comfortable and stylish bedroom.",
+      "long_description": "The Annibale Colombo Bed is a luxurious and elegant bed frame, crafted with high-quality materials for a comfortable and stylish bedroom. Annibale Colombo Bed product image for furniture. Visual hints: furniture, beds, annibale, colombo.",
+      "brand": "Annibale Colombo",
+      "category_id": 723560000000000003,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "furniture",
+          "beds"
+        ],
+        "image_tags": [
+          "furniture",
+          "beds",
+          "annibale",
+          "colombo",
+          "bed"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 11
+      }
+    },
+    {
+      "id": 723550000000000012,
+      "sku": "FUR-ANN-ANN-012",
+      "title": "Annibale Colombo Sofa",
+      "short_description": "The Annibale Colombo Sofa is a sophisticated and comfortable seating option, featuring exquisite design and premium upholstery for your living room.",
+      "long_description": "The Annibale Colombo Sofa is a sophisticated and comfortable seating option, featuring exquisite design and premium upholstery for your living room. Annibale Colombo Sofa product image for furniture. Visual hints: furniture, sofas, annibale, colombo.",
+      "brand": "Annibale Colombo",
+      "category_id": 723560000000000003,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "furniture",
+          "sofas"
+        ],
+        "image_tags": [
+          "furniture",
+          "sofas",
+          "annibale",
+          "colombo",
+          "sofa"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 12
+      }
+    },
+    {
+      "id": 723550000000000013,
+      "sku": "FUR-FUR-BED-013",
+      "title": "Bedside Table African Cherry",
+      "short_description": "The Bedside Table in African Cherry is a stylish and functional addition to your bedroom, providing convenient storage space and a touch of elegance.",
+      "long_description": "The Bedside Table in African Cherry is a stylish and functional addition to your bedroom, providing convenient storage space and a touch of elegance. Bedside Table African Cherry product image for furniture. Visual hints: furniture, bedside tables, bedside, table.",
+      "brand": "Furniture Co.",
+      "category_id": 723560000000000003,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "furniture",
+          "bedside tables"
+        ],
+        "image_tags": [
+          "furniture",
+          "bedside tables",
+          "bedside",
+          "table",
+          "african",
+          "cherry"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 13
+      }
+    },
+    {
+      "id": 723550000000000014,
+      "sku": "FUR-KNO-KNO-014",
+      "title": "Knoll Saarinen Executive Conference Chair",
+      "short_description": "The Knoll Saarinen Executive Conference Chair is a modern and ergonomic chair, perfect for your office or conference room with its timeless design.",
+      "long_description": "The Knoll Saarinen Executive Conference Chair is a modern and ergonomic chair, perfect for your office or conference room with its timeless design. Knoll Saarinen Executive Conference Chair product image for furniture. Visual hints: furniture, office chairs, knoll, saarinen.",
+      "brand": "Knoll",
+      "category_id": 723560000000000003,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "furniture",
+          "office chairs"
+        ],
+        "image_tags": [
+          "furniture",
+          "office chairs",
+          "knoll",
+          "saarinen",
+          "executive",
+          "conference"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 14
+      }
+    },
+    {
+      "id": 723550000000000015,
+      "sku": "FUR-BAT-WOO-015",
+      "title": "Wooden Bathroom Sink With Mirror",
+      "short_description": "The Wooden Bathroom Sink with Mirror is a unique and stylish addition to your bathroom, featuring a wooden sink countertop and a matching mirror.",
+      "long_description": "The Wooden Bathroom Sink with Mirror is a unique and stylish addition to your bathroom, featuring a wooden sink countertop and a matching mirror. Wooden Bathroom Sink With Mirror product image for furniture. Visual hints: furniture, bathroom, wooden, sink.",
+      "brand": "Bath Trends",
+      "category_id": 723560000000000003,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "furniture",
+          "bathroom"
+        ],
+        "image_tags": [
+          "furniture",
+          "bathroom",
+          "wooden",
+          "sink",
+          "with"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 15
+      }
+    },
+    {
+      "id": 723550000000000016,
+      "sku": "GRO-BRD-APP-016",
+      "title": "Apple",
+      "short_description": "Fresh and crisp apples, perfect for snacking or incorporating into various recipes.",
+      "long_description": "Fresh and crisp apples, perfect for snacking or incorporating into various recipes. Apple product image for groceries. Visual hints: fruits, groceries, apple.",
+      "brand": "Apple",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "fruits"
+        ],
+        "image_tags": [
+          "fruits",
+          "groceries",
+          "apple"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 16
+      }
+    },
+    {
+      "id": 723550000000000017,
+      "sku": "GRO-BRD-BEE-017",
+      "title": "Beef Steak",
+      "short_description": "High-quality beef steak, great for grilling or cooking to your preferred level of doneness.",
+      "long_description": "High-quality beef steak, great for grilling or cooking to your preferred level of doneness. Beef Steak product image for groceries. Visual hints: meat, groceries, beef, steak.",
+      "brand": "Beef Steak",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "meat"
+        ],
+        "image_tags": [
+          "meat",
+          "groceries",
+          "beef",
+          "steak"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 17
+      }
+    },
+    {
+      "id": 723550000000000018,
+      "sku": "GRO-BRD-FOO-018",
+      "title": "Cat Food",
+      "short_description": "Nutritious cat food formulated to meet the dietary needs of your feline friend.",
+      "long_description": "Nutritious cat food formulated to meet the dietary needs of your feline friend. Cat Food product image for groceries. Visual hints: pet supplies, cat food, groceries, cat.",
+      "brand": "Cat Food",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "pet supplies",
+          "cat food"
+        ],
+        "image_tags": [
+          "pet supplies",
+          "cat food",
+          "groceries",
+          "cat",
+          "food"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 18
+      }
+    },
+    {
+      "id": 723550000000000019,
+      "sku": "GRO-BRD-CHI-019",
+      "title": "Chicken Meat",
+      "short_description": "Fresh and tender chicken meat, suitable for various culinary preparations.",
+      "long_description": "Fresh and tender chicken meat, suitable for various culinary preparations. Chicken Meat product image for groceries. Visual hints: meat, groceries, chicken.",
+      "brand": "Chicken Meat",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "meat"
+        ],
+        "image_tags": [
+          "meat",
+          "groceries",
+          "chicken"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 19
+      }
+    },
+    {
+      "id": 723550000000000020,
+      "sku": "GRO-BRD-COO-020",
+      "title": "Cooking Oil",
+      "short_description": "Versatile cooking oil suitable for frying, saut\u00e9ing, and various culinary applications.",
+      "long_description": "Versatile cooking oil suitable for frying, saut\u00e9ing, and various culinary applications. Cooking Oil product image for groceries. Visual hints: cooking essentials, groceries, cooking, oil.",
+      "brand": "Cooking Oil",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "cooking essentials"
+        ],
+        "image_tags": [
+          "cooking essentials",
+          "groceries",
+          "cooking",
+          "oil"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 20
+      }
+    },
+    {
+      "id": 723550000000000021,
+      "sku": "GRO-BRD-CUC-021",
+      "title": "Cucumber",
+      "short_description": "Crisp and hydrating cucumbers, ideal for salads, snacks, or as a refreshing side.",
+      "long_description": "Crisp and hydrating cucumbers, ideal for salads, snacks, or as a refreshing side. Cucumber product image for groceries. Visual hints: vegetables, groceries, cucumber.",
+      "brand": "Cucumber",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "vegetables"
+        ],
+        "image_tags": [
+          "vegetables",
+          "groceries",
+          "cucumber"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 21
+      }
+    },
+    {
+      "id": 723550000000000022,
+      "sku": "GRO-BRD-FOO-022",
+      "title": "Dog Food",
+      "short_description": "Specially formulated dog food designed to provide essential nutrients for your canine companion.",
+      "long_description": "Specially formulated dog food designed to provide essential nutrients for your canine companion. Dog Food product image for groceries. Visual hints: pet supplies, dog food, groceries, dog.",
+      "brand": "Dog Food",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "pet supplies",
+          "dog food"
+        ],
+        "image_tags": [
+          "pet supplies",
+          "dog food",
+          "groceries",
+          "dog",
+          "food"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 22
+      }
+    },
+    {
+      "id": 723550000000000023,
+      "sku": "GRO-BRD-EGG-023",
+      "title": "Eggs",
+      "short_description": "Fresh eggs, a versatile ingredient for baking, cooking, or breakfast.",
+      "long_description": "Fresh eggs, a versatile ingredient for baking, cooking, or breakfast. Eggs product image for groceries. Visual hints: dairy, groceries, eggs.",
+      "brand": "Eggs",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "dairy"
+        ],
+        "image_tags": [
+          "dairy",
+          "groceries",
+          "eggs"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 23
+      }
+    },
+    {
+      "id": 723550000000000024,
+      "sku": "GRO-BRD-FIS-024",
+      "title": "Fish Steak",
+      "short_description": "Quality fish steak, suitable for grilling, baking, or pan-searing.",
+      "long_description": "Quality fish steak, suitable for grilling, baking, or pan-searing. Fish Steak product image for groceries. Visual hints: seafood, groceries, fish, steak.",
+      "brand": "Fish Steak",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "seafood"
+        ],
+        "image_tags": [
+          "seafood",
+          "groceries",
+          "fish",
+          "steak"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 24
+      }
+    },
+    {
+      "id": 723550000000000025,
+      "sku": "GRO-BRD-GRE-025",
+      "title": "Green Bell Pepper",
+      "short_description": "Fresh and vibrant green bell pepper, perfect for adding color and flavor to your dishes.",
+      "long_description": "Fresh and vibrant green bell pepper, perfect for adding color and flavor to your dishes. Green Bell Pepper product image for groceries. Visual hints: vegetables, groceries, green, bell.",
+      "brand": "Green Bell Pepper",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "vegetables"
+        ],
+        "image_tags": [
+          "vegetables",
+          "groceries",
+          "green",
+          "bell",
+          "pepper"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 25
+      }
+    },
+    {
+      "id": 723550000000000026,
+      "sku": "GRO-BRD-GRE-026",
+      "title": "Green Chili Pepper",
+      "short_description": "Spicy green chili pepper, ideal for adding heat to your favorite recipes.",
+      "long_description": "Spicy green chili pepper, ideal for adding heat to your favorite recipes. Green Chili Pepper product image for groceries. Visual hints: vegetables, groceries, green, chili.",
+      "brand": "Green Chili Pepper",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "vegetables"
+        ],
+        "image_tags": [
+          "vegetables",
+          "groceries",
+          "green",
+          "chili",
+          "pepper"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 26
+      }
+    },
+    {
+      "id": 723550000000000027,
+      "sku": "GRO-BRD-HON-027",
+      "title": "Honey Jar",
+      "short_description": "Pure and natural honey in a convenient jar, perfect for sweetening beverages or drizzling over food.",
+      "long_description": "Pure and natural honey in a convenient jar, perfect for sweetening beverages or drizzling over food. Honey Jar product image for groceries. Visual hints: condiments, groceries, honey, jar.",
+      "brand": "Honey Jar",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "condiments"
+        ],
+        "image_tags": [
+          "condiments",
+          "groceries",
+          "honey",
+          "jar"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 27
+      }
+    },
+    {
+      "id": 723550000000000028,
+      "sku": "GRO-BRD-CRE-028",
+      "title": "Ice Cream",
+      "short_description": "Creamy and delicious ice cream, available in various flavors for a delightful treat.",
+      "long_description": "Creamy and delicious ice cream, available in various flavors for a delightful treat. Ice Cream product image for groceries. Visual hints: desserts, groceries, ice, cream.",
+      "brand": "Ice Cream",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "desserts"
+        ],
+        "image_tags": [
+          "desserts",
+          "groceries",
+          "ice",
+          "cream"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 28
+      }
+    },
+    {
+      "id": 723550000000000029,
+      "sku": "GRO-BRD-JUI-029",
+      "title": "Juice",
+      "short_description": "Refreshing fruit juice, packed with vitamins and great for staying hydrated.",
+      "long_description": "Refreshing fruit juice, packed with vitamins and great for staying hydrated. Juice product image for groceries. Visual hints: beverages, groceries, juice.",
+      "brand": "Juice",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "beverages"
+        ],
+        "image_tags": [
+          "beverages",
+          "groceries",
+          "juice"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 29
+      }
+    },
+    {
+      "id": 723550000000000030,
+      "sku": "GRO-BRD-KIW-030",
+      "title": "Kiwi",
+      "short_description": "Nutrient-rich kiwi, perfect for snacking or adding a tropical twist to your dishes.",
+      "long_description": "Nutrient-rich kiwi, perfect for snacking or adding a tropical twist to your dishes. Kiwi product image for groceries. Visual hints: fruits, groceries, kiwi.",
+      "brand": "Kiwi",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "fruits"
+        ],
+        "image_tags": [
+          "fruits",
+          "groceries",
+          "kiwi"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 30
+      }
+    },
+    {
+      "id": 723550000000000031,
+      "sku": "GRO-BRD-LEM-031",
+      "title": "Lemon",
+      "short_description": "Zesty and tangy lemons, versatile for cooking, baking, or making refreshing beverages.",
+      "long_description": "Zesty and tangy lemons, versatile for cooking, baking, or making refreshing beverages. Lemon product image for groceries. Visual hints: fruits, groceries, lemon.",
+      "brand": "Lemon",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "fruits"
+        ],
+        "image_tags": [
+          "fruits",
+          "groceries",
+          "lemon"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 31
+      }
+    },
+    {
+      "id": 723550000000000032,
+      "sku": "GRO-BRD-MIL-032",
+      "title": "Milk",
+      "short_description": "Fresh and nutritious milk, a staple for various recipes and daily consumption.",
+      "long_description": "Fresh and nutritious milk, a staple for various recipes and daily consumption. Milk product image for groceries. Visual hints: dairy, groceries, milk.",
+      "brand": "Milk",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "dairy"
+        ],
+        "image_tags": [
+          "dairy",
+          "groceries",
+          "milk"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 32
+      }
+    },
+    {
+      "id": 723550000000000033,
+      "sku": "GRO-BRD-MUL-033",
+      "title": "Mulberry",
+      "short_description": "Sweet and juicy mulberries, perfect for snacking or adding to desserts and cereals.",
+      "long_description": "Sweet and juicy mulberries, perfect for snacking or adding to desserts and cereals. Mulberry product image for groceries. Visual hints: fruits, groceries, mulberry.",
+      "brand": "Mulberry",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "fruits"
+        ],
+        "image_tags": [
+          "fruits",
+          "groceries",
+          "mulberry"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 33
+      }
+    },
+    {
+      "id": 723550000000000034,
+      "sku": "GRO-BRD-NES-034",
+      "title": "Nescafe Coffee",
+      "short_description": "Quality coffee from Nescafe, available in various blends for a rich and satisfying cup.",
+      "long_description": "Quality coffee from Nescafe, available in various blends for a rich and satisfying cup. Nescafe Coffee product image for groceries. Visual hints: beverages, coffee, groceries, nescafe.",
+      "brand": "Nescafe Coffee",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "beverages",
+          "coffee"
+        ],
+        "image_tags": [
+          "beverages",
+          "coffee",
+          "groceries",
+          "nescafe"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 34
+      }
+    },
+    {
+      "id": 723550000000000035,
+      "sku": "GRO-BRD-POT-035",
+      "title": "Potatoes",
+      "short_description": "Versatile and starchy potatoes, great for roasting, mashing, or as a side dish.",
+      "long_description": "Versatile and starchy potatoes, great for roasting, mashing, or as a side dish. Potatoes product image for groceries. Visual hints: vegetables, groceries, potatoes.",
+      "brand": "Potatoes",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "vegetables"
+        ],
+        "image_tags": [
+          "vegetables",
+          "groceries",
+          "potatoes"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 35
+      }
+    },
+    {
+      "id": 723550000000000036,
+      "sku": "GRO-BRD-PRO-036",
+      "title": "Protein Powder",
+      "short_description": "Nutrient-packed protein powder, ideal for supplementing your diet with essential proteins.",
+      "long_description": "Nutrient-packed protein powder, ideal for supplementing your diet with essential proteins. Protein Powder product image for groceries. Visual hints: health supplements, groceries, protein, powder.",
+      "brand": "Protein Powder",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "health supplements"
+        ],
+        "image_tags": [
+          "health supplements",
+          "groceries",
+          "protein",
+          "powder"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 36
+      }
+    },
+    {
+      "id": 723550000000000037,
+      "sku": "GRO-BRD-ONI-037",
+      "title": "Red Onions",
+      "short_description": "Flavorful and aromatic red onions, perfect for adding depth to your savory dishes.",
+      "long_description": "Flavorful and aromatic red onions, perfect for adding depth to your savory dishes. Red Onions product image for groceries. Visual hints: vegetables, groceries, red, onions.",
+      "brand": "Red Onions",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "vegetables"
+        ],
+        "image_tags": [
+          "vegetables",
+          "groceries",
+          "red",
+          "onions"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 37
+      }
+    },
+    {
+      "id": 723550000000000038,
+      "sku": "GRO-BRD-RIC-038",
+      "title": "Rice",
+      "short_description": "High-quality rice, a staple for various cuisines and a versatile base for many dishes.",
+      "long_description": "High-quality rice, a staple for various cuisines and a versatile base for many dishes. Rice product image for groceries. Visual hints: grains, groceries, rice.",
+      "brand": "Rice",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "grains"
+        ],
+        "image_tags": [
+          "grains",
+          "groceries",
+          "rice"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 38
+      }
+    },
+    {
+      "id": 723550000000000039,
+      "sku": "GRO-BRD-SOF-039",
+      "title": "Soft Drinks",
+      "short_description": "Assorted soft drinks in various flavors, perfect for refreshing beverages.",
+      "long_description": "Assorted soft drinks in various flavors, perfect for refreshing beverages. Soft Drinks product image for groceries. Visual hints: beverages, groceries, soft, drinks.",
+      "brand": "Soft Drinks",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "beverages"
+        ],
+        "image_tags": [
+          "beverages",
+          "groceries",
+          "soft",
+          "drinks"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 39
+      }
+    },
+    {
+      "id": 723550000000000040,
+      "sku": "GRO-BRD-STR-040",
+      "title": "Strawberry",
+      "short_description": "Sweet and succulent strawberries, great for snacking, desserts, or blending into smoothies.",
+      "long_description": "Sweet and succulent strawberries, great for snacking, desserts, or blending into smoothies. Strawberry product image for groceries. Visual hints: fruits, groceries, strawberry.",
+      "brand": "Strawberry",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "fruits"
+        ],
+        "image_tags": [
+          "fruits",
+          "groceries",
+          "strawberry"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 40
+      }
+    },
+    {
+      "id": 723550000000000041,
+      "sku": "GRO-BRD-TIS-041",
+      "title": "Tissue Paper Box",
+      "short_description": "Convenient tissue paper box for everyday use, providing soft and absorbent tissues.",
+      "long_description": "Convenient tissue paper box for everyday use, providing soft and absorbent tissues. Tissue Paper Box product image for groceries. Visual hints: household essentials, groceries, tissue, paper.",
+      "brand": "Tissue Paper Box",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "household essentials"
+        ],
+        "image_tags": [
+          "household essentials",
+          "groceries",
+          "tissue",
+          "paper",
+          "box"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 41
+      }
+    },
+    {
+      "id": 723550000000000042,
+      "sku": "GRO-BRD-WAT-042",
+      "title": "Water",
+      "short_description": "Pure and refreshing bottled water, essential for staying hydrated throughout the day.",
+      "long_description": "Pure and refreshing bottled water, essential for staying hydrated throughout the day. Water product image for groceries. Visual hints: beverages, groceries, water.",
+      "brand": "Water",
+      "category_id": 723560000000000004,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "beverages"
+        ],
+        "image_tags": [
+          "beverages",
+          "groceries",
+          "water"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 42
+      }
+    },
+    {
+      "id": 723550000000000043,
+      "sku": "HOM-BRD-DEC-043",
+      "title": "Decoration Swing",
+      "short_description": "The Decoration Swing is a charming addition to your home decor. Crafted with intricate details, it adds a touch of elegance and whimsy to any room.",
+      "long_description": "The Decoration Swing is a charming addition to your home decor. Crafted with intricate details, it adds a touch of elegance and whimsy to any room. Decoration Swing product image for home decoration. Visual hints: home decor, swing, home, decoration.",
+      "brand": "Decoration Swing",
+      "category_id": 723560000000000005,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "home decor",
+          "swing"
+        ],
+        "image_tags": [
+          "home decor",
+          "swing",
+          "home",
+          "decoration"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 43
+      }
+    },
+    {
+      "id": 723550000000000044,
+      "sku": "HOM-BRD-FAM-044",
+      "title": "Family Tree Photo Frame",
+      "short_description": "The Family Tree Photo Frame is a sentimental and stylish way to display your cherished family memories. With multiple photo slots, it tells the story of your loved ones.",
+      "long_description": "The Family Tree Photo Frame is a sentimental and stylish way to display your cherished family memories. With multiple photo slots, it tells the story of your loved ones. Family Tree Photo Frame product image for home decoration. Visual hints: home decor, photo frame, home, decoration.",
+      "brand": "Family Tree Photo Frame",
+      "category_id": 723560000000000005,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "home decor",
+          "photo frame"
+        ],
+        "image_tags": [
+          "home decor",
+          "photo frame",
+          "home",
+          "decoration",
+          "family",
+          "tree",
+          "photo",
+          "frame"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 44
+      }
+    },
+    {
+      "id": 723550000000000045,
+      "sku": "HOM-BRD-HOU-045",
+      "title": "House Showpiece Plant",
+      "short_description": "The House Showpiece Plant is an artificial plant that brings a touch of nature to your home without the need for maintenance. It adds greenery and style to any space.",
+      "long_description": "The House Showpiece Plant is an artificial plant that brings a touch of nature to your home without the need for maintenance. It adds greenery and style to any space. House Showpiece Plant product image for home decoration. Visual hints: home decor, artificial plants, home, decoration.",
+      "brand": "House Showpiece Plant",
+      "category_id": 723560000000000005,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "home decor",
+          "artificial plants"
+        ],
+        "image_tags": [
+          "home decor",
+          "artificial plants",
+          "home",
+          "decoration",
+          "house",
+          "showpiece",
+          "plant"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 45
+      }
+    },
+    {
+      "id": 723550000000000046,
+      "sku": "HOM-BRD-PLA-046",
+      "title": "Plant Pot",
+      "short_description": "The Plant Pot is a stylish container for your favorite plants. With a sleek design, it complements your indoor or outdoor garden, adding a modern touch to your plant display.",
+      "long_description": "The Plant Pot is a stylish container for your favorite plants. With a sleek design, it complements your indoor or outdoor garden, adding a modern touch to your plant display. Plant Pot product image for home decoration. Visual hints: home decor, plant accessories, home, decoration.",
+      "brand": "Plant Pot",
+      "category_id": 723560000000000005,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "home decor",
+          "plant accessories"
+        ],
+        "image_tags": [
+          "home decor",
+          "plant accessories",
+          "home",
+          "decoration",
+          "plant",
+          "pot"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 46
+      }
+    },
+    {
+      "id": 723550000000000047,
+      "sku": "HOM-BRD-TAB-047",
+      "title": "Table Lamp",
+      "short_description": "The Table Lamp is a functional and decorative lighting solution for your living space. With a modern design, it provides both ambient and task lighting, enhancing the atmosphere.",
+      "long_description": "The Table Lamp is a functional and decorative lighting solution for your living space. With a modern design, it provides both ambient and task lighting, enhancing the atmosphere. Table Lamp product image for home decoration. Visual hints: home decor, lighting, home, decoration.",
+      "brand": "Table Lamp",
+      "category_id": 723560000000000005,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "home decor",
+          "lighting"
+        ],
+        "image_tags": [
+          "home decor",
+          "lighting",
+          "home",
+          "decoration",
+          "table",
+          "lamp"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 47
+      }
+    },
+    {
+      "id": 723550000000000048,
+      "sku": "KIT-BRD-BAM-048",
+      "title": "Bamboo Spatula",
+      "short_description": "The Bamboo Spatula is a versatile kitchen tool made from eco-friendly bamboo. Ideal for flipping, stirring, and serving various dishes.",
+      "long_description": "The Bamboo Spatula is a versatile kitchen tool made from eco-friendly bamboo. Ideal for flipping, stirring, and serving various dishes. Bamboo Spatula product image for kitchen accessories. Visual hints: kitchen tools, utensils, kitchen, accessories.",
+      "brand": "Bamboo Spatula",
+      "category_id": 723560000000000006,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "kitchen tools",
+          "utensils"
+        ],
+        "image_tags": [
+          "kitchen tools",
+          "utensils",
+          "kitchen",
+          "accessories",
+          "bamboo",
+          "spatula"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 48
+      }
+    },
+    {
+      "id": 723550000000000049,
+      "sku": "KIT-BRD-BLA-049",
+      "title": "Black Aluminium Cup",
+      "short_description": "The Black Aluminium Cup is a stylish and durable cup suitable for both hot and cold beverages. Its sleek black design adds a modern touch to your drinkware collection.",
+      "long_description": "The Black Aluminium Cup is a stylish and durable cup suitable for both hot and cold beverages. Its sleek black design adds a modern touch to your drinkware collection. Black Aluminium Cup product image for kitchen accessories. Visual hints: drinkware, cups, kitchen, accessories.",
+      "brand": "Black Aluminium Cup",
+      "category_id": 723560000000000006,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "drinkware",
+          "cups"
+        ],
+        "image_tags": [
+          "drinkware",
+          "cups",
+          "kitchen",
+          "accessories",
+          "black",
+          "aluminium",
+          "cup"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 49
+      }
+    },
+    {
+      "id": 723550000000000050,
+      "sku": "KIT-BRD-BLA-050",
+      "title": "Black Whisk",
+      "short_description": "The Black Whisk is a kitchen essential for whisking and beating ingredients. Its ergonomic handle and sleek design make it a practical and stylish tool.",
+      "long_description": "The Black Whisk is a kitchen essential for whisking and beating ingredients. Its ergonomic handle and sleek design make it a practical and stylish tool. Black Whisk product image for kitchen accessories. Visual hints: kitchen tools, utensils, kitchen, accessories.",
+      "brand": "Black Whisk",
+      "category_id": 723560000000000006,
+      "status": "active",
+      "attributes_jsonb": {
+        "tags": [
+          "kitchen tools",
+          "utensils"
+        ],
+        "image_tags": [
+          "kitchen tools",
+          "utensils",
+          "kitchen",
+          "accessories",
+          "black",
+          "whisk"
+        ],
+        "source": "dummyjson",
+        "source_product_id": 50
+      }
+    }
+  ],
+  "product_media": [
+    {
+      "id": 723580000000000001,
+      "product_id": 723550000000000001,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Essence Mascara Lash Princess",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000002,
+      "product_id": 723550000000000002,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Eyeshadow Palette with Mirror",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000003,
+      "product_id": 723550000000000003,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/beauty/powder-canister/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/beauty/powder-canister/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Powder Canister",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000004,
+      "product_id": 723550000000000004,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Red Lipstick",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000005,
+      "product_id": 723550000000000005,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/beauty/red-nail-polish/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/beauty/red-nail-polish/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Red Nail Polish",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000006,
+      "product_id": 723550000000000006,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Calvin Klein CK One",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000007,
+      "product_id": 723550000000000007,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Chanel Coco Noir Eau De",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000008,
+      "product_id": 723550000000000008,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/fragrances/dior-j'adore/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/fragrances/dior-j'adore/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Dior J'adore",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000009,
+      "product_id": 723550000000000009,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/fragrances/dolce-shine-eau-de/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/fragrances/dolce-shine-eau-de/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Dolce Shine Eau de",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000010,
+      "product_id": 723550000000000010,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/fragrances/gucci-bloom-eau-de/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/fragrances/gucci-bloom-eau-de/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Gucci Bloom Eau de",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000011,
+      "product_id": 723550000000000011,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-bed/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-bed/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Annibale Colombo Bed",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000012,
+      "product_id": 723550000000000012,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-sofa/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-sofa/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Annibale Colombo Sofa",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000013,
+      "product_id": 723550000000000013,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/furniture/bedside-table-african-cherry/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/furniture/bedside-table-african-cherry/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Bedside Table African Cherry",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000014,
+      "product_id": 723550000000000014,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/furniture/knoll-saarinen-executive-conference-chair/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/furniture/knoll-saarinen-executive-conference-chair/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Knoll Saarinen Executive Conference Chair",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000015,
+      "product_id": 723550000000000015,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Wooden Bathroom Sink With Mirror",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000016,
+      "product_id": 723550000000000016,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/apple/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/apple/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Apple",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000017,
+      "product_id": 723550000000000017,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/beef-steak/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/beef-steak/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Beef Steak",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000018,
+      "product_id": 723550000000000018,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/cat-food/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/cat-food/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Cat Food",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000019,
+      "product_id": 723550000000000019,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/chicken-meat/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/chicken-meat/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Chicken Meat",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000020,
+      "product_id": 723550000000000020,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/cooking-oil/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/cooking-oil/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Cooking Oil",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000021,
+      "product_id": 723550000000000021,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/cucumber/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/cucumber/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Cucumber",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000022,
+      "product_id": 723550000000000022,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/dog-food/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/dog-food/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Dog Food",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000023,
+      "product_id": 723550000000000023,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/eggs/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/eggs/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Eggs",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000024,
+      "product_id": 723550000000000024,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/fish-steak/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/fish-steak/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Fish Steak",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000025,
+      "product_id": 723550000000000025,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/green-bell-pepper/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/green-bell-pepper/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Green Bell Pepper",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000026,
+      "product_id": 723550000000000026,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/green-chili-pepper/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/green-chili-pepper/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Green Chili Pepper",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000027,
+      "product_id": 723550000000000027,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/honey-jar/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/honey-jar/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Honey Jar",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000028,
+      "product_id": 723550000000000028,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/ice-cream/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/ice-cream/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Ice Cream",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000029,
+      "product_id": 723550000000000029,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/juice/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/juice/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Juice",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000030,
+      "product_id": 723550000000000030,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/kiwi/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/kiwi/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Kiwi",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000031,
+      "product_id": 723550000000000031,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/lemon/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/lemon/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Lemon",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000032,
+      "product_id": 723550000000000032,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/milk/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/milk/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Milk",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000033,
+      "product_id": 723550000000000033,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/mulberry/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/mulberry/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Mulberry",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000034,
+      "product_id": 723550000000000034,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/nescafe-coffee/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/nescafe-coffee/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Nescafe Coffee",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000035,
+      "product_id": 723550000000000035,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/potatoes/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/potatoes/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Potatoes",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000036,
+      "product_id": 723550000000000036,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/protein-powder/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/protein-powder/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Protein Powder",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000037,
+      "product_id": 723550000000000037,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/red-onions/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/red-onions/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Red Onions",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000038,
+      "product_id": 723550000000000038,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/rice/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/rice/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Rice",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000039,
+      "product_id": 723550000000000039,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/soft-drinks/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/soft-drinks/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Soft Drinks",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000040,
+      "product_id": 723550000000000040,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/strawberry/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/strawberry/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Strawberry",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000041,
+      "product_id": 723550000000000041,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/tissue-paper-box/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/tissue-paper-box/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Tissue Paper Box",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000042,
+      "product_id": 723550000000000042,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/groceries/water/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/groceries/water/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Water",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000043,
+      "product_id": 723550000000000043,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/home-decoration/decoration-swing/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/home-decoration/decoration-swing/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Decoration Swing",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000044,
+      "product_id": 723550000000000044,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/home-decoration/family-tree-photo-frame/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/home-decoration/family-tree-photo-frame/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Family Tree Photo Frame",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000045,
+      "product_id": 723550000000000045,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/home-decoration/house-showpiece-plant/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/home-decoration/house-showpiece-plant/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "House Showpiece Plant",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000046,
+      "product_id": 723550000000000046,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/home-decoration/plant-pot/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/home-decoration/plant-pot/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Plant Pot",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000047,
+      "product_id": 723550000000000047,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/home-decoration/table-lamp/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/home-decoration/table-lamp/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Table Lamp",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000048,
+      "product_id": 723550000000000048,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/kitchen-accessories/bamboo-spatula/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/kitchen-accessories/bamboo-spatula/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Bamboo Spatula",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000049,
+      "product_id": 723550000000000049,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/kitchen-accessories/black-aluminium-cup/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/kitchen-accessories/black-aluminium-cup/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Black Aluminium Cup",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    },
+    {
+      "id": 723580000000000050,
+      "product_id": 723550000000000050,
+      "media_type": "image",
+      "url": "https://cdn.dummyjson.com/product-images/kitchen-accessories/black-whisk/1.webp",
+      "thumbnail_url": "https://cdn.dummyjson.com/product-images/kitchen-accessories/black-whisk/thumbnail.webp",
+      "sort_order": 0,
+      "alt_text": "Black Whisk",
+      "width": null,
+      "height": null,
+      "is_primary": true
+    }
+  ],
+  "sellers": [
+    {
+      "id": 723570000000000001,
+      "seller_code": "essence",
+      "name": "Essence Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/essence",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000002,
+      "seller_code": "glamour-beauty",
+      "name": "Glamour Beauty Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/glamour-beauty",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000003,
+      "seller_code": "velvet-touch",
+      "name": "Velvet Touch Store",
+      "rating": 4.64,
+      "seller_url": "https://example.com/sellers/velvet-touch",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000004,
+      "seller_code": "chic-cosmetics",
+      "name": "Chic Cosmetics Store",
+      "rating": 4.36,
+      "seller_url": "https://example.com/sellers/chic-cosmetics",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000005,
+      "seller_code": "nail-couture",
+      "name": "Nail Couture Store",
+      "rating": 4.32,
+      "seller_url": "https://example.com/sellers/nail-couture",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000006,
+      "seller_code": "calvin-klein",
+      "name": "Calvin Klein Store",
+      "rating": 4.37,
+      "seller_url": "https://example.com/sellers/calvin-klein",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000007,
+      "seller_code": "chanel",
+      "name": "Chanel Store",
+      "rating": 4.26,
+      "seller_url": "https://example.com/sellers/chanel",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000008,
+      "seller_code": "dior",
+      "name": "Dior Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/dior",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000009,
+      "seller_code": "dolce-gabbana",
+      "name": "Dolce & Gabbana Store",
+      "rating": 3.96,
+      "seller_url": "https://example.com/sellers/dolce-gabbana",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000010,
+      "seller_code": "gucci",
+      "name": "Gucci Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/gucci",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000011,
+      "seller_code": "annibale-colombo",
+      "name": "Annibale Colombo Store",
+      "rating": 4.77,
+      "seller_url": "https://example.com/sellers/annibale-colombo",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000012,
+      "seller_code": "furniture-co",
+      "name": "Furniture Co. Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/furniture-co",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000013,
+      "seller_code": "knoll",
+      "name": "Knoll Store",
+      "rating": 4.88,
+      "seller_url": "https://example.com/sellers/knoll",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000014,
+      "seller_code": "bath-trends",
+      "name": "Bath Trends Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/bath-trends",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000015,
+      "seller_code": "apple",
+      "name": "Apple Store",
+      "rating": 4.19,
+      "seller_url": "https://example.com/sellers/apple",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000016,
+      "seller_code": "beef-steak",
+      "name": "Beef Steak Store",
+      "rating": 4.47,
+      "seller_url": "https://example.com/sellers/beef-steak",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000017,
+      "seller_code": "cat-food",
+      "name": "Cat Food Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/cat-food",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000018,
+      "seller_code": "chicken-meat",
+      "name": "Chicken Meat Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/chicken-meat",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000019,
+      "seller_code": "cooking-oil",
+      "name": "Cooking Oil Store",
+      "rating": 4.8,
+      "seller_url": "https://example.com/sellers/cooking-oil",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000020,
+      "seller_code": "cucumber",
+      "name": "Cucumber Store",
+      "rating": 4.07,
+      "seller_url": "https://example.com/sellers/cucumber",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000021,
+      "seller_code": "dog-food",
+      "name": "Dog Food Store",
+      "rating": 4.55,
+      "seller_url": "https://example.com/sellers/dog-food",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000022,
+      "seller_code": "eggs",
+      "name": "Eggs Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/eggs",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000023,
+      "seller_code": "fish-steak",
+      "name": "Fish Steak Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/fish-steak",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000024,
+      "seller_code": "green-bell-pepper",
+      "name": "Green Bell Pepper Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/green-bell-pepper",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000025,
+      "seller_code": "green-chili-pepper",
+      "name": "Green Chili Pepper Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/green-chili-pepper",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000026,
+      "seller_code": "honey-jar",
+      "name": "Honey Jar Store",
+      "rating": 3.97,
+      "seller_url": "https://example.com/sellers/honey-jar",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000027,
+      "seller_code": "ice-cream",
+      "name": "Ice Cream Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/ice-cream",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000028,
+      "seller_code": "juice",
+      "name": "Juice Store",
+      "rating": 3.94,
+      "seller_url": "https://example.com/sellers/juice",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000029,
+      "seller_code": "kiwi",
+      "name": "Kiwi Store",
+      "rating": 4.93,
+      "seller_url": "https://example.com/sellers/kiwi",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000030,
+      "seller_code": "lemon",
+      "name": "Lemon Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/lemon",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000031,
+      "seller_code": "milk",
+      "name": "Milk Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/milk",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000032,
+      "seller_code": "mulberry",
+      "name": "Mulberry Store",
+      "rating": 4.95,
+      "seller_url": "https://example.com/sellers/mulberry",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000033,
+      "seller_code": "nescafe-coffee",
+      "name": "Nescafe Coffee Store",
+      "rating": 4.82,
+      "seller_url": "https://example.com/sellers/nescafe-coffee",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000034,
+      "seller_code": "potatoes",
+      "name": "Potatoes Store",
+      "rating": 4.81,
+      "seller_url": "https://example.com/sellers/potatoes",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000035,
+      "seller_code": "protein-powder",
+      "name": "Protein Powder Store",
+      "rating": 4.18,
+      "seller_url": "https://example.com/sellers/protein-powder",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000036,
+      "seller_code": "red-onions",
+      "name": "Red Onions Store",
+      "rating": 4.2,
+      "seller_url": "https://example.com/sellers/red-onions",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000037,
+      "seller_code": "rice",
+      "name": "Rice Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/rice",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000038,
+      "seller_code": "soft-drinks",
+      "name": "Soft Drinks Store",
+      "rating": 4.75,
+      "seller_url": "https://example.com/sellers/soft-drinks",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000039,
+      "seller_code": "strawberry",
+      "name": "Strawberry Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/strawberry",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000040,
+      "seller_code": "tissue-paper-box",
+      "name": "Tissue Paper Box Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/tissue-paper-box",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000041,
+      "seller_code": "water",
+      "name": "Water Store",
+      "rating": 4.96,
+      "seller_url": "https://example.com/sellers/water",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000042,
+      "seller_code": "decoration-swing",
+      "name": "Decoration Swing Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/decoration-swing",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000043,
+      "seller_code": "family-tree-photo-frame",
+      "name": "Family Tree Photo Frame Store",
+      "rating": 4.53,
+      "seller_url": "https://example.com/sellers/family-tree-photo-frame",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000044,
+      "seller_code": "house-showpiece-plant",
+      "name": "House Showpiece Plant Store",
+      "rating": 4.67,
+      "seller_url": "https://example.com/sellers/house-showpiece-plant",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000045,
+      "seller_code": "plant-pot",
+      "name": "Plant Pot Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/plant-pot",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000046,
+      "seller_code": "table-lamp",
+      "name": "Table Lamp Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/table-lamp",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000047,
+      "seller_code": "bamboo-spatula",
+      "name": "Bamboo Spatula Store",
+      "rating": 3.8,
+      "seller_url": "https://example.com/sellers/bamboo-spatula",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000048,
+      "seller_code": "black-aluminium-cup",
+      "name": "Black Aluminium Cup Store",
+      "rating": 4.46,
+      "seller_url": "https://example.com/sellers/black-aluminium-cup",
+      "location": "Online",
+      "is_verified": true
+    },
+    {
+      "id": 723570000000000049,
+      "seller_code": "black-whisk",
+      "name": "Black Whisk Store",
+      "rating": 3.9,
+      "seller_url": "https://example.com/sellers/black-whisk",
+      "location": "Online",
+      "is_verified": true
+    }
+  ],
+  "product_offers": [
+    {
+      "id": 723590000000000001,
+      "product_id": 723550000000000001,
+      "seller_id": 723570000000000001,
+      "price": 9.99,
+      "currency": "USD",
+      "inventory_count": 99,
+      "product_url": "https://dummyjson.com/products/1",
+      "shipping_info": "Ships in 3-5 business days",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000002,
+      "product_id": 723550000000000002,
+      "seller_id": 723570000000000002,
+      "price": 19.99,
+      "currency": "USD",
+      "inventory_count": 34,
+      "product_url": "https://dummyjson.com/products/2",
+      "shipping_info": "Ships in 2 weeks",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000003,
+      "product_id": 723550000000000003,
+      "seller_id": 723570000000000003,
+      "price": 14.99,
+      "currency": "USD",
+      "inventory_count": 89,
+      "product_url": "https://dummyjson.com/products/3",
+      "shipping_info": "Ships in 1-2 business days",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000004,
+      "product_id": 723550000000000004,
+      "seller_id": 723570000000000004,
+      "price": 12.99,
+      "currency": "USD",
+      "inventory_count": 91,
+      "product_url": "https://dummyjson.com/products/4",
+      "shipping_info": "Ships in 1 week",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000005,
+      "product_id": 723550000000000005,
+      "seller_id": 723570000000000005,
+      "price": 8.99,
+      "currency": "USD",
+      "inventory_count": 79,
+      "product_url": "https://dummyjson.com/products/5",
+      "shipping_info": "Ships overnight",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000006,
+      "product_id": 723550000000000006,
+      "seller_id": 723570000000000006,
+      "price": 49.99,
+      "currency": "USD",
+      "inventory_count": 29,
+      "product_url": "https://dummyjson.com/products/6",
+      "shipping_info": "Ships overnight",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000007,
+      "product_id": 723550000000000007,
+      "seller_id": 723570000000000007,
+      "price": 129.99,
+      "currency": "USD",
+      "inventory_count": 58,
+      "product_url": "https://dummyjson.com/products/7",
+      "shipping_info": "Ships overnight",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000008,
+      "product_id": 723550000000000008,
+      "seller_id": 723570000000000008,
+      "price": 89.99,
+      "currency": "USD",
+      "inventory_count": 98,
+      "product_url": "https://dummyjson.com/products/8",
+      "shipping_info": "Ships in 2 weeks",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000009,
+      "product_id": 723550000000000009,
+      "seller_id": 723570000000000009,
+      "price": 69.99,
+      "currency": "USD",
+      "inventory_count": 4,
+      "product_url": "https://dummyjson.com/products/9",
+      "shipping_info": "Ships in 1 month",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000010,
+      "product_id": 723550000000000010,
+      "seller_id": 723570000000000010,
+      "price": 79.99,
+      "currency": "USD",
+      "inventory_count": 91,
+      "product_url": "https://dummyjson.com/products/10",
+      "shipping_info": "Ships overnight",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000011,
+      "product_id": 723550000000000011,
+      "seller_id": 723570000000000011,
+      "price": 1899.99,
+      "currency": "USD",
+      "inventory_count": 88,
+      "product_url": "https://dummyjson.com/products/11",
+      "shipping_info": "Ships in 1 month",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000012,
+      "product_id": 723550000000000012,
+      "seller_id": 723570000000000011,
+      "price": 2499.99,
+      "currency": "USD",
+      "inventory_count": 60,
+      "product_url": "https://dummyjson.com/products/12",
+      "shipping_info": "Ships in 1 week",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000013,
+      "product_id": 723550000000000013,
+      "seller_id": 723570000000000012,
+      "price": 299.99,
+      "currency": "USD",
+      "inventory_count": 64,
+      "product_url": "https://dummyjson.com/products/13",
+      "shipping_info": "Ships overnight",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000014,
+      "product_id": 723550000000000014,
+      "seller_id": 723570000000000013,
+      "price": 499.99,
+      "currency": "USD",
+      "inventory_count": 26,
+      "product_url": "https://dummyjson.com/products/14",
+      "shipping_info": "Ships overnight",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000015,
+      "product_id": 723550000000000015,
+      "seller_id": 723570000000000014,
+      "price": 799.99,
+      "currency": "USD",
+      "inventory_count": 7,
+      "product_url": "https://dummyjson.com/products/15",
+      "shipping_info": "Ships in 3-5 business days",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000016,
+      "product_id": 723550000000000016,
+      "seller_id": 723570000000000015,
+      "price": 1.99,
+      "currency": "USD",
+      "inventory_count": 8,
+      "product_url": "https://dummyjson.com/products/16",
+      "shipping_info": "Ships in 2 weeks",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000017,
+      "product_id": 723550000000000017,
+      "seller_id": 723570000000000016,
+      "price": 12.99,
+      "currency": "USD",
+      "inventory_count": 86,
+      "product_url": "https://dummyjson.com/products/17",
+      "shipping_info": "Ships overnight",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000018,
+      "product_id": 723550000000000018,
+      "seller_id": 723570000000000017,
+      "price": 8.99,
+      "currency": "USD",
+      "inventory_count": 46,
+      "product_url": "https://dummyjson.com/products/18",
+      "shipping_info": "Ships overnight",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000019,
+      "product_id": 723550000000000019,
+      "seller_id": 723570000000000018,
+      "price": 9.99,
+      "currency": "USD",
+      "inventory_count": 97,
+      "product_url": "https://dummyjson.com/products/19",
+      "shipping_info": "Ships in 1 month",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000020,
+      "product_id": 723550000000000020,
+      "seller_id": 723570000000000019,
+      "price": 4.99,
+      "currency": "USD",
+      "inventory_count": 10,
+      "product_url": "https://dummyjson.com/products/20",
+      "shipping_info": "Ships in 1-2 business days",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000021,
+      "product_id": 723550000000000021,
+      "seller_id": 723570000000000020,
+      "price": 1.49,
+      "currency": "USD",
+      "inventory_count": 84,
+      "product_url": "https://dummyjson.com/products/21",
+      "shipping_info": "Ships in 1-2 business days",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000022,
+      "product_id": 723550000000000022,
+      "seller_id": 723570000000000021,
+      "price": 10.99,
+      "currency": "USD",
+      "inventory_count": 71,
+      "product_url": "https://dummyjson.com/products/22",
+      "shipping_info": "Ships in 1-2 business days",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000023,
+      "product_id": 723550000000000023,
+      "seller_id": 723570000000000022,
+      "price": 2.99,
+      "currency": "USD",
+      "inventory_count": 9,
+      "product_url": "https://dummyjson.com/products/23",
+      "shipping_info": "Ships in 1 week",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000024,
+      "product_id": 723550000000000024,
+      "seller_id": 723570000000000023,
+      "price": 14.99,
+      "currency": "USD",
+      "inventory_count": 74,
+      "product_url": "https://dummyjson.com/products/24",
+      "shipping_info": "Ships in 3-5 business days",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000025,
+      "product_id": 723550000000000025,
+      "seller_id": 723570000000000024,
+      "price": 1.29,
+      "currency": "USD",
+      "inventory_count": 33,
+      "product_url": "https://dummyjson.com/products/25",
+      "shipping_info": "Ships in 1 week",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000026,
+      "product_id": 723550000000000026,
+      "seller_id": 723570000000000025,
+      "price": 0.99,
+      "currency": "USD",
+      "inventory_count": 3,
+      "product_url": "https://dummyjson.com/products/26",
+      "shipping_info": "Ships in 1 week",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000027,
+      "product_id": 723550000000000027,
+      "seller_id": 723570000000000026,
+      "price": 6.99,
+      "currency": "USD",
+      "inventory_count": 34,
+      "product_url": "https://dummyjson.com/products/27",
+      "shipping_info": "Ships in 1-2 business days",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000028,
+      "product_id": 723550000000000028,
+      "seller_id": 723570000000000027,
+      "price": 5.49,
+      "currency": "USD",
+      "inventory_count": 27,
+      "product_url": "https://dummyjson.com/products/28",
+      "shipping_info": "Ships in 2 weeks",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000029,
+      "product_id": 723550000000000029,
+      "seller_id": 723570000000000028,
+      "price": 3.99,
+      "currency": "USD",
+      "inventory_count": 50,
+      "product_url": "https://dummyjson.com/products/29",
+      "shipping_info": "Ships in 1 week",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000030,
+      "product_id": 723550000000000030,
+      "seller_id": 723570000000000029,
+      "price": 2.49,
+      "currency": "USD",
+      "inventory_count": 99,
+      "product_url": "https://dummyjson.com/products/30",
+      "shipping_info": "Ships overnight",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000031,
+      "product_id": 723550000000000031,
+      "seller_id": 723570000000000030,
+      "price": 0.79,
+      "currency": "USD",
+      "inventory_count": 31,
+      "product_url": "https://dummyjson.com/products/31",
+      "shipping_info": "Ships in 1 month",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000032,
+      "product_id": 723550000000000032,
+      "seller_id": 723570000000000031,
+      "price": 3.49,
+      "currency": "USD",
+      "inventory_count": 27,
+      "product_url": "https://dummyjson.com/products/32",
+      "shipping_info": "Ships in 2 weeks",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000033,
+      "product_id": 723550000000000033,
+      "seller_id": 723570000000000032,
+      "price": 4.99,
+      "currency": "USD",
+      "inventory_count": 99,
+      "product_url": "https://dummyjson.com/products/33",
+      "shipping_info": "Ships in 1 week",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000034,
+      "product_id": 723550000000000034,
+      "seller_id": 723570000000000033,
+      "price": 7.99,
+      "currency": "USD",
+      "inventory_count": 57,
+      "product_url": "https://dummyjson.com/products/34",
+      "shipping_info": "Ships in 1-2 business days",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000035,
+      "product_id": 723550000000000035,
+      "seller_id": 723570000000000034,
+      "price": 2.29,
+      "currency": "USD",
+      "inventory_count": 13,
+      "product_url": "https://dummyjson.com/products/35",
+      "shipping_info": "Ships in 3-5 business days",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000036,
+      "product_id": 723550000000000036,
+      "seller_id": 723570000000000035,
+      "price": 19.99,
+      "currency": "USD",
+      "inventory_count": 80,
+      "product_url": "https://dummyjson.com/products/36",
+      "shipping_info": "Ships in 1 month",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000037,
+      "product_id": 723550000000000037,
+      "seller_id": 723570000000000036,
+      "price": 1.99,
+      "currency": "USD",
+      "inventory_count": 82,
+      "product_url": "https://dummyjson.com/products/37",
+      "shipping_info": "Ships in 3-5 business days",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000038,
+      "product_id": 723550000000000038,
+      "seller_id": 723570000000000037,
+      "price": 5.99,
+      "currency": "USD",
+      "inventory_count": 59,
+      "product_url": "https://dummyjson.com/products/38",
+      "shipping_info": "Ships overnight",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000039,
+      "product_id": 723550000000000039,
+      "seller_id": 723570000000000038,
+      "price": 1.99,
+      "currency": "USD",
+      "inventory_count": 53,
+      "product_url": "https://dummyjson.com/products/39",
+      "shipping_info": "Ships in 2 weeks",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000040,
+      "product_id": 723550000000000040,
+      "seller_id": 723570000000000039,
+      "price": 3.99,
+      "currency": "USD",
+      "inventory_count": 46,
+      "product_url": "https://dummyjson.com/products/40",
+      "shipping_info": "Ships in 1-2 business days",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000041,
+      "product_id": 723550000000000041,
+      "seller_id": 723570000000000040,
+      "price": 2.49,
+      "currency": "USD",
+      "inventory_count": 86,
+      "product_url": "https://dummyjson.com/products/41",
+      "shipping_info": "Ships in 1-2 business days",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000042,
+      "product_id": 723550000000000042,
+      "seller_id": 723570000000000041,
+      "price": 0.99,
+      "currency": "USD",
+      "inventory_count": 53,
+      "product_url": "https://dummyjson.com/products/42",
+      "shipping_info": "Ships in 1 month",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000043,
+      "product_id": 723550000000000043,
+      "seller_id": 723570000000000042,
+      "price": 59.99,
+      "currency": "USD",
+      "inventory_count": 47,
+      "product_url": "https://dummyjson.com/products/43",
+      "shipping_info": "Ships in 1 month",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000044,
+      "product_id": 723550000000000044,
+      "seller_id": 723570000000000043,
+      "price": 29.99,
+      "currency": "USD",
+      "inventory_count": 77,
+      "product_url": "https://dummyjson.com/products/44",
+      "shipping_info": "Ships in 2 weeks",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000045,
+      "product_id": 723550000000000045,
+      "seller_id": 723570000000000044,
+      "price": 39.99,
+      "currency": "USD",
+      "inventory_count": 28,
+      "product_url": "https://dummyjson.com/products/45",
+      "shipping_info": "Ships in 1 week",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000046,
+      "product_id": 723550000000000046,
+      "seller_id": 723570000000000045,
+      "price": 14.99,
+      "currency": "USD",
+      "inventory_count": 59,
+      "product_url": "https://dummyjson.com/products/46",
+      "shipping_info": "Ships in 3-5 business days",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000047,
+      "product_id": 723550000000000047,
+      "seller_id": 723570000000000046,
+      "price": 49.99,
+      "currency": "USD",
+      "inventory_count": 9,
+      "product_url": "https://dummyjson.com/products/47",
+      "shipping_info": "Ships in 1-2 business days",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000048,
+      "product_id": 723550000000000048,
+      "seller_id": 723570000000000047,
+      "price": 7.99,
+      "currency": "USD",
+      "inventory_count": 37,
+      "product_url": "https://dummyjson.com/products/48",
+      "shipping_info": "Ships overnight",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000049,
+      "product_id": 723550000000000049,
+      "seller_id": 723570000000000048,
+      "price": 5.99,
+      "currency": "USD",
+      "inventory_count": 75,
+      "product_url": "https://dummyjson.com/products/49",
+      "shipping_info": "Ships overnight",
+      "is_active": true
+    },
+    {
+      "id": 723590000000000050,
+      "product_id": 723550000000000050,
+      "seller_id": 723570000000000049,
+      "price": 9.99,
+      "currency": "USD",
+      "inventory_count": 73,
+      "product_url": "https://dummyjson.com/products/50",
+      "shipping_info": "Ships in 1 month",
+      "is_active": true
+    }
+  ],
+  "product_review_stats": [
+    {
+      "product_id": 723550000000000001,
+      "average_rating": 2.56,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000002,
+      "average_rating": 2.86,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000003,
+      "average_rating": 4.64,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000004,
+      "average_rating": 4.36,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000005,
+      "average_rating": 4.32,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000006,
+      "average_rating": 4.37,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000007,
+      "average_rating": 4.26,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000008,
+      "average_rating": 3.8,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000009,
+      "average_rating": 3.96,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000010,
+      "average_rating": 2.74,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000011,
+      "average_rating": 4.77,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000012,
+      "average_rating": 3.92,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000013,
+      "average_rating": 2.87,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000014,
+      "average_rating": 4.88,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000015,
+      "average_rating": 3.59,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000016,
+      "average_rating": 4.19,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000017,
+      "average_rating": 4.47,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000018,
+      "average_rating": 3.13,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000019,
+      "average_rating": 3.19,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000020,
+      "average_rating": 4.8,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000021,
+      "average_rating": 4.07,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000022,
+      "average_rating": 4.55,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000023,
+      "average_rating": 2.53,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000024,
+      "average_rating": 3.78,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000025,
+      "average_rating": 3.25,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000026,
+      "average_rating": 3.66,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000027,
+      "average_rating": 3.97,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000028,
+      "average_rating": 3.39,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000029,
+      "average_rating": 3.94,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000030,
+      "average_rating": 4.93,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000031,
+      "average_rating": 3.53,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000032,
+      "average_rating": 2.61,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000033,
+      "average_rating": 4.95,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000034,
+      "average_rating": 4.82,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000035,
+      "average_rating": 4.81,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000036,
+      "average_rating": 4.18,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000037,
+      "average_rating": 4.2,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000038,
+      "average_rating": 3.18,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000039,
+      "average_rating": 4.75,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000040,
+      "average_rating": 3.08,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000041,
+      "average_rating": 2.69,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000042,
+      "average_rating": 4.96,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000043,
+      "average_rating": 3.16,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000044,
+      "average_rating": 4.53,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000045,
+      "average_rating": 4.67,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000046,
+      "average_rating": 3.01,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000047,
+      "average_rating": 3.55,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000048,
+      "average_rating": 3.27,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000049,
+      "average_rating": 4.46,
+      "review_count": 3
+    },
+    {
+      "product_id": 723550000000000050,
+      "average_rating": 3.9,
+      "review_count": 3
+    }
+  ],
+  "product_search_documents": [
+    {
+      "product_id": 723550000000000001,
+      "search_text": "Essence Mascara Lash Princess beauty Essence The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula. beauty mascara beauty mascara essence lash princess"
+    },
+    {
+      "product_id": 723550000000000002,
+      "search_text": "Eyeshadow Palette with Mirror beauty Glamour Beauty The Eyeshadow Palette with Mirror offers a versatile range of eyeshadow shades for creating stunning eye looks. With a built-in mirror, it's convenient for on-the-go makeup application. beauty eyeshadow beauty eyeshadow palette with mirror"
+    },
+    {
+      "product_id": 723550000000000003,
+      "search_text": "Powder Canister beauty Velvet Touch The Powder Canister is a finely milled setting powder designed to set makeup and control shine. With a lightweight and translucent formula, it provides a smooth and matte finish. beauty face powder beauty face powder powder canister"
+    },
+    {
+      "product_id": 723550000000000004,
+      "search_text": "Red Lipstick beauty Chic Cosmetics The Red Lipstick is a classic and bold choice for adding a pop of color to your lips. With a creamy and pigmented formula, it provides a vibrant and long-lasting finish. beauty lipstick beauty lipstick red"
+    },
+    {
+      "product_id": 723550000000000005,
+      "search_text": "Red Nail Polish beauty Nail Couture The Red Nail Polish offers a rich and glossy red hue for vibrant and polished nails. With a quick-drying formula, it provides a salon-quality finish at home. beauty nail polish beauty nail polish red nail polish"
+    },
+    {
+      "product_id": 723550000000000006,
+      "search_text": "Calvin Klein CK One fragrances Calvin Klein CK One by Calvin Klein is a classic unisex fragrance, known for its fresh and clean scent. It's a versatile fragrance suitable for everyday wear. fragrances perfumes fragrances perfumes calvin klein one"
+    },
+    {
+      "product_id": 723550000000000007,
+      "search_text": "Chanel Coco Noir Eau De fragrances Chanel Coco Noir by Chanel is an elegant and mysterious fragrance, featuring notes of grapefruit, rose, and sandalwood. Perfect for evening occasions. fragrances perfumes fragrances perfumes chanel coco noir eau"
+    },
+    {
+      "product_id": 723550000000000008,
+      "search_text": "Dior J'adore fragrances Dior J'adore by Dior is a luxurious and floral fragrance, known for its blend of ylang-ylang, rose, and jasmine. It embodies femininity and sophistication. fragrances perfumes fragrances perfumes dior adore"
+    },
+    {
+      "product_id": 723550000000000009,
+      "search_text": "Dolce Shine Eau de fragrances Dolce & Gabbana Dolce Shine by Dolce & Gabbana is a vibrant and fruity fragrance, featuring notes of mango, jasmine, and blonde woods. It's a joyful and youthful scent. fragrances perfumes fragrances perfumes dolce shine eau"
+    },
+    {
+      "product_id": 723550000000000010,
+      "search_text": "Gucci Bloom Eau de fragrances Gucci Gucci Bloom by Gucci is a floral and captivating fragrance, with notes of tuberose, jasmine, and Rangoon creeper. It's a modern and romantic scent. fragrances perfumes fragrances perfumes gucci bloom eau"
+    },
+    {
+      "product_id": 723550000000000011,
+      "search_text": "Annibale Colombo Bed furniture Annibale Colombo The Annibale Colombo Bed is a luxurious and elegant bed frame, crafted with high-quality materials for a comfortable and stylish bedroom. furniture beds furniture beds annibale colombo bed"
+    },
+    {
+      "product_id": 723550000000000012,
+      "search_text": "Annibale Colombo Sofa furniture Annibale Colombo The Annibale Colombo Sofa is a sophisticated and comfortable seating option, featuring exquisite design and premium upholstery for your living room. furniture sofas furniture sofas annibale colombo sofa"
+    },
+    {
+      "product_id": 723550000000000013,
+      "search_text": "Bedside Table African Cherry furniture Furniture Co. The Bedside Table in African Cherry is a stylish and functional addition to your bedroom, providing convenient storage space and a touch of elegance. furniture bedside tables furniture bedside tables bedside table african cherry"
+    },
+    {
+      "product_id": 723550000000000014,
+      "search_text": "Knoll Saarinen Executive Conference Chair furniture Knoll The Knoll Saarinen Executive Conference Chair is a modern and ergonomic chair, perfect for your office or conference room with its timeless design. furniture office chairs furniture office chairs knoll saarinen executive conference"
+    },
+    {
+      "product_id": 723550000000000015,
+      "search_text": "Wooden Bathroom Sink With Mirror furniture Bath Trends The Wooden Bathroom Sink with Mirror is a unique and stylish addition to your bathroom, featuring a wooden sink countertop and a matching mirror. furniture bathroom furniture bathroom wooden sink with"
+    },
+    {
+      "product_id": 723550000000000016,
+      "search_text": "Apple groceries Apple Fresh and crisp apples, perfect for snacking or incorporating into various recipes. fruits fruits groceries apple"
+    },
+    {
+      "product_id": 723550000000000017,
+      "search_text": "Beef Steak groceries Beef Steak High-quality beef steak, great for grilling or cooking to your preferred level of doneness. meat meat groceries beef steak"
+    },
+    {
+      "product_id": 723550000000000018,
+      "search_text": "Cat Food groceries Cat Food Nutritious cat food formulated to meet the dietary needs of your feline friend. pet supplies cat food pet supplies cat food groceries cat food"
+    },
+    {
+      "product_id": 723550000000000019,
+      "search_text": "Chicken Meat groceries Chicken Meat Fresh and tender chicken meat, suitable for various culinary preparations. meat meat groceries chicken"
+    },
+    {
+      "product_id": 723550000000000020,
+      "search_text": "Cooking Oil groceries Cooking Oil Versatile cooking oil suitable for frying, saut\u00e9ing, and various culinary applications. cooking essentials cooking essentials groceries cooking oil"
+    },
+    {
+      "product_id": 723550000000000021,
+      "search_text": "Cucumber groceries Cucumber Crisp and hydrating cucumbers, ideal for salads, snacks, or as a refreshing side. vegetables vegetables groceries cucumber"
+    },
+    {
+      "product_id": 723550000000000022,
+      "search_text": "Dog Food groceries Dog Food Specially formulated dog food designed to provide essential nutrients for your canine companion. pet supplies dog food pet supplies dog food groceries dog food"
+    },
+    {
+      "product_id": 723550000000000023,
+      "search_text": "Eggs groceries Eggs Fresh eggs, a versatile ingredient for baking, cooking, or breakfast. dairy dairy groceries eggs"
+    },
+    {
+      "product_id": 723550000000000024,
+      "search_text": "Fish Steak groceries Fish Steak Quality fish steak, suitable for grilling, baking, or pan-searing. seafood seafood groceries fish steak"
+    },
+    {
+      "product_id": 723550000000000025,
+      "search_text": "Green Bell Pepper groceries Green Bell Pepper Fresh and vibrant green bell pepper, perfect for adding color and flavor to your dishes. vegetables vegetables groceries green bell pepper"
+    },
+    {
+      "product_id": 723550000000000026,
+      "search_text": "Green Chili Pepper groceries Green Chili Pepper Spicy green chili pepper, ideal for adding heat to your favorite recipes. vegetables vegetables groceries green chili pepper"
+    },
+    {
+      "product_id": 723550000000000027,
+      "search_text": "Honey Jar groceries Honey Jar Pure and natural honey in a convenient jar, perfect for sweetening beverages or drizzling over food. condiments condiments groceries honey jar"
+    },
+    {
+      "product_id": 723550000000000028,
+      "search_text": "Ice Cream groceries Ice Cream Creamy and delicious ice cream, available in various flavors for a delightful treat. desserts desserts groceries ice cream"
+    },
+    {
+      "product_id": 723550000000000029,
+      "search_text": "Juice groceries Juice Refreshing fruit juice, packed with vitamins and great for staying hydrated. beverages beverages groceries juice"
+    },
+    {
+      "product_id": 723550000000000030,
+      "search_text": "Kiwi groceries Kiwi Nutrient-rich kiwi, perfect for snacking or adding a tropical twist to your dishes. fruits fruits groceries kiwi"
+    },
+    {
+      "product_id": 723550000000000031,
+      "search_text": "Lemon groceries Lemon Zesty and tangy lemons, versatile for cooking, baking, or making refreshing beverages. fruits fruits groceries lemon"
+    },
+    {
+      "product_id": 723550000000000032,
+      "search_text": "Milk groceries Milk Fresh and nutritious milk, a staple for various recipes and daily consumption. dairy dairy groceries milk"
+    },
+    {
+      "product_id": 723550000000000033,
+      "search_text": "Mulberry groceries Mulberry Sweet and juicy mulberries, perfect for snacking or adding to desserts and cereals. fruits fruits groceries mulberry"
+    },
+    {
+      "product_id": 723550000000000034,
+      "search_text": "Nescafe Coffee groceries Nescafe Coffee Quality coffee from Nescafe, available in various blends for a rich and satisfying cup. beverages coffee beverages coffee groceries nescafe"
+    },
+    {
+      "product_id": 723550000000000035,
+      "search_text": "Potatoes groceries Potatoes Versatile and starchy potatoes, great for roasting, mashing, or as a side dish. vegetables vegetables groceries potatoes"
+    },
+    {
+      "product_id": 723550000000000036,
+      "search_text": "Protein Powder groceries Protein Powder Nutrient-packed protein powder, ideal for supplementing your diet with essential proteins. health supplements health supplements groceries protein powder"
+    },
+    {
+      "product_id": 723550000000000037,
+      "search_text": "Red Onions groceries Red Onions Flavorful and aromatic red onions, perfect for adding depth to your savory dishes. vegetables vegetables groceries red onions"
+    },
+    {
+      "product_id": 723550000000000038,
+      "search_text": "Rice groceries Rice High-quality rice, a staple for various cuisines and a versatile base for many dishes. grains grains groceries rice"
+    },
+    {
+      "product_id": 723550000000000039,
+      "search_text": "Soft Drinks groceries Soft Drinks Assorted soft drinks in various flavors, perfect for refreshing beverages. beverages beverages groceries soft drinks"
+    },
+    {
+      "product_id": 723550000000000040,
+      "search_text": "Strawberry groceries Strawberry Sweet and succulent strawberries, great for snacking, desserts, or blending into smoothies. fruits fruits groceries strawberry"
+    },
+    {
+      "product_id": 723550000000000041,
+      "search_text": "Tissue Paper Box groceries Tissue Paper Box Convenient tissue paper box for everyday use, providing soft and absorbent tissues. household essentials household essentials groceries tissue paper box"
+    },
+    {
+      "product_id": 723550000000000042,
+      "search_text": "Water groceries Water Pure and refreshing bottled water, essential for staying hydrated throughout the day. beverages beverages groceries water"
+    },
+    {
+      "product_id": 723550000000000043,
+      "search_text": "Decoration Swing home decoration Decoration Swing The Decoration Swing is a charming addition to your home decor. Crafted with intricate details, it adds a touch of elegance and whimsy to any room. home decor swing home decor swing home decoration"
+    },
+    {
+      "product_id": 723550000000000044,
+      "search_text": "Family Tree Photo Frame home decoration Family Tree Photo Frame The Family Tree Photo Frame is a sentimental and stylish way to display your cherished family memories. With multiple photo slots, it tells the story of your loved ones. home decor photo frame home decor photo frame home decoration family tree photo frame"
+    },
+    {
+      "product_id": 723550000000000045,
+      "search_text": "House Showpiece Plant home decoration House Showpiece Plant The House Showpiece Plant is an artificial plant that brings a touch of nature to your home without the need for maintenance. It adds greenery and style to any space. home decor artificial plants home decor artificial plants home decoration house showpiece plant"
+    },
+    {
+      "product_id": 723550000000000046,
+      "search_text": "Plant Pot home decoration Plant Pot The Plant Pot is a stylish container for your favorite plants. With a sleek design, it complements your indoor or outdoor garden, adding a modern touch to your plant display. home decor plant accessories home decor plant accessories home decoration plant pot"
+    },
+    {
+      "product_id": 723550000000000047,
+      "search_text": "Table Lamp home decoration Table Lamp The Table Lamp is a functional and decorative lighting solution for your living space. With a modern design, it provides both ambient and task lighting, enhancing the atmosphere. home decor lighting home decor lighting home decoration table lamp"
+    },
+    {
+      "product_id": 723550000000000048,
+      "search_text": "Bamboo Spatula kitchen accessories Bamboo Spatula The Bamboo Spatula is a versatile kitchen tool made from eco-friendly bamboo. Ideal for flipping, stirring, and serving various dishes. kitchen tools utensils kitchen tools utensils kitchen accessories bamboo spatula"
+    },
+    {
+      "product_id": 723550000000000049,
+      "search_text": "Black Aluminium Cup kitchen accessories Black Aluminium Cup The Black Aluminium Cup is a stylish and durable cup suitable for both hot and cold beverages. Its sleek black design adds a modern touch to your drinkware collection. drinkware cups drinkware cups kitchen accessories black aluminium cup"
+    },
+    {
+      "product_id": 723550000000000050,
+      "search_text": "Black Whisk kitchen accessories Black Whisk The Black Whisk is a kitchen essential for whisking and beating ingredients. Its ergonomic handle and sleek design make it a practical and stylish tool. kitchen tools utensils kitchen tools utensils kitchen accessories black whisk"
+    }
+  ],
+  "product_embeddings": []
+}

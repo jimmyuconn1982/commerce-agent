@@ -23,6 +23,9 @@ from dataclasses import asdict, dataclass
 import json
 import os
 from pathlib import Path
+import re
+from urllib.parse import quote_plus
+from urllib.request import Request, urlopen
 from typing import Any
 
 from .catalog import Catalog
@@ -30,11 +33,17 @@ from .models import Product
 
 DEFAULT_DATABASE_URL = "postgresql://commerce_agent:commerce_agent@127.0.0.1:5432/commerce_agent"
 DEFAULT_TINY_SEED_PATH = Path(__file__).resolve().parents[2] / "db" / "seeds" / "tiny_seed.json"
+DEFAULT_PUBLIC_SEED_PATH = Path(__file__).resolve().parents[2] / "db" / "seeds" / "public_seed_50.json"
 
 CATEGORY_ID_BASE = 723460000000000000
 SELLER_ID_BASE = 723470000000000000
 MEDIA_ID_BASE = 723480000000000000
 OFFER_ID_BASE = 723490000000000000
+PUBLIC_PRODUCT_ID_BASE = 723550000000000000
+PUBLIC_CATEGORY_ID_BASE = 723560000000000000
+PUBLIC_SELLER_ID_BASE = 723570000000000000
+PUBLIC_MEDIA_ID_BASE = 723580000000000000
+PUBLIC_OFFER_ID_BASE = 723590000000000000
 
 
 @dataclass(slots=True)
@@ -119,7 +128,150 @@ def write_tiny_seed(path: Path = DEFAULT_TINY_SEED_PATH) -> Path:
     return path
 
 
-def load_seed_data(seed_path: Path = DEFAULT_TINY_SEED_PATH, database_url: str | None = None) -> None:
+def fetch_dummyjson_products(limit: int = 50, skip: int = 0) -> list[dict[str, Any]]:
+    """Fetch public product rows from DummyJSON for local testing."""
+    url = (
+        "https://dummyjson.com/products"
+        f"?limit={limit}&skip={skip}"
+        "&select=id,title,description,category,price,rating,stock,tags,brand,sku,shippingInformation,"
+        "availabilityStatus,images,thumbnail,reviews"
+    )
+    request = Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    with urlopen(request) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+    return payload["products"]
+
+
+def build_public_seed(products: list[dict[str, Any]]) -> TinySeedBundle:
+    """Build one normalized seed bundle from public product rows."""
+    categories = _build_named_categories(
+        sorted({_normalize_category_name(str(item.get("category", "misc"))) for item in products}),
+        base=PUBLIC_CATEGORY_ID_BASE,
+    )
+    category_ids = {item["name"]: item["id"] for item in categories}
+    sellers = _build_public_sellers(products)
+    seller_ids = {item["seller_code"]: item["id"] for item in sellers}
+
+    product_rows: list[dict[str, Any]] = []
+    media_rows: list[dict[str, Any]] = []
+    offer_rows: list[dict[str, Any]] = []
+    review_rows: list[dict[str, Any]] = []
+    search_rows: list[dict[str, Any]] = []
+
+    for index, source_product in enumerate(products, start=1):
+        product_id = PUBLIC_PRODUCT_ID_BASE + int(source_product["id"])
+        category_name = _normalize_category_name(str(source_product.get("category", "misc")))
+        image_tags = _public_image_tags(source_product)
+        seller_code = _public_seller_code(source_product)
+        brand = str(source_product.get("brand") or source_product.get("title") or "Unknown Brand").strip()
+        image_url = _primary_image_url(source_product)
+        description = str(source_product.get("description") or "").strip()
+        title = str(source_product.get("title") or "").strip()
+        tags = [str(tag).strip().lower() for tag in source_product.get("tags", []) if str(tag).strip()]
+        review_count = len(source_product.get("reviews", []))
+        rating = float(source_product.get("rating") or 0.0)
+
+        product_rows.append(
+            {
+                "id": product_id,
+                "sku": str(source_product.get("sku") or f"dummyjson-{source_product['id']}"),
+                "title": title,
+                "short_description": description,
+                "long_description": f"{description} {_image_summary_from_product(source_product)}".strip(),
+                "brand": brand,
+                "category_id": category_ids[category_name],
+                "status": "active",
+                "attributes_jsonb": {
+                    "tags": tags,
+                    "image_tags": image_tags,
+                    "source": "dummyjson",
+                    "source_product_id": int(source_product["id"]),
+                },
+            }
+        )
+        media_rows.append(
+            {
+                "id": PUBLIC_MEDIA_ID_BASE + index,
+                "product_id": product_id,
+                "media_type": "image",
+                "url": image_url,
+                "thumbnail_url": str(source_product.get("thumbnail") or image_url),
+                "sort_order": 0,
+                "alt_text": title,
+                "width": None,
+                "height": None,
+                "is_primary": True,
+            }
+        )
+        offer_rows.append(
+            {
+                "id": PUBLIC_OFFER_ID_BASE + index,
+                "product_id": product_id,
+                "seller_id": seller_ids[seller_code],
+                "price": float(source_product.get("price") or 0.0),
+                "currency": "USD",
+                "inventory_count": max(0, int(source_product.get("stock") or 0)),
+                "product_url": f"https://dummyjson.com/products/{source_product['id']}",
+                "shipping_info": str(source_product.get("shippingInformation") or "Ships in 3-5 business days"),
+                "is_active": True,
+            }
+        )
+        review_rows.append(
+            {
+                "product_id": product_id,
+                "average_rating": rating,
+                "review_count": review_count,
+            }
+        )
+        search_rows.append(
+            {
+                "product_id": product_id,
+                "search_text": " ".join(
+                    part.strip()
+                    for part in [
+                        title,
+                        category_name,
+                        brand,
+                        description,
+                        " ".join(tags),
+                        " ".join(image_tags),
+                    ]
+                    if part.strip()
+                ),
+            }
+        )
+
+    return TinySeedBundle(
+        categories=categories,
+        products=product_rows,
+        product_media=media_rows,
+        sellers=sellers,
+        product_offers=offer_rows,
+        product_review_stats=review_rows,
+        product_search_documents=search_rows,
+        product_embeddings=[],
+    )
+
+
+def write_public_seed(
+    path: Path = DEFAULT_PUBLIC_SEED_PATH,
+    *,
+    limit: int = 50,
+    skip: int = 0,
+) -> Path:
+    """Fetch one public product sample and write it as a normalized seed bundle."""
+    bundle = build_public_seed(fetch_dummyjson_products(limit=limit, skip=skip))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(asdict(bundle), indent=2), encoding="utf-8")
+    return path
+
+
+def load_seed_data(
+    seed_path: Path = DEFAULT_TINY_SEED_PATH,
+    database_url: str | None = None,
+    *,
+    truncate_first: bool = False,
+) -> None:
     """Load one normalized seed bundle into PostgreSQL with upserts."""
     import psycopg
     from psycopg.types.json import Json
@@ -129,6 +281,8 @@ def load_seed_data(seed_path: Path = DEFAULT_TINY_SEED_PATH, database_url: str |
 
     with psycopg.connect(database_url) as conn:
         with conn.cursor() as cur:
+            if truncate_first:
+                _truncate_seed_tables(cur)
             _upsert_categories(cur, data["categories"])
             _upsert_products(cur, data["products"], Json)
             _upsert_product_media(cur, data["product_media"])
@@ -157,21 +311,36 @@ def load_seed_data_cli() -> None:
     parser = argparse.ArgumentParser(description="Load seed data into the local PostgreSQL database")
     parser.add_argument("--seed-path", type=Path, default=DEFAULT_TINY_SEED_PATH)
     parser.add_argument("--database-url", default=os.getenv("DATABASE_URL", DEFAULT_DATABASE_URL))
+    parser.add_argument("--truncate-first", action="store_true")
     args = parser.parse_args()
-    load_seed_data(seed_path=args.seed_path, database_url=args.database_url)
+    load_seed_data(
+        seed_path=args.seed_path,
+        database_url=args.database_url,
+        truncate_first=args.truncate_first,
+    )
     print(f"loaded seed data from {args.seed_path}")
+
+
+def build_public_seed_cli() -> None:
+    """CLI wrapper that fetches and writes one public 50-product seed bundle."""
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Build a public product seed bundle from DummyJSON")
+    parser.add_argument("--output", type=Path, default=DEFAULT_PUBLIC_SEED_PATH)
+    parser.add_argument("--limit", type=int, default=50)
+    parser.add_argument("--skip", type=int, default=0)
+    args = parser.parse_args()
+    path = write_public_seed(args.output, limit=args.limit, skip=args.skip)
+    print(path)
 
 
 def _build_categories(products: list[Product]) -> list[dict[str, Any]]:
     category_names = sorted({product.category for product in products})
-    return [
-        {
-            "id": CATEGORY_ID_BASE + index,
-            "name": name,
-            "parent_id": None,
-        }
-        for index, name in enumerate(category_names, start=1)
-    ]
+    return _build_named_categories(category_names, base=CATEGORY_ID_BASE)
+
+
+def _build_named_categories(names: list[str], *, base: int) -> list[dict[str, Any]]:
+    return [{"id": base + index, "name": name, "parent_id": None} for index, name in enumerate(names, start=1)]
 
 
 def _build_product_row(product: Product, category_id: int) -> dict[str, Any]:
@@ -244,6 +413,74 @@ def _build_search_document_row(product: Product) -> dict[str, Any]:
     }
 
 
+def _build_public_sellers(products: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    sellers: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for source_product in products:
+        seller_code = _public_seller_code(source_product)
+        if seller_code in seen:
+            continue
+        seen.add(seller_code)
+        brand = str(source_product.get("brand") or source_product.get("title") or "Marketplace Seller").strip()
+        sellers.append(
+            {
+                "id": PUBLIC_SELLER_ID_BASE + len(sellers) + 1,
+                "seller_code": seller_code,
+                "name": f"{brand} Store",
+                "rating": round(max(3.8, min(5.0, float(source_product.get('rating') or 4.2))), 2),
+                "seller_url": f"https://example.com/sellers/{quote_plus(seller_code)}",
+                "location": "Online",
+                "is_verified": True,
+            }
+        )
+    return sellers
+
+
+def _public_seller_code(source_product: dict[str, Any]) -> str:
+    brand = str(source_product.get("brand") or source_product.get("title") or "marketplace").strip().lower()
+    slug = re.sub(r"[^a-z0-9]+", "-", brand).strip("-")
+    return slug or f"seller-{source_product['id']}"
+
+
+def _normalize_category_name(raw_category: str) -> str:
+    return raw_category.strip().lower().replace("-", " ")
+
+
+def _primary_image_url(source_product: dict[str, Any]) -> str:
+    images = source_product.get("images") or []
+    if images:
+        return str(images[0])
+    return str(source_product.get("thumbnail") or "")
+
+
+def _public_image_tags(source_product: dict[str, Any]) -> list[str]:
+    raw_tags = [str(tag).strip().lower() for tag in source_product.get("tags", []) if str(tag).strip()]
+    title_tokens = [
+        token
+        for token in re.findall(r"[a-z0-9]+", str(source_product.get("title") or "").lower())
+        if len(token) > 2
+    ]
+    category_tokens = [
+        token
+        for token in re.findall(r"[a-z0-9]+", str(source_product.get("category") or "").lower())
+        if len(token) > 2
+    ]
+    seen: set[str] = set()
+    result: list[str] = []
+    for token in raw_tags + category_tokens + title_tokens[:4]:
+        if token not in seen:
+            seen.add(token)
+            result.append(token)
+    return result[:8]
+
+
+def _image_summary_from_product(source_product: dict[str, Any]) -> str:
+    title = str(source_product.get("title") or "").strip()
+    category = _normalize_category_name(str(source_product.get("category") or "product"))
+    tags = ", ".join(_public_image_tags(source_product)[:4])
+    return f"{title} product image for {category}. Visual hints: {tags}."
+
+
 def _infer_brand(product: Product) -> str:
     words = product.name.split()
     if len(words) >= 2:
@@ -261,6 +498,23 @@ def _price_for_product(product: Product, index: int) -> float:
     }
     base = category_prices.get(product.category, 49.0)
     return round(base + (index * 3.5), 2)
+
+
+def _truncate_seed_tables(cur: Any) -> None:
+    cur.execute(
+        """
+        TRUNCATE TABLE
+            product_embeddings,
+            product_search_documents,
+            product_review_stats,
+            product_offers,
+            product_media,
+            products,
+            sellers,
+            categories
+        CASCADE
+        """
+    )
 
 
 def _upsert_categories(cur, rows: list[dict[str, Any]]) -> None:
