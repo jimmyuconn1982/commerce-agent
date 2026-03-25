@@ -73,3 +73,23 @@ The web UI includes:
 
 - Database design and ER diagram: [docs/database-design.md](docs/database-design.md)
 - 数据库设计与 ER 图: [docs/database-design.zh-CN.md](docs/database-design.zh-CN.md)
+- Seed data plan: [docs/seed-data-plan.md](docs/seed-data-plan.md)
+
+## Local Database
+
+Start PostgreSQL with `pgvector`:
+
+```bash
+docker compose up -d postgres
+```
+
+Apply the initial schema:
+
+```bash
+docker compose exec -T postgres psql \
+  -U commerce_agent \
+  -d commerce_agent \
+  -f /work/db/migrations/0001_initial_schema.sql
+```
+
+The database workspace lives in [db/README.md](db/README.md).

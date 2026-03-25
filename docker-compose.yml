@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: commerce-agent-postgres
+    environment:
+      POSTGRES_DB: commerce_agent
+      POSTGRES_USER: commerce_agent
+      POSTGRES_PASSWORD: commerce_agent
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+      - ./db:/work/db:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U commerce_agent -d commerce_agent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  postgres_data:
