@@ -1,7 +1,27 @@
 from __future__ import annotations
 
+"""Core commerce agent orchestration.
+
+Inputs:
+- user prompt text
+- optional local image path
+- optional category and top-k limit
+
+Outputs:
+- direct chat text, or
+- search matches plus a structured pipeline trace
+
+Role:
+- keep the public API stable for CLI and web entrypoints
+- orchestrate router, vision, retrieval, rerank, and generation tools
+
+Upgrade path:
+- keep `run_pipeline()` as the stable entrypoint
+- swap the current orchestrator for a deeper planner / LangGraph graph later
+- move retrieval and generation to external services without changing callers
+"""
+
 from pathlib import Path
-import re
 from typing import Callable
 
 from .catalog import Catalog
@@ -18,10 +38,27 @@ from .models import (
     ToolCallTrace,
     VisionAnalysis,
 )
+from .tools import (
+    AnalyzeImageInput,
+    ChatGenerationInput,
+    ChatPathInput,
+    CommerceTools,
+    ImageSearchInput,
+    ImageSearchPathInput,
+    MultimodalSearchInput,
+    MultimodalSearchPathInput,
+    RerankInput,
+    RouteIntentInput,
+    TextSearchInput,
+    TextSearchPathInput,
+)
+from .router import HeuristicRouter, RouterCase
 from .vision import OpenAIVisionAnalyzer, VisionAnalyzer
 
 
 class CommerceAgent:
+    """High-level backend facade for chat and commerce retrieval."""
+
     def __init__(
         self,
         catalog: Catalog | None = None,
@@ -29,6 +66,8 @@ class CommerceAgent:
     ) -> None:
         self.catalog = catalog or Catalog.from_json()
         self.vision_analyzer = vision_analyzer
+        self.router = HeuristicRouter(self.catalog)
+        self.tools = CommerceTools(self)
 
     def text_search(
         self,
@@ -37,14 +76,16 @@ class CommerceAgent:
         category: str | None = None,
         limit: int = 5,
     ) -> list[Product]:
-        retrieval = self.tool_text_search(query=query, category=category, limit=limit)
-        rerank = self.tool_rerank(retrieval.candidates, strategy="text-score")
+        """Run text retrieval and return the top ranked products."""
+        retrieval = self.tools.text_search(TextSearchInput(query=query, category=category, limit=limit))
+        rerank = self.tools.rerank(RerankInput(candidates=retrieval.candidates, strategy="text-score"))
         return [candidate.product for candidate in rerank.candidates_after[:limit]]
 
     def image_search(self, image_path: str | Path, limit: int = 5) -> tuple[VisionAnalysis, list[Product]]:
-        analysis = self.tool_analyze_image(Path(image_path))
-        retrieval = self.tool_image_search(image_analysis=analysis, limit=limit)
-        rerank = self.tool_rerank(retrieval.candidates, strategy="image-score")
+        """Analyze one image and return visually matched products."""
+        analysis = self.tools.analyze_image(AnalyzeImageInput(image_path=Path(image_path)))
+        retrieval = self.tools.image_search(ImageSearchInput(image_analysis=analysis, limit=limit))
+        rerank = self.tools.rerank(RerankInput(candidates=retrieval.candidates, strategy="image-score"))
         return analysis, [candidate.product for candidate in rerank.candidates_after[:limit]]
 
     def multimodal_search(
@@ -55,146 +96,37 @@ class CommerceAgent:
         category: str | None = None,
         limit: int = 5,
     ) -> tuple[VisionAnalysis | None, list[Product]]:
-        analysis = self.tool_analyze_image(Path(image_path)) if image_path else None
-        retrieval = self.tool_multimodal_search(
-            text_query=text_query,
-            image_analysis=analysis,
-            category=category,
-            limit=limit,
+        """Blend text and image signals and return ranked matches."""
+        analysis = self.tools.analyze_image(AnalyzeImageInput(image_path=Path(image_path))) if image_path else None
+        retrieval = self.tools.multimodal_search(
+            MultimodalSearchInput(
+                text_query=text_query,
+                image_analysis=analysis,
+                category=category,
+                limit=limit,
+            )
         )
-        rerank = self.tool_rerank(retrieval.candidates, strategy="blended-score")
+        rerank = self.tools.rerank(RerankInput(candidates=retrieval.candidates, strategy="blended-score"))
         return analysis, [candidate.product for candidate in rerank.candidates_after[:limit]]
 
     def chat(self, prompt: str, image_path: str | Path | None = None) -> str:
-        analysis = self.tool_analyze_image(Path(image_path)) if image_path else None
-        retrieval = self.tool_multimodal_search(text_query=prompt, image_analysis=analysis, limit=3)
-        rerank = self.tool_rerank(retrieval.candidates, strategy="blended-score")
-        products = [candidate.product for candidate in rerank.candidates_after[:3]]
-        return self.tool_generate_chat(prompt=prompt, analysis=analysis, products=products)
-
-    def classify_intent(self, prompt: str = "", has_image: bool = False) -> str:
-        return self.route_intent(prompt=prompt, has_image=has_image).intent
-
-    def route_intent(self, prompt: str = "", has_image: bool = False) -> RouterTrace:
-        text = prompt.strip().lower()
-        if has_image and text:
-            return RouterTrace(prompt=prompt, has_image=has_image, intent="multimodal-search", rationale="image and text are both present")
-        if has_image:
-            return RouterTrace(prompt=prompt, has_image=has_image, intent="image-search", rationale="image is present without text")
-        if not text:
-            return RouterTrace(prompt=prompt, has_image=has_image, intent="chat", rationale="empty text defaults to chat")
-
-        question_words = {
-            "what",
-            "which",
-            "how",
-            "why",
-            "can",
-            "could",
-            "should",
-            "help",
-            "recommend",
-            "suggest",
-            "compare",
-            "need",
-            "want",
-            "looking",
-            "find me",
-        }
-        search_words = {
-            "search",
-            "find",
-            "show",
-            "red",
-            "blue",
-            "hat",
-            "shoes",
-            "keyboard",
-            "desk",
-            "bottle",
-            "hoodie",
-            "earbuds",
-        }
-
-        if "?" in text:
-            return RouterTrace(prompt=prompt, has_image=has_image, intent="chat", rationale="question mark indicates conversational intent")
-        if any(phrase in text for phrase in question_words):
-            return RouterTrace(prompt=prompt, has_image=has_image, intent="chat", rationale="question or recommendation phrasing detected")
-
-        tokens = self._tokenize(re.sub(r"[^\w\s-]", " ", text))
-        if len(tokens) <= 6 and any(token in search_words for token in tokens):
-            return RouterTrace(prompt=prompt, has_image=has_image, intent="text-search", rationale="short query with search-oriented product terms")
-        if len(tokens) <= 5:
-            return RouterTrace(prompt=prompt, has_image=has_image, intent="text-search", rationale="short keyword-like query")
-        return RouterTrace(prompt=prompt, has_image=has_image, intent="chat", rationale="longer prompt defaults to chat")
-
-    def get_tools(self) -> dict[str, Callable[..., object]]:
-        return {
-            "route_intent": self.route_intent,
-            "analyze_image": self.tool_analyze_image,
-            "text_search": self.tool_text_search,
-            "image_search": self.tool_image_search,
-            "multimodal_search": self.tool_multimodal_search,
-            "rerank": self.tool_rerank,
-            "generate_chat": self.tool_generate_chat,
-            "generate_search_summary": self.tool_generate_search_summary,
-        }
-
-    def tool_analyze_image(self, image_path: Path) -> VisionAnalysis:
-        return self._get_vision_analyzer().analyze(Path(image_path))
-
-    def tool_text_search(
-        self,
-        *,
-        query: str,
-        category: str | None = None,
-        limit: int = 5,
-    ) -> RetrievalTrace:
-        return self.retrieve_candidates(text_query=query, category=category, limit=limit)
-
-    def tool_image_search(
-        self,
-        *,
-        image_analysis: VisionAnalysis,
-        category: str | None = None,
-        limit: int = 5,
-    ) -> RetrievalTrace:
-        return self.retrieve_candidates(image_analysis=image_analysis, category=category, limit=limit)
-
-    def tool_multimodal_search(
-        self,
-        *,
-        text_query: str,
-        image_analysis: VisionAnalysis | None = None,
-        category: str | None = None,
-        limit: int = 5,
-    ) -> RetrievalTrace:
-        return self.retrieve_candidates(
-            text_query=text_query,
-            image_analysis=image_analysis,
-            category=category,
-            limit=limit,
+        """Return a conversational reply without querying the product catalog."""
+        analysis = self.tools.analyze_image(AnalyzeImageInput(image_path=Path(image_path))) if image_path else None
+        return self.tools.generate_chat(
+            ChatGenerationInput(prompt=prompt, analysis=analysis, products=[])
         )
 
-    def tool_rerank(self, candidates: list[ScoredCandidate], strategy: str) -> RerankTrace:
-        return self.rerank_candidates(candidates, strategy)
+    def classify_intent(self, prompt: str = "", has_image: bool = False) -> str:
+        """Return only the routed intent label."""
+        return self.tools.route_intent(RouteIntentInput(prompt=prompt, has_image=has_image)).intent
 
-    def tool_generate_chat(
-        self,
-        *,
-        prompt: str,
-        analysis: VisionAnalysis | None,
-        products: list[Product],
-    ) -> str:
-        return self._generate_chat_response(prompt=prompt, analysis=analysis, products=products)
+    def route_intent(self, prompt: str = "", has_image: bool = False) -> RouterTrace:
+        """Route one request and keep the rationale for debugging."""
+        return self.router.route(RouterCase(prompt=prompt, has_image=has_image))
 
-    def tool_generate_search_summary(self, *, intent: str, matches: list[Product]) -> str:
-        label = {
-            "text-search": "text",
-            "image-search": "visual",
-            "multimodal-search": "multimodal",
-        }.get(intent, "search")
-        return f"Found {len(matches)} {label} matches."
+    def get_tools(self) -> dict[str, Callable[..., object]]:
+        """Expose the registered tool callables for orchestration and tests."""
+        return self.tools.registry()
 
     def retrieve_candidates(
         self,
@@ -204,6 +136,7 @@ class CommerceAgent:
         category: str | None = None,
         limit: int = 5,
     ) -> RetrievalTrace:
+        """Score catalog items against text and optional image signals."""
         text_tokens = self._tokenize(text_query)
         image_tokens = self._tokenize(f"{image_analysis.summary} {' '.join(image_analysis.tags)}") if image_analysis else set()
         candidates: list[ScoredCandidate] = []
@@ -237,6 +170,7 @@ class CommerceAgent:
         )
 
     def rerank_candidates(self, candidates: list[ScoredCandidate], strategy: str) -> RerankTrace:
+        """Reorder candidates according to the selected ranking strategy."""
         before = list(candidates)
         if strategy == "text-score":
             after = sorted(before, key=lambda item: (item.text_score, item.product.rating), reverse=True)
@@ -254,13 +188,16 @@ class CommerceAgent:
         category: str | None = None,
         limit: int = 5,
     ) -> PipelineResult:
+        """Execute the routed backend path and return the final trace."""
         image_analysis: VisionAnalysis | None = None
         retrieval: RetrievalTrace | None = None
         rerank: RerankTrace | None = None
         matches: list[Product] = []
         steps: list[ToolCallTrace] = []
 
-        router = self.route_intent(prompt=prompt, has_image=image_path is not None)
+        # The router is the first boundary: it decides whether this request
+        # stays in chat mode or enters one of the retrieval paths.
+        router = self.tools.route_intent(RouteIntentInput(prompt=prompt, has_image=image_path is not None))
         steps.append(
             ToolCallTrace(
                 tool_name="route_intent",
@@ -271,7 +208,7 @@ class CommerceAgent:
         )
 
         if image_path:
-            image_analysis = self.tool_analyze_image(Path(image_path))
+            image_analysis = self.tools.analyze_image(AnalyzeImageInput(image_path=Path(image_path)))
             steps.append(
                 ToolCallTrace(
                     tool_name="analyze_image",
@@ -281,87 +218,109 @@ class CommerceAgent:
                 )
             )
 
+        # Each intent maps to a dedicated path tool so the control flow stays
+        # explicit and can later be upgraded to a graph-style executor.
         current_intent = router.intent
+        if current_intent == "chat":
+            return self._finalize_pipeline(
+                router=router,
+                image_analysis=image_analysis,
+                retrieval=None,
+                rerank=None,
+                generation=self.tools.run_chat_path(
+                    ChatPathInput(prompt=prompt, image_analysis=image_analysis, steps=steps)
+                ),
+                matches=[],
+                steps=steps,
+            )
+
         if current_intent == "text-search":
-            retrieval = self.tool_text_search(query=prompt, category=category, limit=limit)
-            steps.append(
-                ToolCallTrace(
-                    tool_name="text_search",
-                    thought="Use text retrieval for keyword-heavy queries.",
-                    input_summary=f"query={prompt!r}",
-                    observation_summary=f"candidates={len(retrieval.candidates)}",
+            path_result = self.tools.run_text_search_path(
+                TextSearchPathInput(prompt=prompt, category=category, limit=limit, steps=steps)
+            )
+            retrieval, rerank, matches, generation = (
+                path_result.retrieval,
+                path_result.rerank,
+                path_result.matches,
+                path_result.generation,
+            )
+            return self._finalize_pipeline(
+                router=router,
+                image_analysis=image_analysis,
+                retrieval=retrieval,
+                rerank=rerank,
+                generation=generation,
+                matches=matches,
+                steps=steps,
+            )
+
+        if current_intent == "image-search":
+            path_result = self.tools.run_image_search_path(
+                ImageSearchPathInput(
+                    image_analysis=image_analysis,
+                    category=category,
+                    limit=limit,
+                    steps=steps,
                 )
             )
-            rerank = self.tool_rerank(retrieval.candidates, strategy="text-score")
-        elif current_intent == "image-search":
-            retrieval = self.tool_image_search(image_analysis=image_analysis, category=category, limit=limit)
-            steps.append(
-                ToolCallTrace(
-                    tool_name="image_search",
-                    thought="Use visual features for image-only search.",
-                    input_summary=f"summary={image_analysis.summary if image_analysis else ''}",
-                    observation_summary=f"candidates={len(retrieval.candidates)}",
-                )
+            retrieval, rerank, matches, generation = (
+                path_result.retrieval,
+                path_result.rerank,
+                path_result.matches,
+                path_result.generation,
             )
-            rerank = self.tool_rerank(retrieval.candidates, strategy="image-score")
-        else:
-            retrieval = self.tool_multimodal_search(
-                text_query=prompt,
+            return self._finalize_pipeline(
+                router=router,
+                image_analysis=image_analysis,
+                retrieval=retrieval,
+                rerank=rerank,
+                generation=generation,
+                matches=matches,
+                steps=steps,
+            )
+
+        path_result = self.tools.run_multimodal_search_path(
+            MultimodalSearchPathInput(
+                prompt=prompt,
                 image_analysis=image_analysis,
                 category=category,
                 limit=limit,
-            )
-            steps.append(
-                ToolCallTrace(
-                    tool_name="multimodal_search" if image_analysis else "text_search",
-                    thought="Gather candidates before deciding how to answer.",
-                    input_summary=f"text={prompt!r}; has_image={image_analysis is not None}",
-                    observation_summary=f"candidates={len(retrieval.candidates)}",
-                )
-            )
-            rerank = self.tool_rerank(
-                retrieval.candidates,
-                strategy="blended-score" if image_analysis or current_intent == "chat" else "text-score",
-            )
-
-        steps.append(
-            ToolCallTrace(
-                tool_name="rerank",
-                thought="Promote the strongest candidates for the chosen intent.",
-                input_summary=f"strategy={rerank.strategy}; before={len(rerank.candidates_before)}",
-                observation_summary=f"after={len(rerank.candidates_after)}",
+                steps=steps,
             )
         )
-        matches = [candidate.product for candidate in rerank.candidates_after[:limit]]
-
-        if current_intent == "chat":
-            content = self.tool_generate_chat(prompt=prompt, analysis=image_analysis, products=matches)
-            generator_tool = "generate_chat"
-            generator_thought = "Compose a conversational answer grounded in the top retrieved products."
-        else:
-            content = self.tool_generate_search_summary(intent=current_intent, matches=matches)
-            generator_tool = "generate_search_summary"
-            generator_thought = "Return a concise retrieval summary for the UI."
-
-        steps.append(
-            ToolCallTrace(
-                tool_name=generator_tool,
-                thought=generator_thought,
-                input_summary=f"matches={len(matches)}",
-                observation_summary=content,
-            )
+        retrieval, rerank, matches, generation = (
+            path_result.retrieval,
+            path_result.rerank,
+            path_result.matches,
+            path_result.generation,
         )
-        generation = GenerationTrace(
-            mode=current_intent,
-            prompt=prompt,
-            selected_product_ids=[product.id for product in matches],
-            response=content,
+        return self._finalize_pipeline(
+            router=router,
+            image_analysis=image_analysis,
+            retrieval=retrieval,
+            rerank=rerank,
+            generation=generation,
+            matches=matches,
+            steps=steps,
         )
+
+    def _finalize_pipeline(
+        self,
+        *,
+        router: RouterTrace,
+        image_analysis: VisionAnalysis | None,
+        retrieval: RetrievalTrace | None,
+        rerank: RerankTrace | None,
+        generation: GenerationTrace,
+        matches: list[Product],
+        steps: list[ToolCallTrace],
+    ) -> PipelineResult:
+        """Assemble the final result object shared by all pipeline paths."""
         trace = PipelineTrace(
             router=router,
             react=ReActTrace(
                 initial_intent=router.intent,
-                final_intent=current_intent,
+                final_intent=generation.mode,
                 steps=steps,
             ),
             image_analysis=image_analysis,
@@ -370,22 +329,25 @@ class CommerceAgent:
             generation=generation,
         )
         return PipelineResult(
-            intent=current_intent,
-            content=content,
+            intent=generation.mode,
+            content=generation.response,
             analysis=image_analysis,
             matches=matches,
             trace=trace,
         )
 
     def _tokenize(self, text: str) -> set[str]:
+        """Normalize whitespace tokenization for lightweight scoring."""
         return {token.lower() for token in text.split() if token.strip()}
 
     def _get_vision_analyzer(self) -> VisionAnalyzer:
+        """Lazily create the vision adapter when image analysis is needed."""
         if self.vision_analyzer is None:
             self.vision_analyzer = OpenAIVisionAnalyzer()
         return self.vision_analyzer
 
     def _score_text(self, product: Product, tokens: set[str]) -> tuple[float, list[str]]:
+        """Score one product against text tokens and record matched fields."""
         if not tokens:
             return product.rating, ["rating"]
         haystacks = [
@@ -412,6 +374,7 @@ class CommerceAgent:
         return round(score + product.rating / 10, 2), matched_fields
 
     def _score_image(self, product: Product, tokens: set[str]) -> tuple[float, list[str]]:
+        """Score one product against vision-derived tokens."""
         if not tokens:
             return product.rating, ["rating"]
         haystacks = [
@@ -440,25 +403,12 @@ class CommerceAgent:
         analysis: VisionAnalysis | None,
         products: list[Product],
     ) -> str:
-        lower_prompt = prompt.lower()
-        if not products:
-            return (
-                "I could not find a strong catalog match. Try giving me a product type, "
-                "style cue, or visual description."
-            )
-        if any(word in lower_prompt for word in {"image", "photo", "picture", "look"}):
-            lead = "Based on your visual intent, these are the closest matches:"
-        elif any(word in lower_prompt for word in {"find", "search", "looking"}):
-            lead = "Here are the strongest matches from the catalog:"
-        else:
-            lead = "Here is a concise recommendation set:"
-        lines = [lead]
+        """Build a lightweight conversational response for chat mode."""
+        lines = ["I can help with general conversation, or assist you in searching the catalog by text, image, or both."]
         if analysis:
             lines.append(f"Image summary: {analysis.summary}")
             if analysis.tags:
                 lines.append(f"Image tags: {', '.join(analysis.tags)}")
-        for product in products:
-            lines.append(
-                f"- {product.name}: {product.description} Visual cue: {product.visual_description}"
-            )
+        if prompt:
+            lines.append(f"You said: {prompt}")
         return "\n".join(lines)

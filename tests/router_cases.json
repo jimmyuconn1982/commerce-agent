@@ -1,0 +1,32 @@
+[
+  {
+    "prompt": "What model are you?",
+    "has_image": false,
+    "expected_intent": "chat"
+  },
+  {
+    "prompt": "你能做什么",
+    "has_image": false,
+    "expected_intent": "chat"
+  },
+  {
+    "prompt": "帮我找一个红色的帽子",
+    "has_image": false,
+    "expected_intent": "text-search"
+  },
+  {
+    "prompt": "compact keyboard",
+    "has_image": false,
+    "expected_intent": "text-search"
+  },
+  {
+    "prompt": "",
+    "has_image": true,
+    "expected_intent": "image-search"
+  },
+  {
+    "prompt": "green bag for work",
+    "has_image": true,
+    "expected_intent": "multimodal-search"
+  }
+]

@@ -1,5 +1,23 @@
 from __future__ import annotations
 
+"""Vision analysis adapter.
+
+Inputs:
+- a local image path
+- optional environment configuration for OpenAI or mock mode
+
+Outputs:
+- `VisionAnalysis` with a short summary and visual tags
+
+Role:
+- isolate image understanding from the rest of the agent
+- support both real API calls and local mock responses
+
+Upgrade path:
+- add richer structured extraction, embeddings, or multi-image support
+- swap providers without changing retrieval callers
+"""
+
 import base64
 import mimetypes
 import os
@@ -10,16 +28,22 @@ from .models import VisionAnalysis
 
 
 class VisionAnalyzer(Protocol):
+    """Protocol for pluggable image analyzers."""
+
     def analyze(self, image_path: Path) -> VisionAnalysis:
+        """Return a structured visual summary for one image path."""
         ...
 
 
 class OpenAIVisionAnalyzer:
+    """OpenAI-backed vision adapter with optional local mock behavior."""
+
     def __init__(self, model: str | None = None) -> None:
         self._client = None
         self.model = model or os.getenv("COMMERCE_AGENT_VISION_MODEL", "gpt-4.1-mini")
 
     def analyze(self, image_path: Path) -> VisionAnalysis:
+        """Analyze one local image and return summary plus visual tags."""
         if not image_path.exists():
             raise ValueError(f"image file not found: {image_path}")
 
@@ -27,6 +51,8 @@ class OpenAIVisionAnalyzer:
         if not media_type or not media_type.startswith("image/"):
             raise ValueError(f"unsupported image type for file: {image_path}")
 
+        # Mock mode keeps the image pipeline testable before real API access is
+        # configured, which is useful for UI and backend integration work.
         if not os.getenv("OPENAI_API_KEY"):
             if os.getenv("COMMERCE_AGENT_MOCK_VISION") == "1":
                 return self._mock_analysis(image_path)
@@ -64,6 +90,7 @@ class OpenAIVisionAnalyzer:
         return self._parse_response(image_path=image_path, text=response.output_text)
 
     def _mock_analysis(self, image_path: Path) -> VisionAnalysis:
+        """Return a deterministic mock analysis for local development."""
         raw = os.getenv("COMMERCE_AGENT_MOCK_VISION_RESPONSE", "").strip()
         if raw:
             return self._parse_response(image_path=image_path, text=raw)
@@ -74,6 +101,9 @@ class OpenAIVisionAnalyzer:
         return self._parse_response(image_path=image_path, text=f"{summary}\n{tags}")
 
     def _parse_response(self, image_path: Path, text: str) -> VisionAnalysis:
+        """Parse the vision model output into the shared analysis schema."""
+        # The parser accepts the strict two-line format and also degrades
+        # gracefully if the model returns only a plain summary.
         summary = ""
         tags: list[str] = []
         for line in text.splitlines():

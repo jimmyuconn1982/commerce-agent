@@ -50,9 +50,9 @@ def test_chat_returns_guided_response() -> None:
         vision_analyzer=FakeVisionAnalyzer("compact keyboard on a desk", ["keyboard", "desk"])
     )
     reply = agent.chat("I am looking for a compact keyboard for my desk", image_path="tests/fixtures/keyboard.png")
-    assert "Mechanical Keyboard" in reply
+    assert "Mechanical Keyboard" not in reply
     assert "Image summary:" in reply
-    assert "recommendation" in reply.lower() or "matches" in reply.lower()
+    assert "general conversation" in reply.lower()
 
 
 def test_run_pipeline_returns_observable_trace() -> None:
@@ -70,6 +70,26 @@ def test_run_pipeline_returns_observable_trace() -> None:
     assert result.trace.generation.selected_product_ids
 
 
+def test_chat_pipeline_does_not_touch_catalog_search() -> None:
+    agent = CommerceAgent(vision_analyzer=FakeVisionAnalyzer("unused", []))
+    result = agent.run_pipeline(prompt="What can you do?", limit=3)
+    assert result.intent == "chat"
+    assert result.matches == []
+    assert result.trace.retrieval is None
+    assert result.trace.rerank is None
+    assert result.trace.generation.selected_product_ids == []
+
+
+def test_multimodal_pipeline_uses_explicit_multimodal_branch() -> None:
+    agent = CommerceAgent(
+        vision_analyzer=FakeVisionAnalyzer("raised keys desk", ["keyboard", "desk"])
+    )
+    result = agent.run_pipeline(prompt="office", image_path="tests/fixtures/keyboard.png", limit=3)
+    assert result.intent == "multimodal-search"
+    tool_names = [step.tool_name for step in result.trace.react.steps]
+    assert "multimodal_search" in tool_names
+
+
 def test_mock_vision_response_allows_image_flow_without_api_key(monkeypatch, tmp_path) -> None:
     image_path = tmp_path / "green-bag.png"
     image_path.write_bytes(b"fake")
@@ -84,3 +104,12 @@ def test_mock_vision_response_allows_image_flow_without_api_key(monkeypatch, tmp
     analysis = OpenAIVisionAnalyzer().analyze(image_path)
     assert analysis.summary == "compact green bag"
     assert "green" in analysis.tags
+
+
+def test_react_paths_are_exposed_as_tools() -> None:
+    agent = CommerceAgent(vision_analyzer=FakeVisionAnalyzer("unused", []))
+    tools = agent.get_tools()
+    assert "chat_path" in tools
+    assert "text_search_path" in tools
+    assert "image_search_path" in tools
+    assert "multimodal_search_path" in tools

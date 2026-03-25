@@ -1,5 +1,22 @@
 from __future__ import annotations
 
+"""Command-line entrypoint for local development.
+
+Inputs:
+- subcommands for chat, text search, image search, and multimodal search
+
+Outputs:
+- plain JSON for retrieval results
+- plain text for chat replies
+
+Role:
+- provide a fast way to test the backend without the web UI
+
+Upgrade path:
+- add debug flags for traces and eval replay
+- keep the same user-facing commands even if the backend graph changes
+"""
+
 import argparse
 from dataclasses import asdict
 import json

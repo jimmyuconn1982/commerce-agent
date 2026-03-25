@@ -1,5 +1,22 @@
 from __future__ import annotations
 
+"""FastAPI entrypoint for the chat-style frontend.
+
+Inputs:
+- multipart form requests with text, local images, or image URLs
+
+Outputs:
+- routed chat/search responses shaped for the web client
+
+Role:
+- bridge browser uploads into the backend pipeline
+- keep transport concerns outside the agent core
+
+Upgrade path:
+- add debug endpoints for trace inspection
+- split public and developer APIs as backend observability grows
+"""
+
 import os
 import shutil
 import tempfile
@@ -33,11 +50,13 @@ agent = CommerceAgent()
 
 @app.get("/")
 def index() -> FileResponse:
+    """Serve the single-page frontend shell."""
     return FileResponse(STATIC_DIR / "index.html")
 
 
 @app.get("/api/catalog")
 def get_catalog() -> dict[str, object]:
+    """Return the current product catalog for frontend bootstrap and debug."""
     return {"products": [asdict(product) for product in agent.catalog.all()]}
 
 @app.post("/api/message")
@@ -47,6 +66,9 @@ async def message(
     image_url: str = Form(""),
     limit: int = Form(5),
 ) -> dict[str, object]:
+    """Handle one chat-style request and return the routed backend result."""
+    # The web API exposes a single unified message endpoint. Intent routing
+    # happens inside the backend pipeline, not in the transport layer.
     if not text and file is None and not image_url.strip():
         raise HTTPException(status_code=400, detail="text or file is required")
 
@@ -74,6 +96,7 @@ async def message(
 
 
 def _save_upload(file: UploadFile) -> Path:
+    """Persist one uploaded file into a temporary local path."""
     suffix = Path(file.filename or "upload.bin").suffix or ".bin"
     handle = tempfile.NamedTemporaryFile(delete=False, suffix=suffix)
     temp_path = Path(handle.name)
@@ -83,6 +106,7 @@ def _save_upload(file: UploadFile) -> Path:
 
 
 async def _resolve_image_input(file: UploadFile | None, image_url: str) -> Path | None:
+    """Resolve either an uploaded image or a remote image URL into a local path."""
     if file is not None and file.filename:
         return _save_upload(file)
     if image_url.strip():
@@ -91,6 +115,7 @@ async def _resolve_image_input(file: UploadFile | None, image_url: str) -> Path 
 
 
 async def _download_image(image_url: str) -> Path:
+    """Download a remote image URL into a temporary local file."""
     try:
         async with httpx.AsyncClient(follow_redirects=True, timeout=20.0) as client:
             response = await client.get(image_url)
@@ -111,6 +136,7 @@ async def _download_image(image_url: str) -> Path:
 
 
 def _suffix_from_content_type(content_type: str) -> str:
+    """Infer a reasonable file suffix from the HTTP content type."""
     if "png" in content_type:
         return ".png"
     if "webp" in content_type:
@@ -121,6 +147,7 @@ def _suffix_from_content_type(content_type: str) -> str:
 
 
 def main() -> None:
+    """Start the local FastAPI server with environment-based host and port."""
     host = os.getenv("COMMERCE_AGENT_HOST", "127.0.0.1")
     port = int(os.getenv("COMMERCE_AGENT_PORT", "8000"))
     uvicorn.run("commerce_agent.web:app", host=host, port=port, reload=False)

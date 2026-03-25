@@ -68,3 +68,8 @@ The web UI includes:
 - predefined simulated users
 - multiple chat threads per user
 - browser-persisted chat history across refreshes
+
+## Design Docs
+
+- Database design and ER diagram: [docs/database-design.md](docs/database-design.md)
+- 数据库设计与 ER 图: [docs/database-design.zh-CN.md](docs/database-design.zh-CN.md)
