@@ -23,6 +23,7 @@ import json
 import sys
 
 from .agent import CommerceAgent
+from .repository import PostgresSearchRepository
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -54,7 +55,7 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
-    agent = CommerceAgent()
+    agent = CommerceAgent(search_repository=PostgresSearchRepository())
     try:
         if args.command == "chat":
             print(agent.chat(args.prompt, image_path=args.image))

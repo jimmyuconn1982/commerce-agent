@@ -51,8 +51,33 @@ Load the tiny seed bundle:
 commerce-agent-load-seed
 ```
 
+Build text embeddings:
+
+```bash
+commerce-agent-build-text-embeddings
+```
+
+Build image embeddings:
+
+```bash
+commerce-agent-build-image-embeddings
+```
+
+Build both local semantic indexes in one step:
+
+```bash
+commerce-agent-build-semantic-indexes
+commerce-agent-semantic-index-status
+```
+
+Run PostgreSQL-backed text search:
+
+```bash
+commerce-agent-db-text-search "compact keyboard under 200"
+```
+
 ## Next Steps
 
 - add seed-data staging tables for public sources
 - add import scripts for public and synthetic test data
-- connect the backend repository layer to PostgreSQL
+- connect the backend agent paths to the PostgreSQL repository

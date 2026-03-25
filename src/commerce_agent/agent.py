@@ -38,6 +38,7 @@ from .models import (
     ToolCallTrace,
     VisionAnalysis,
 )
+from .repository import CatalogSearchRepository, SearchRepository
 from .tools import (
     AnalyzeImageInput,
     ChatGenerationInput,
@@ -63,9 +64,11 @@ class CommerceAgent:
         self,
         catalog: Catalog | None = None,
         vision_analyzer: VisionAnalyzer | None = None,
+        search_repository: SearchRepository | None = None,
     ) -> None:
         self.catalog = catalog or Catalog.from_json()
         self.vision_analyzer = vision_analyzer
+        self.search_repository = search_repository or CatalogSearchRepository(self.catalog)
         self.router = HeuristicRouter(self.catalog)
         self.tools = CommerceTools(self)
 
@@ -78,8 +81,7 @@ class CommerceAgent:
     ) -> list[Product]:
         """Run text retrieval and return the top ranked products."""
         retrieval = self.tools.text_search(TextSearchInput(query=query, category=category, limit=limit))
-        rerank = self.tools.rerank(RerankInput(candidates=retrieval.candidates, strategy="text-score"))
-        return [candidate.product for candidate in rerank.candidates_after[:limit]]
+        return [candidate.product for candidate in retrieval.candidates[:limit]]
 
     def image_search(self, image_path: str | Path, limit: int = 5) -> tuple[VisionAnalysis, list[Product]]:
         """Analyze one image and return visually matched products."""
@@ -166,6 +168,26 @@ class CommerceAgent:
             text_tokens=sorted(text_tokens),
             image_tokens=sorted(image_tokens),
             candidates=ranked[: max(limit, len(ranked))],
+            limit=limit,
+        )
+
+    def retrieve_text_candidates(
+        self,
+        *,
+        text_query: str = "",
+        category: str | None = None,
+        limit: int = 5,
+    ) -> RetrievalTrace:
+        """Retrieve text-search candidates from the configured search repository."""
+        parsed, hits = self.search_repository.search_text(text_query, limit=limit)
+        candidates = [self._candidate_from_search_hit(hit) for hit in hits]
+        if category:
+            candidates = [candidate for candidate in candidates if candidate.product.category == category]
+        return RetrievalTrace(
+            query_text=parsed.remaining_query or parsed.normalized_query or text_query,
+            text_tokens=sorted((parsed.remaining_query or parsed.normalized_query).split()),
+            image_tokens=[],
+            candidates=candidates,
             limit=limit,
         )
 
@@ -395,6 +417,27 @@ class CommerceAgent:
                 score += 1.0
                 matched_fields.append("name")
         return round(score + product.rating / 10, 2), matched_fields
+
+    def _candidate_from_search_hit(self, hit) -> ScoredCandidate:
+        """Convert one repository hit into the shared retrieval candidate shape."""
+        product = Product(
+            id=hit.product_id,
+            name=hit.title,
+            category=hit.category_name,
+            rating=round(float(hit.seller_rating or 0), 2),
+            tags=[],
+            description=hit.short_description,
+            image_url=hit.primary_image_url,
+            image_tags=[],
+            visual_description=hit.short_description,
+        )
+        return ScoredCandidate(
+            product=product,
+            score=round(float(hit.match_score), 6),
+            text_score=round(float(hit.keyword_score), 6),
+            image_score=round(float(hit.semantic_score), 6),
+            matched_fields=["repository"],
+        )
 
     def _generate_chat_response(
         self,

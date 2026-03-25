@@ -86,6 +86,9 @@ CREATE TABLE IF NOT EXISTS product_embeddings (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+CREATE UNIQUE INDEX IF NOT EXISTS uq_product_embedding_variant
+    ON product_embeddings(product_id, embedding_type, model_name);
+
 CREATE UNIQUE INDEX IF NOT EXISTS uq_product_primary_media
     ON product_media(product_id)
     WHERE is_primary = TRUE;

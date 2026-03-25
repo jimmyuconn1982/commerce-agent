@@ -32,6 +32,7 @@ from fastapi.staticfiles import StaticFiles
 
 from .agent import CommerceAgent
 from .api_models import RoutedMessageResponse
+from .repository import PostgresSearchRepository
 
 STATIC_DIR = Path(__file__).resolve().parents[2] / "web"
 
@@ -45,7 +46,7 @@ app.add_middleware(
 )
 app.mount("/assets", StaticFiles(directory=STATIC_DIR / "assets"), name="assets")
 
-agent = CommerceAgent()
+agent = CommerceAgent(search_repository=PostgresSearchRepository())
 
 
 @app.get("/")

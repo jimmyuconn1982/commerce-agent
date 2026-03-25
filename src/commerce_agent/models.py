@@ -138,3 +138,38 @@ class PipelineResult:
     analysis: VisionAnalysis | None
     matches: list[Product]
     trace: PipelineTrace
+
+
+@dataclass(slots=True)
+class ParsedSearchQuery:
+    """Structured query object produced by the first-pass search parser."""
+
+    raw_query: str
+    normalized_query: str
+    remaining_query: str
+    category_hints: list[str]
+    attribute_hints: list[str]
+    min_price: float | None
+    max_price: float | None
+    sort: str | None
+
+
+@dataclass(slots=True)
+class ProductSearchHit:
+    """Joined product card returned by the PostgreSQL text-search repository."""
+
+    product_id: int
+    title: str
+    short_description: str
+    primary_image_url: str
+    price: float
+    currency: str
+    seller_name: str
+    seller_rating: float
+    review_count: int
+    inventory_count: int
+    product_url: str
+    category_name: str
+    keyword_score: float
+    semantic_score: float
+    match_score: float

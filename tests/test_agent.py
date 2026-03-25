@@ -2,6 +2,7 @@ from pathlib import Path
 
 from commerce_agent.agent import CommerceAgent
 from commerce_agent.models import VisionAnalysis
+from commerce_agent.repository import SearchRepository
 from commerce_agent.vision import OpenAIVisionAnalyzer
 
 
@@ -14,8 +15,52 @@ class FakeVisionAnalyzer:
         return VisionAnalysis(image_path=image_path, summary=self.summary, tags=self.tags)
 
 
+class StubSearchRepository(SearchRepository):
+    def __init__(self) -> None:
+        self.queries: list[tuple[str, int]] = []
+
+    def search_text(self, query: str, limit: int = 5):
+        from commerce_agent.models import ParsedSearchQuery, ProductSearchHit
+
+        self.queries.append((query, limit))
+        return (
+            ParsedSearchQuery(
+                raw_query=query,
+                normalized_query=query.lower(),
+                remaining_query=query.lower(),
+                category_hints=[],
+                attribute_hints=[],
+                min_price=None,
+                max_price=None,
+                sort=None,
+            ),
+            [
+                ProductSearchHit(
+                    product_id=723450000000000006,
+                    title="Mechanical Keyboard",
+                    short_description="Tactile mechanical keyboard with hot-swappable switches.",
+                    primary_image_url="images/mechanical-keyboard.jpg",
+                    price=150.0,
+                    currency="USD",
+                    seller_name="Home Office Co",
+                    seller_rating=4.5,
+                    review_count=197,
+                    inventory_count=62,
+                    product_url="https://example.com/products/723450000000000006",
+                    category_name="electronics",
+                    keyword_score=1.0,
+                    semantic_score=0.5,
+                    match_score=0.825,
+                )
+            ],
+        )
+
+
 def test_text_search_ranks_direct_match_first() -> None:
-    agent = CommerceAgent(vision_analyzer=FakeVisionAnalyzer("unused", []))
+    agent = CommerceAgent(
+        vision_analyzer=FakeVisionAnalyzer("unused", []),
+        search_repository=StubSearchRepository(),
+    )
     results = agent.text_search("keyboard", limit=2)
     assert results
     assert results[0].id == 723450000000000006
@@ -57,7 +102,8 @@ def test_chat_returns_guided_response() -> None:
 
 def test_run_pipeline_returns_observable_trace() -> None:
     agent = CommerceAgent(
-        vision_analyzer=FakeVisionAnalyzer("compact keyboard on a desk", ["keyboard", "desk"])
+        vision_analyzer=FakeVisionAnalyzer("compact keyboard on a desk", ["keyboard", "desk"]),
+        search_repository=StubSearchRepository(),
     )
     result = agent.run_pipeline(prompt="keyboard", limit=3)
     assert result.intent == "text-search"
@@ -71,7 +117,10 @@ def test_run_pipeline_returns_observable_trace() -> None:
 
 
 def test_chat_pipeline_does_not_touch_catalog_search() -> None:
-    agent = CommerceAgent(vision_analyzer=FakeVisionAnalyzer("unused", []))
+    agent = CommerceAgent(
+        vision_analyzer=FakeVisionAnalyzer("unused", []),
+        search_repository=StubSearchRepository(),
+    )
     result = agent.run_pipeline(prompt="What can you do?", limit=3)
     assert result.intent == "chat"
     assert result.matches == []
@@ -107,9 +156,25 @@ def test_mock_vision_response_allows_image_flow_without_api_key(monkeypatch, tmp
 
 
 def test_react_paths_are_exposed_as_tools() -> None:
-    agent = CommerceAgent(vision_analyzer=FakeVisionAnalyzer("unused", []))
+    agent = CommerceAgent(
+        vision_analyzer=FakeVisionAnalyzer("unused", []),
+        search_repository=StubSearchRepository(),
+    )
     tools = agent.get_tools()
     assert "chat_path" in tools
     assert "text_search_path" in tools
     assert "image_search_path" in tools
     assert "multimodal_search_path" in tools
+
+
+def test_text_search_path_uses_search_repository() -> None:
+    repository = StubSearchRepository()
+    agent = CommerceAgent(
+        vision_analyzer=FakeVisionAnalyzer("unused", []),
+        search_repository=repository,
+    )
+
+    result = agent.run_pipeline(prompt="keyboard", limit=3)
+    assert repository.queries == [("keyboard", 3)]
+    assert result.intent == "text-search"
+    assert result.matches[0].id == 723450000000000006

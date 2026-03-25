@@ -99,4 +99,9 @@ Build and load the tiny local seed:
 ```bash
 commerce-agent-build-tiny-seed
 commerce-agent-load-seed
+commerce-agent-build-text-embeddings
+commerce-agent-build-image-embeddings
+commerce-agent-build-semantic-indexes
+commerce-agent-semantic-index-status
+commerce-agent-db-text-search "compact keyboard under 200"
 ```

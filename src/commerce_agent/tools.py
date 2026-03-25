@@ -160,7 +160,7 @@ class CommerceTools:
 
     def text_search(self, data: TextSearchInput) -> RetrievalTrace:
         """Retrieve candidates from text signals only."""
-        return self.agent.retrieve_candidates(
+        return self.agent.retrieve_text_candidates(
             text_query=data.query,
             category=data.category,
             limit=data.limit,
@@ -233,17 +233,20 @@ class CommerceTools:
         data.steps.append(
             ToolCallTrace(
                 tool_name="text_search",
-                thought="Use text retrieval for keyword-heavy queries.",
+                thought="Use the configured text-search repository for retrieval.",
                 input_summary=f"query={data.prompt!r}",
                 observation_summary=f"candidates={len(retrieval.candidates)}",
             )
         )
-        rerank = self.rerank(RerankInput(candidates=retrieval.candidates, strategy="text-score"))
         return self._complete_search_path(
             intent="text-search",
             prompt=data.prompt,
             retrieval=retrieval,
-            rerank=rerank,
+            rerank=RerankTrace(
+                strategy="repository-order",
+                candidates_before=list(retrieval.candidates),
+                candidates_after=list(retrieval.candidates),
+            ),
             steps=data.steps,
             limit=data.limit,
         )

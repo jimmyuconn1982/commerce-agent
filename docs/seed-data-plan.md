@@ -115,4 +115,11 @@ The repository now includes:
   - `product_search_documents`
 
 The first loader intentionally skips `product_embeddings`.
-Embeddings will be built in a later step after the core seed path is stable.
+Embeddings are now built by a separate local semantic indexing pipeline after the core seed load step.
+
+Current local semantic indexing behavior:
+
+- text embeddings use a deterministic mock embedding provider
+- image embeddings use the same deterministic mock provider over image references
+- both flows write into `product_embeddings`
+- both flows can be rebuilt locally before switching to a real model provider
