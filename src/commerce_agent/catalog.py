@@ -43,7 +43,7 @@ class Catalog:
         """Return a copy of all products for retrieval and debugging."""
         return list(self._products)
 
-    def get(self, product_id: str) -> Product:
+    def get(self, product_id: int) -> Product:
         """Look up one product by id and fail loudly if it is unknown."""
         try:
             return self._by_id[product_id]

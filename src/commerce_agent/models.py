@@ -27,7 +27,7 @@ from pathlib import Path
 class Product:
     """Structured product record used across retrieval and UI responses."""
 
-    id: str
+    id: int
     name: str
     category: str
     rating: float
@@ -94,7 +94,7 @@ class GenerationTrace:
 
     mode: str
     prompt: str
-    selected_product_ids: list[str]
+    selected_product_ids: list[int]
     response: str
 
 

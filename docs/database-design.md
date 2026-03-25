@@ -30,6 +30,25 @@ The recommended first production-like stack is:
 - PostgreSQL Full-Text Search
 - `pgvector`
 
+## ID Strategy
+
+Use Snowflake-style `bigint` ids as the primary key strategy across the relational model.
+
+Principles:
+
+- do not use database auto-increment ids as long-term entity ids
+- use time-ordered 64-bit ids for `products`, `categories`, `sellers`, `product_media`, `product_offers`, and `product_embeddings`
+- keep business-facing identifiers separate, such as `sku`, `seller_code`, or `category_slug`
+
+Why:
+
+- works better for distributed writes and later service decomposition
+- keeps ids compact compared with UUID
+- preserves index locality better than random ids
+- avoids exposing row-count style auto-increment sequences
+
+In this repository, the MVP catalog should also use Snowflake-style integer product ids so the application model stays aligned with the target database design.
+
 ## Entity Relationship Diagram
 
 ```mermaid

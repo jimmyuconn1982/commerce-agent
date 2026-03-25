@@ -18,7 +18,7 @@ def test_text_search_ranks_direct_match_first() -> None:
     agent = CommerceAgent(vision_analyzer=FakeVisionAnalyzer("unused", []))
     results = agent.text_search("keyboard", limit=2)
     assert results
-    assert results[0].id == "sku-1006"
+    assert results[0].id == 723450000000000006
 
 
 def test_image_search_matches_visual_description() -> None:
@@ -28,7 +28,7 @@ def test_image_search_matches_visual_description() -> None:
     analysis, results = agent.image_search("tests/fixtures/desk.png", limit=3)
     assert analysis.summary == "wood top office desk"
     assert results
-    assert results[0].id == "sku-1005"
+    assert results[0].id == 723450000000000005
 
 
 def test_multimodal_search_blends_text_and_image_intent() -> None:
@@ -42,7 +42,7 @@ def test_multimodal_search_blends_text_and_image_intent() -> None:
     )
     assert analysis is not None
     assert results
-    assert results[0].id == "sku-1006"
+    assert results[0].id == 723450000000000006
 
 
 def test_chat_returns_guided_response() -> None:

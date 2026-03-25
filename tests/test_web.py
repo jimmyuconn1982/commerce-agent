@@ -8,7 +8,7 @@ class StubAgent:
     def __init__(self) -> None:
         self.catalog = type("CatalogStub", (), {"all": lambda self: [self._product]})()
         self.catalog._product = Product(
-            id="sku-1006",
+            id=723450000000000006,
             name="Mechanical Keyboard",
             category="electronics",
             rating=4.7,
@@ -91,7 +91,7 @@ def test_message_endpoint_routes_to_text_search(monkeypatch) -> None:
     assert response.status_code == 200
     body = response.json()
     assert body["intent"] == "text-search"
-    assert body["matches"][0]["id"] == "sku-1006"
+    assert body["matches"][0]["id"] == 723450000000000006
 
 
 def test_multimodal_text_only_returns_matches(monkeypatch) -> None:
@@ -101,4 +101,4 @@ def test_multimodal_text_only_returns_matches(monkeypatch) -> None:
     assert response.status_code == 200
     body = response.json()
     assert body["analysis"] is None
-    assert body["matches"][0]["id"] == "sku-1006"
+    assert body["matches"][0]["id"] == 723450000000000006

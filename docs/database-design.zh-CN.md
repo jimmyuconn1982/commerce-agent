@@ -30,6 +30,25 @@
 - PostgreSQL Full-Text Search
 - `pgvector`
 
+## ID 策略
+
+关系模型中的主键统一采用 Snowflake-style `bigint`。
+
+原则：
+
+- 不使用数据库自增 id 作为长期实体主键
+- `products`、`categories`、`sellers`、`product_media`、`product_offers`、`product_embeddings` 统一使用有时间序的 64 位整数 id
+- 面向业务展示的标识单独保留，例如 `sku`、`seller_code`、`category_slug`
+
+原因：
+
+- 更适合后续分布式写入和服务拆分
+- 相比 UUID 更紧凑
+- 比随机 id 更有利于索引局部性
+- 避免暴露数据库自增序列带来的规模信息
+
+在本仓库中，MVP 的 JSON catalog 也应使用 Snowflake-style 整数产品 id，保证应用层模型和目标数据库设计保持一致。
+
 ## ER 图
 
 ```mermaid
