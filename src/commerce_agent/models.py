@@ -36,6 +36,13 @@ class Product:
     image_url: str
     image_tags: list[str]
     visual_description: str
+    price: float | None = None
+    currency: str | None = None
+    seller_name: str | None = None
+    seller_rating: float | None = None
+    review_count: int | None = None
+    inventory_count: int | None = None
+    product_url: str | None = None
 
 
 @dataclass(slots=True)

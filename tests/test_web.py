@@ -82,6 +82,7 @@ def test_message_endpoint_routes_to_chat(monkeypatch) -> None:
     assert response.status_code == 200
     assert response.json()["intent"] == "chat"
     assert response.json()["content"] == "stubbed reply for: recommend a keyboard"
+    assert response.json()["trace"]["router"]["intent"] == "chat"
 
 
 def test_message_endpoint_routes_to_text_search(monkeypatch) -> None:
@@ -92,6 +93,7 @@ def test_message_endpoint_routes_to_text_search(monkeypatch) -> None:
     body = response.json()
     assert body["intent"] == "text-search"
     assert body["matches"][0]["id"] == 723450000000000006
+    assert body["trace"]["router"]["intent"] == "text-search"
 
 
 def test_multimodal_text_only_returns_matches(monkeypatch) -> None:

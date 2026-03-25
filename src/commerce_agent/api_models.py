@@ -25,4 +25,5 @@ class RoutedMessageResponse(BaseModel):
     content: str
     analysis: dict[str, object] | None = None
     matches: list[dict[str, object]] = Field(default_factory=list)
+    trace: dict[str, object] | None = None
     limit: int = Field(default=5, ge=1, le=20)

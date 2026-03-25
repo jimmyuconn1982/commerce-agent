@@ -469,6 +469,13 @@ class CommerceAgent:
             image_url=hit.primary_image_url,
             image_tags=[],
             visual_description=hit.short_description,
+            price=float(hit.price) if hit.price is not None else None,
+            currency=hit.currency,
+            seller_name=hit.seller_name,
+            seller_rating=float(hit.seller_rating or 0),
+            review_count=int(hit.review_count or 0),
+            inventory_count=int(hit.inventory_count or 0),
+            product_url=hit.product_url,
         )
         return ScoredCandidate(
             product=product,

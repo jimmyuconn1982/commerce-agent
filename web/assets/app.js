@@ -212,15 +212,79 @@ function renderMessageBody(container, message) {
       const card = document.createElement("div");
       card.className = "result-card";
       card.innerHTML = `
-        <div class="result-row">
-          <strong>${product.name}</strong>
-          <span class="result-meta">${product.category} · ${product.rating}</span>
+        <div class="result-top">
+          <img class="result-image" src="${product.image_url}" alt="${product.name}" />
+          <div class="result-copy">
+            <div class="result-row">
+              <strong>${product.name}</strong>
+              <span class="result-price">${formatPrice(product.price, product.currency)}</span>
+            </div>
+            <div class="result-meta-row">
+              <span class="result-meta">${product.category}</span>
+              <span class="result-meta">${product.seller_name || "Unknown seller"}</span>
+              <span class="result-meta">${formatReview(product.review_count, product.seller_rating)}</span>
+              <span class="result-meta">inventory ${product.inventory_count ?? 0}</span>
+            </div>
+          </div>
         </div>
         <div class="result-desc">${product.description}</div>
+        ${product.product_url ? `<a class="result-link" href="${product.product_url}" target="_blank" rel="noreferrer">Open product</a>` : ""}
       `;
       results.appendChild(card);
     }
     container.appendChild(results);
+  }
+
+  if (message.trace) {
+    const debug = document.createElement("details");
+    debug.className = "debug-trace";
+    const steps = (message.trace.react?.steps || [])
+      .map(
+        (step) => `
+          <div class="debug-step">
+            <div class="debug-step-title">${step.tool_name}</div>
+            <div class="debug-step-copy">${step.thought}</div>
+            <div class="debug-step-copy">${step.input_summary}</div>
+            <div class="debug-step-copy">${step.observation_summary}</div>
+          </div>
+        `,
+      )
+      .join("");
+
+    const retrievalRows = (message.trace.retrieval?.candidates || [])
+      .slice(0, 5)
+      .map(
+        (candidate) => `
+          <tr>
+            <td>${candidate.product.name}</td>
+            <td>${Number(candidate.score).toFixed(4)}</td>
+            <td>${Number(candidate.text_score).toFixed(4)}</td>
+            <td>${Number(candidate.image_score).toFixed(4)}</td>
+          </tr>
+        `,
+      )
+      .join("");
+
+    debug.innerHTML = `
+      <summary>Pipeline trace</summary>
+      <div class="debug-grid">
+        <div class="debug-chip"><strong>Intent</strong><span>${message.trace.router?.intent || "unknown"}</span></div>
+        <div class="debug-chip"><strong>Rationale</strong><span>${message.trace.router?.rationale || "n/a"}</span></div>
+      </div>
+      <div class="debug-section">
+        <div class="debug-label">Steps</div>
+        ${steps || '<div class="debug-step-copy">No steps recorded.</div>'}
+      </div>
+      <div class="debug-section">
+        <div class="debug-label">Top Candidates</div>
+        ${
+          retrievalRows
+            ? `<table class="debug-table"><thead><tr><th>Product</th><th>Score</th><th>Text</th><th>Image</th></tr></thead><tbody>${retrievalRows}</tbody></table>`
+            : '<div class="debug-step-copy">No retrieval candidates.</div>'
+        }
+      </div>
+    `;
+    container.appendChild(debug);
   }
 }
 
@@ -302,6 +366,7 @@ async function sendCurrentMessage() {
       content: response.content,
       analysis: response.analysis,
       matches: response.matches,
+      trace: response.trace,
     });
   } catch (error) {
     appendMessage({
@@ -389,6 +454,32 @@ function renderAttachmentPreview() {
     el.attachmentPreview.appendChild(node);
   }
   el.attachmentPreview.classList.remove("hidden");
+}
+
+function formatPrice(price, currency) {
+  if (price == null) {
+    return "";
+  }
+  const amount = Number(price);
+  if (Number.isNaN(amount)) {
+    return `${price} ${currency || ""}`.trim();
+  }
+  return new Intl.NumberFormat(undefined, {
+    style: "currency",
+    currency: currency || "USD",
+    maximumFractionDigits: 2,
+  }).format(amount);
+}
+
+function formatReview(reviewCount, sellerRating) {
+  const parts = [];
+  if (sellerRating != null) {
+    parts.push(`seller ${Number(sellerRating).toFixed(1)}`);
+  }
+  if (reviewCount != null) {
+    parts.push(`${reviewCount} reviews`);
+  }
+  return parts.join(" · ");
 }
 
 function autoResizePrompt() {

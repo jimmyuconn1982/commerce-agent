@@ -87,6 +87,7 @@ async def message(
             content=result.content,
             analysis=asdict(result.analysis) if result.analysis else None,
             matches=[asdict(product) for product in result.matches],
+            trace=asdict(result.trace),
             limit=limit,
         ).model_dump()
     except ValueError as exc:
