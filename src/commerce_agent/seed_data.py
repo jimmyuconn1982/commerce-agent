@@ -29,21 +29,12 @@ from urllib.request import Request, urlopen
 from typing import Any
 
 from .catalog import Catalog
+from .ids import SnowflakeLikeIdGenerator
 from .models import Product
 
 DEFAULT_DATABASE_URL = "postgresql://commerce_agent:commerce_agent@127.0.0.1:5432/commerce_agent"
 DEFAULT_TINY_SEED_PATH = Path(__file__).resolve().parents[2] / "db" / "seeds" / "tiny_seed.json"
 DEFAULT_PUBLIC_SEED_PATH = Path(__file__).resolve().parents[2] / "db" / "seeds" / "public_seed_50.json"
-
-CATEGORY_ID_BASE = 723460000000000000
-SELLER_ID_BASE = 723470000000000000
-MEDIA_ID_BASE = 723480000000000000
-OFFER_ID_BASE = 723490000000000000
-PUBLIC_PRODUCT_ID_BASE = 723550000000000000
-PUBLIC_CATEGORY_ID_BASE = 723560000000000000
-PUBLIC_SELLER_ID_BASE = 723570000000000000
-PUBLIC_MEDIA_ID_BASE = 723580000000000000
-PUBLIC_OFFER_ID_BASE = 723590000000000000
 
 
 @dataclass(slots=True)
@@ -62,12 +53,13 @@ class TinySeedBundle:
 
 def build_tiny_seed(catalog: Catalog) -> TinySeedBundle:
     """Build a deterministic tiny seed from the current MVP catalog."""
-    categories = _build_categories(catalog.all())
+    generator = SnowflakeLikeIdGenerator()
+    categories = _build_categories(catalog.all(), generator=generator)
     category_ids = {item["name"]: item["id"] for item in categories}
 
     sellers = [
         {
-            "id": SELLER_ID_BASE + 1,
+            "id": generator.stable("tiny_seller", "urban-hub"),
             "seller_code": "urban-hub",
             "name": "Urban Hub",
             "rating": 4.7,
@@ -76,7 +68,7 @@ def build_tiny_seed(catalog: Catalog) -> TinySeedBundle:
             "is_verified": True,
         },
         {
-            "id": SELLER_ID_BASE + 2,
+            "id": generator.stable("tiny_seller", "trail-works"),
             "seller_code": "trail-works",
             "name": "Trail Works",
             "rating": 4.6,
@@ -85,7 +77,7 @@ def build_tiny_seed(catalog: Catalog) -> TinySeedBundle:
             "is_verified": True,
         },
         {
-            "id": SELLER_ID_BASE + 3,
+            "id": generator.stable("tiny_seller", "home-office-co"),
             "seller_code": "home-office-co",
             "name": "Home Office Co",
             "rating": 4.5,
@@ -101,10 +93,10 @@ def build_tiny_seed(catalog: Catalog) -> TinySeedBundle:
     review_rows: list[dict[str, Any]] = []
     search_rows: list[dict[str, Any]] = []
 
-    for index, product in enumerate(catalog.all(), start=1):
+    for product in catalog.all():
         products.append(_build_product_row(product, category_ids[product.category]))
-        media_rows.append(_build_media_row(product, index))
-        offer_rows.append(_build_offer_row(product, index, sellers))
+        media_rows.append(_build_media_row(product, generator=generator))
+        offer_rows.append(_build_offer_row(product, sellers, generator=generator))
         review_rows.append(_build_review_row(product))
         search_rows.append(_build_search_document_row(product))
 
@@ -144,12 +136,14 @@ def fetch_dummyjson_products(limit: int = 50, skip: int = 0) -> list[dict[str, A
 
 def build_public_seed(products: list[dict[str, Any]]) -> TinySeedBundle:
     """Build one normalized seed bundle from public product rows."""
+    generator = SnowflakeLikeIdGenerator()
     categories = _build_named_categories(
         sorted({_normalize_category_name(str(item.get("category", "misc"))) for item in products}),
-        base=PUBLIC_CATEGORY_ID_BASE,
+        entity="public_category",
+        generator=generator,
     )
     category_ids = {item["name"]: item["id"] for item in categories}
-    sellers = _build_public_sellers(products)
+    sellers = _build_public_sellers(products, generator=generator)
     seller_ids = {item["seller_code"]: item["id"] for item in sellers}
 
     product_rows: list[dict[str, Any]] = []
@@ -158,8 +152,8 @@ def build_public_seed(products: list[dict[str, Any]]) -> TinySeedBundle:
     review_rows: list[dict[str, Any]] = []
     search_rows: list[dict[str, Any]] = []
 
-    for index, source_product in enumerate(products, start=1):
-        product_id = PUBLIC_PRODUCT_ID_BASE + int(source_product["id"])
+    for source_product in products:
+        product_id = generator.stable("public_product", f"dummyjson:{source_product['id']}")
         category_name = _normalize_category_name(str(source_product.get("category", "misc")))
         image_tags = _public_image_tags(source_product)
         seller_code = _public_seller_code(source_product)
@@ -191,7 +185,7 @@ def build_public_seed(products: list[dict[str, Any]]) -> TinySeedBundle:
         )
         media_rows.append(
             {
-                "id": PUBLIC_MEDIA_ID_BASE + index,
+                "id": generator.stable("public_media", product_id),
                 "product_id": product_id,
                 "media_type": "image",
                 "url": image_url,
@@ -205,7 +199,7 @@ def build_public_seed(products: list[dict[str, Any]]) -> TinySeedBundle:
         )
         offer_rows.append(
             {
-                "id": PUBLIC_OFFER_ID_BASE + index,
+                "id": generator.stable("public_offer", f"{product_id}:{seller_ids[seller_code]}"),
                 "product_id": product_id,
                 "seller_id": seller_ids[seller_code],
                 "price": float(source_product.get("price") or 0.0),
@@ -334,13 +328,18 @@ def build_public_seed_cli() -> None:
     print(path)
 
 
-def _build_categories(products: list[Product]) -> list[dict[str, Any]]:
+def _build_categories(products: list[Product], *, generator: SnowflakeLikeIdGenerator) -> list[dict[str, Any]]:
     category_names = sorted({product.category for product in products})
-    return _build_named_categories(category_names, base=CATEGORY_ID_BASE)
+    return _build_named_categories(category_names, entity="tiny_category", generator=generator)
 
 
-def _build_named_categories(names: list[str], *, base: int) -> list[dict[str, Any]]:
-    return [{"id": base + index, "name": name, "parent_id": None} for index, name in enumerate(names, start=1)]
+def _build_named_categories(
+    names: list[str],
+    *,
+    entity: str,
+    generator: SnowflakeLikeIdGenerator,
+) -> list[dict[str, Any]]:
+    return [{"id": generator.stable(entity, name), "name": name, "parent_id": None} for name in names]
 
 
 def _build_product_row(product: Product, category_id: int) -> dict[str, Any]:
@@ -360,9 +359,9 @@ def _build_product_row(product: Product, category_id: int) -> dict[str, Any]:
     }
 
 
-def _build_media_row(product: Product, index: int) -> dict[str, Any]:
+def _build_media_row(product: Product, *, generator: SnowflakeLikeIdGenerator) -> dict[str, Any]:
     return {
-        "id": MEDIA_ID_BASE + index,
+        "id": generator.stable("tiny_media", product.id),
         "product_id": product.id,
         "media_type": "image",
         "url": product.image_url,
@@ -375,15 +374,20 @@ def _build_media_row(product: Product, index: int) -> dict[str, Any]:
     }
 
 
-def _build_offer_row(product: Product, index: int, sellers: list[dict[str, Any]]) -> dict[str, Any]:
-    seller = sellers[(index - 1) % len(sellers)]
+def _build_offer_row(
+    product: Product,
+    sellers: list[dict[str, Any]],
+    *,
+    generator: SnowflakeLikeIdGenerator,
+) -> dict[str, Any]:
+    seller = sellers[product.id % len(sellers)]
     return {
-        "id": OFFER_ID_BASE + index,
+        "id": generator.stable("tiny_offer", f"{product.id}:{seller['id']}"),
         "product_id": product.id,
         "seller_id": seller["id"],
-        "price": _price_for_product(product, index),
+        "price": _price_for_product(product),
         "currency": "USD",
-        "inventory_count": 20 + (index * 7),
+        "inventory_count": 20 + ((product.id % 9) * 7),
         "product_url": f"https://example.com/products/{product.id}",
         "shipping_info": "Standard shipping in 3-5 business days",
         "is_active": True,
@@ -413,7 +417,7 @@ def _build_search_document_row(product: Product) -> dict[str, Any]:
     }
 
 
-def _build_public_sellers(products: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def _build_public_sellers(products: list[dict[str, Any]], *, generator: SnowflakeLikeIdGenerator) -> list[dict[str, Any]]:
     sellers: list[dict[str, Any]] = []
     seen: set[str] = set()
     for source_product in products:
@@ -424,7 +428,7 @@ def _build_public_sellers(products: list[dict[str, Any]]) -> list[dict[str, Any]
         brand = str(source_product.get("brand") or source_product.get("title") or "Marketplace Seller").strip()
         sellers.append(
             {
-                "id": PUBLIC_SELLER_ID_BASE + len(sellers) + 1,
+                "id": generator.stable("public_seller", seller_code),
                 "seller_code": seller_code,
                 "name": f"{brand} Store",
                 "rating": round(max(3.8, min(5.0, float(source_product.get('rating') or 4.2))), 2),
@@ -488,7 +492,7 @@ def _infer_brand(product: Product) -> str:
     return words[0]
 
 
-def _price_for_product(product: Product, index: int) -> float:
+def _price_for_product(product: Product) -> float:
     category_prices = {
         "electronics": 129.0,
         "furniture": 399.0,
@@ -497,7 +501,7 @@ def _price_for_product(product: Product, index: int) -> float:
         "outdoors": 39.0,
     }
     base = category_prices.get(product.category, 49.0)
-    return round(base + (index * 3.5), 2)
+    return round(base + ((product.id % 11) * 3.5), 2)
 
 
 def _truncate_seed_tables(cur: Any) -> None:

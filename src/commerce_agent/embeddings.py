@@ -28,11 +28,10 @@ from urllib.request import Request, urlopen
 
 import psycopg
 
+from .ids import SnowflakeLikeIdGenerator
 from .seed_data import DEFAULT_DATABASE_URL
 
 EMBEDDING_DIMENSION = 1024
-TEXT_EMBEDDING_ID_BASE = 823450000000000000
-IMAGE_EMBEDDING_ID_BASE = 823460000000000000
 
 
 @dataclass(slots=True)
@@ -141,6 +140,7 @@ def build_text_embeddings(
     provider = provider or get_embedding_provider()
     database_url = database_url or os.getenv("DATABASE_URL", DEFAULT_DATABASE_URL)
     count = 0
+    generator = SnowflakeLikeIdGenerator()
 
     with psycopg.connect(database_url) as conn:
         with conn.cursor() as cur:
@@ -161,7 +161,7 @@ def build_text_embeddings(
                 """
             )
             rows = cur.fetchall()
-            for index, row in enumerate(rows, start=1):
+            for row in rows:
                 product_id, title, short_description, long_description, category_name, search_text = row
                 source_text = " ".join(
                     part.strip()
@@ -181,7 +181,7 @@ def build_text_embeddings(
                     )
                     """,
                     {
-                        "id": TEXT_EMBEDDING_ID_BASE + index,
+                        "id": generator.stable("text_embedding", f"{product_id}:{provider.model_name}"),
                         "product_id": product_id,
                         "model_name": provider.model_name,
                         "model_version": provider.model_version,
@@ -202,6 +202,7 @@ def build_image_embeddings(
     provider = provider or get_embedding_provider()
     database_url = database_url or os.getenv("DATABASE_URL", DEFAULT_DATABASE_URL)
     count = 0
+    generator = SnowflakeLikeIdGenerator()
 
     with psycopg.connect(database_url) as conn:
         with conn.cursor() as cur:
@@ -219,7 +220,7 @@ def build_image_embeddings(
                 """
             )
             rows = cur.fetchall()
-            for index, row in enumerate(rows, start=1):
+            for row in rows:
                 product_id, title, image_url, alt_text = row
                 source = " ".join(part.strip() for part in [title, alt_text, image_url] if part and part.strip())
                 embedding = provider.embed_image_reference(source)
@@ -235,7 +236,7 @@ def build_image_embeddings(
                     )
                     """,
                     {
-                        "id": IMAGE_EMBEDDING_ID_BASE + index,
+                        "id": generator.stable("image_embedding", f"{product_id}:{provider.model_name}"),
                         "product_id": product_id,
                         "model_name": provider.model_name,
                         "model_version": provider.model_version,

@@ -1,27 +1,27 @@
 {
   "categories": [
     {
-      "id": 723460000000000001,
+      "id": 40871060743418616,
       "name": "apparel",
       "parent_id": null
     },
     {
-      "id": 723460000000000002,
+      "id": 39373725338341637,
       "name": "electronics",
       "parent_id": null
     },
     {
-      "id": 723460000000000003,
+      "id": 53155288622304953,
       "name": "footwear",
       "parent_id": null
     },
     {
-      "id": 723460000000000004,
+      "id": 43336887803001247,
       "name": "furniture",
       "parent_id": null
     },
     {
-      "id": 723460000000000005,
+      "id": 61940507050834777,
       "name": "outdoors",
       "parent_id": null
     }
@@ -34,7 +34,7 @@
       "short_description": "Lightweight trail shoes with stable grip for mixed terrain.",
       "long_description": "Lightweight trail shoes with stable grip for mixed terrain. Low-cut running shoe with rugged sole, dark upper, and outdoor styling.",
       "brand": "Trail Running",
-      "category_id": 723460000000000003,
+      "category_id": 53155288622304953,
       "status": "active",
       "attributes_jsonb": {
         "tags": [
@@ -57,7 +57,7 @@
       "short_description": "Midweight cotton hoodie for daily wear.",
       "long_description": "Midweight cotton hoodie for daily wear. Relaxed fit hoodie with drawstrings, front pocket, and minimalist style.",
       "brand": "Everyday Hoodie",
-      "category_id": 723460000000000001,
+      "category_id": 40871060743418616,
       "status": "active",
       "attributes_jsonb": {
         "tags": [
@@ -80,7 +80,7 @@
       "short_description": "Compact earbuds with active noise cancellation.",
       "long_description": "Compact earbuds with active noise cancellation. Small in-ear earbuds seated in a rounded charging case with glossy finish.",
       "brand": "Wireless Earbuds",
-      "category_id": 723460000000000002,
+      "category_id": 39373725338341637,
       "status": "active",
       "attributes_jsonb": {
         "tags": [
@@ -103,7 +103,7 @@
       "short_description": "Double-wall bottle that keeps drinks cold for 24 hours.",
       "long_description": "Double-wall bottle that keeps drinks cold for 24 hours. Tall stainless steel bottle with screw top and matte powder-coated finish.",
       "brand": "Insulated Water",
-      "category_id": 723460000000000005,
+      "category_id": 61940507050834777,
       "status": "active",
       "attributes_jsonb": {
         "tags": [
@@ -126,7 +126,7 @@
       "short_description": "Electric standing desk with programmable height presets.",
       "long_description": "Electric standing desk with programmable height presets. Rectangular desk with wooden top, metal legs, and clean home-office profile.",
       "brand": "Standing Desk",
-      "category_id": 723460000000000004,
+      "category_id": 43336887803001247,
       "status": "active",
       "attributes_jsonb": {
         "tags": [
@@ -149,7 +149,7 @@
       "short_description": "Tactile mechanical keyboard with hot-swappable switches.",
       "long_description": "Tactile mechanical keyboard with hot-swappable switches. Compact keyboard with raised keycaps, angled body, and desktop setup aesthetic.",
       "brand": "Mechanical Keyboard",
-      "category_id": 723460000000000002,
+      "category_id": 39373725338341637,
       "status": "active",
       "attributes_jsonb": {
         "tags": [
@@ -168,7 +168,7 @@
   ],
   "product_media": [
     {
-      "id": 723480000000000001,
+      "id": 130446573337380257,
       "product_id": 723450000000000001,
       "media_type": "image",
       "url": "images/trail-running-shoes.jpg",
@@ -180,7 +180,7 @@
       "is_primary": true
     },
     {
-      "id": 723480000000000002,
+      "id": 127657975535702278,
       "product_id": 723450000000000002,
       "media_type": "image",
       "url": "images/everyday-hoodie.jpg",
@@ -192,7 +192,7 @@
       "is_primary": true
     },
     {
-      "id": 723480000000000003,
+      "id": 119477448159375734,
       "product_id": 723450000000000003,
       "media_type": "image",
       "url": "images/wireless-earbuds.jpg",
@@ -204,7 +204,7 @@
       "is_primary": true
     },
     {
-      "id": 723480000000000004,
+      "id": 114868706968223966,
       "product_id": 723450000000000004,
       "media_type": "image",
       "url": "images/insulated-water-bottle.jpg",
@@ -216,7 +216,7 @@
       "is_primary": true
     },
     {
-      "id": 723480000000000005,
+      "id": 123092957592242514,
       "product_id": 723450000000000005,
       "media_type": "image",
       "url": "images/standing-desk.jpg",
@@ -228,7 +228,7 @@
       "is_primary": true
     },
     {
-      "id": 723480000000000006,
+      "id": 139012967349010670,
       "product_id": 723450000000000006,
       "media_type": "image",
       "url": "images/mechanical-keyboard.jpg",
@@ -242,7 +242,7 @@
   ],
   "sellers": [
     {
-      "id": 723470000000000001,
+      "id": 95824743338150673,
       "seller_code": "urban-hub",
       "name": "Urban Hub",
       "rating": 4.7,
@@ -251,7 +251,7 @@
       "is_verified": true
     },
     {
-      "id": 723470000000000002,
+      "id": 93828000496451667,
       "seller_code": "trail-works",
       "name": "Trail Works",
       "rating": 4.6,
@@ -260,7 +260,7 @@
       "is_verified": true
     },
     {
-      "id": 723470000000000003,
+      "id": 103918623868327774,
       "seller_code": "home-office-co",
       "name": "Home Office Co",
       "rating": 4.5,
@@ -271,67 +271,67 @@
   ],
   "product_offers": [
     {
-      "id": 723490000000000001,
+      "id": 156824036769253006,
       "product_id": 723450000000000001,
-      "seller_id": 723470000000000001,
-      "price": 92.5,
+      "seller_id": 93828000496451667,
+      "price": 99.5,
       "currency": "USD",
-      "inventory_count": 27,
+      "inventory_count": 48,
       "product_url": "https://example.com/products/723450000000000001",
       "shipping_info": "Standard shipping in 3-5 business days",
       "is_active": true
     },
     {
-      "id": 723490000000000002,
+      "id": 160006297975823976,
       "product_id": 723450000000000002,
-      "seller_id": 723470000000000002,
-      "price": 66.0,
+      "seller_id": 103918623868327774,
+      "price": 73.0,
       "currency": "USD",
-      "inventory_count": 34,
+      "inventory_count": 55,
       "product_url": "https://example.com/products/723450000000000002",
       "shipping_info": "Standard shipping in 3-5 business days",
       "is_active": true
     },
     {
-      "id": 723490000000000003,
+      "id": 150964296442206684,
       "product_id": 723450000000000003,
-      "seller_id": 723470000000000003,
-      "price": 139.5,
+      "seller_id": 95824743338150673,
+      "price": 146.5,
       "currency": "USD",
-      "inventory_count": 41,
+      "inventory_count": 62,
       "product_url": "https://example.com/products/723450000000000003",
       "shipping_info": "Standard shipping in 3-5 business days",
       "is_active": true
     },
     {
-      "id": 723490000000000004,
+      "id": 160814038182562558,
       "product_id": 723450000000000004,
-      "seller_id": 723470000000000001,
-      "price": 53.0,
+      "seller_id": 93828000496451667,
+      "price": 60.0,
       "currency": "USD",
-      "inventory_count": 48,
+      "inventory_count": 69,
       "product_url": "https://example.com/products/723450000000000004",
       "shipping_info": "Standard shipping in 3-5 business days",
       "is_active": true
     },
     {
-      "id": 723490000000000005,
+      "id": 171166078641626253,
       "product_id": 723450000000000005,
-      "seller_id": 723470000000000002,
-      "price": 416.5,
+      "seller_id": 103918623868327774,
+      "price": 423.5,
       "currency": "USD",
-      "inventory_count": 55,
+      "inventory_count": 76,
       "product_url": "https://example.com/products/723450000000000005",
       "shipping_info": "Standard shipping in 3-5 business days",
       "is_active": true
     },
     {
-      "id": 723490000000000006,
+      "id": 145866314351701360,
       "product_id": 723450000000000006,
-      "seller_id": 723470000000000003,
-      "price": 150.0,
+      "seller_id": 95824743338150673,
+      "price": 157.0,
       "currency": "USD",
-      "inventory_count": 62,
+      "inventory_count": 20,
       "product_url": "https://example.com/products/723450000000000006",
       "shipping_info": "Standard shipping in 3-5 business days",
       "is_active": true

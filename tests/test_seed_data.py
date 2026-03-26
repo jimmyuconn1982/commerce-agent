@@ -17,6 +17,7 @@ def test_build_tiny_seed_matches_catalog_shape() -> None:
     assert bundle.product_embeddings == []
     assert bundle.categories
     assert bundle.sellers
+    assert bundle.product_media[0]["product_id"] == bundle.products[0]["id"]
 
 
 def test_write_tiny_seed_writes_json_bundle(tmp_path: Path) -> None:
@@ -59,6 +60,7 @@ def test_build_public_seed_keeps_media_and_search_docs_on_same_product() -> None
     assert bundle.product_search_documents[0]["product_id"] == bundle.products[0]["id"]
     assert bundle.product_media[0]["url"] == "https://cdn.example.com/camera-backpack.webp"
     assert "Camera Backpack" in bundle.product_search_documents[0]["search_text"]
+    assert bundle.products[0]["id"] == build_public_seed(products).products[0]["id"]
 
 
 def test_write_public_seed_writes_public_bundle(tmp_path: Path, monkeypatch) -> None:

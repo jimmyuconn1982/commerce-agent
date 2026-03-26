@@ -6,6 +6,7 @@ from commerce_agent.embeddings import (
     get_embedding_provider,
     vector_literal,
 )
+from commerce_agent.ids import SnowflakeLikeIdGenerator
 
 
 def test_deterministic_embedding_provider_is_stable() -> None:
@@ -42,3 +43,13 @@ def test_bigmodel_provider_requires_api_key(monkeypatch) -> None:
         assert "BIGMODEL_API_KEY" in str(exc)
     else:
         raise AssertionError("expected missing API key to raise ValueError")
+
+
+def test_embedding_ids_are_stable_per_product_and_model() -> None:
+    generator = SnowflakeLikeIdGenerator()
+    first = generator.stable("text_embedding", "123:embedding-3")
+    second = generator.stable("text_embedding", "123:embedding-3")
+    image_id = generator.stable("image_embedding", "123:embedding-3")
+
+    assert first == second
+    assert first != image_id
