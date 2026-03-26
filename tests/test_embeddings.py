@@ -24,9 +24,10 @@ def test_vector_literal_formats_for_pgvector() -> None:
 
 
 def test_semantic_index_build_result_carries_counts() -> None:
-    result = SemanticIndexBuildResult(text_embeddings_built=6, image_embeddings_built=6)
+    result = SemanticIndexBuildResult(text_embeddings_built=6, image_embeddings_built=6, multimodal_embeddings_built=6)
     assert result.text_embeddings_built == 6
     assert result.image_embeddings_built == 6
+    assert result.multimodal_embeddings_built == 6
 
 
 def test_get_embedding_provider_defaults_to_deterministic(monkeypatch) -> None:
@@ -50,6 +51,8 @@ def test_embedding_ids_are_stable_per_product_and_model() -> None:
     first = generator.stable("text_embedding", "123:embedding-3")
     second = generator.stable("text_embedding", "123:embedding-3")
     image_id = generator.stable("image_embedding", "123:embedding-3")
+    multimodal_id = generator.stable("multimodal_embedding", "123:embedding-3")
 
     assert first == second
     assert first != image_id
+    assert multimodal_id != image_id

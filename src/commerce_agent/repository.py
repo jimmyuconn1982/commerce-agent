@@ -130,6 +130,7 @@ class CatalogSearchRepository:
             hits.append(
                 ProductSearchHit(
                     product_id=product.id,
+                    sku=getattr(product, "sku", f"sku-{product.id}"),
                     title=product.name,
                     short_description=product.description,
                     primary_image_url=product.image_url,
@@ -141,8 +142,9 @@ class CatalogSearchRepository:
                     inventory_count=0,
                     product_url=f"https://example.com/products/{product.id}",
                     category_name=product.category,
-                    keyword_score=keyword_score,
-                    semantic_score=image_score,
+                    text_score=keyword_score,
+                    image_score=image_score,
+                    multimodal_score=max(keyword_score, image_score),
                     match_score=match_score,
                 )
             )
@@ -151,7 +153,7 @@ class CatalogSearchRepository:
 
 
 class PostgresSearchRepository:
-    """Repository that fuses text and image semantic retrieval in PostgreSQL."""
+    """Repository that fuses text, image, and multimodal semantic retrieval in PostgreSQL."""
 
     def __init__(
         self,
@@ -163,23 +165,25 @@ class PostgresSearchRepository:
         self.embedding_provider = get_embedding_provider()
 
     def search_text(self, query: str, limit: int = 5) -> tuple[ParsedSearchQuery, list[ProductSearchHit]]:
-        """Parse one text query, run text+image semantic retrieval, and return product cards."""
+        """Parse one text query, run three-way semantic retrieval, and return product cards."""
         with psycopg.connect(self.database_url) as conn:
             categories = self._load_category_names(conn)
             parsed = self.parser.parse(query, known_categories=categories)
             query_text = parsed.remaining_query or parsed.normalized_query or parsed.raw_query
             text_vector = vector_literal(self.embedding_provider.embed_text(query_text))
             image_vector = vector_literal(self.embedding_provider.embed_image_reference(query_text))
-            rows = self._search_text_rows(conn, parsed, text_vector, image_vector, limit)
+            multimodal_vector = vector_literal(self.embedding_provider.embed_text(query_text))
+            rows = self._search_text_rows(conn, parsed, text_vector, image_vector, multimodal_vector, limit)
         return parsed, [ProductSearchHit(*row) for row in rows]
 
     def search_image(self, image_analysis: VisionAnalysis, limit: int = 5) -> list[ProductSearchHit]:
-        """Run text+image semantic retrieval from image analysis and return ranked product cards."""
+        """Run three-way semantic retrieval from image analysis and return ranked product cards."""
         image_ref = self._image_query_text(image_analysis)
         text_vector = vector_literal(self.embedding_provider.embed_text(image_ref))
         image_vector = vector_literal(self.embedding_provider.embed_image_reference(image_ref))
+        multimodal_vector = vector_literal(self.embedding_provider.embed_text(image_ref))
         with psycopg.connect(self.database_url) as conn:
-            rows = self._search_image_rows(conn, text_vector, image_vector, limit)
+            rows = self._search_image_rows(conn, text_vector, image_vector, multimodal_vector, limit)
         return [ProductSearchHit(*row) for row in rows]
 
     def search_multimodal(
@@ -188,7 +192,7 @@ class PostgresSearchRepository:
         image_analysis: VisionAnalysis,
         limit: int = 5,
     ) -> tuple[ParsedSearchQuery, list[ProductSearchHit]]:
-        """Run multimodal retrieval by fusing text semantic and image semantic signals."""
+        """Run multimodal retrieval by fusing text, image, and multimodal signals."""
         with psycopg.connect(self.database_url) as conn:
             categories = self._load_category_names(conn)
             parsed = self.parser.parse(query, known_categories=categories)
@@ -197,7 +201,8 @@ class PostgresSearchRepository:
             fused_text = " ".join(part for part in [query_text, image_ref] if part).strip()
             text_vector = vector_literal(self.embedding_provider.embed_text(fused_text))
             image_vector = vector_literal(self.embedding_provider.embed_image_reference(image_ref))
-            rows = self._search_multimodal_rows(conn, parsed, text_vector, image_vector, limit)
+            multimodal_vector = vector_literal(self.embedding_provider.embed_text(fused_text))
+            rows = self._search_multimodal_rows(conn, parsed, text_vector, image_vector, multimodal_vector, limit)
         return parsed, [ProductSearchHit(*row) for row in rows]
 
     def _image_query_text(self, image_analysis: VisionAnalysis) -> str:
@@ -216,6 +221,7 @@ class PostgresSearchRepository:
         parsed: ParsedSearchQuery,
         text_vector: str,
         image_vector: str,
+        multimodal_vector: str,
         limit: int,
     ) -> list[tuple]:
         """Execute text-search retrieval with both text and image semantic channels."""
@@ -223,6 +229,7 @@ class PostgresSearchRepository:
         params: dict[str, object] = {
             "text_vector": text_vector,
             "image_vector": image_vector,
+            "multimodal_vector": multimodal_vector,
             "embedding_model": self.embedding_provider.model_name,
             "candidate_limit": max(limit * 8, 30),
             "limit": limit,
@@ -265,17 +272,31 @@ class PostgresSearchRepository:
                 ORDER BY pe.embedding <=> %(image_vector)s::vector
                 LIMIT %(candidate_limit)s
             ),
+            multimodal_hits AS (
+                SELECT
+                    pe.product_id,
+                    1 - (pe.embedding <=> %(multimodal_vector)s::vector) AS multimodal_score
+                FROM product_embeddings pe
+                WHERE pe.embedding_type = 'multimodal' AND pe.model_name = %(embedding_model)s
+                ORDER BY pe.embedding <=> %(multimodal_vector)s::vector
+                LIMIT %(candidate_limit)s
+            ),
             fused AS (
                 SELECT
-                    COALESCE(t.product_id, i.product_id) AS product_id,
+                    COALESCE(t.product_id, i.product_id, m.product_id) AS product_id,
                     COALESCE(t.text_score, 0) AS text_score,
                     COALESCE(i.image_score, 0) AS image_score,
-                    (COALESCE(t.text_score, 0) * 0.65) + (COALESCE(i.image_score, 0) * 0.35) AS match_score
+                    COALESCE(m.multimodal_score, 0) AS multimodal_score,
+                    (COALESCE(t.text_score, 0) * 0.4)
+                    + (COALESCE(i.image_score, 0) * 0.2)
+                    + (COALESCE(m.multimodal_score, 0) * 0.4) AS match_score
                 FROM text_hits t
                 FULL OUTER JOIN image_hits i ON i.product_id = t.product_id
+                FULL OUTER JOIN multimodal_hits m ON m.product_id = COALESCE(t.product_id, i.product_id)
             )
             SELECT
                 p.id,
+                p.sku,
                 p.title,
                 p.short_description,
                 COALESCE(pm.url, '') AS primary_image_url,
@@ -289,6 +310,7 @@ class PostgresSearchRepository:
                 c.name AS category_name,
                 f.text_score,
                 f.image_score,
+                f.multimodal_score,
                 f.match_score
             FROM fused f
             JOIN products p ON p.id = f.product_id
@@ -323,9 +345,10 @@ class PostgresSearchRepository:
         conn: psycopg.Connection,
         text_vector: str,
         image_vector: str,
+        multimodal_vector: str,
         limit: int,
     ) -> list[tuple]:
-        """Execute image-search retrieval with both text and image semantic channels."""
+        """Execute image-search retrieval with text, image, and multimodal channels."""
         sql = """
             WITH text_hits AS (
                 SELECT
@@ -344,19 +367,32 @@ class PostgresSearchRepository:
                 WHERE pe.embedding_type = 'image' AND pe.model_name = %(embedding_model)s
                 ORDER BY pe.embedding <=> %(image_vector)s::vector
                 LIMIT %(limit)s
-            )
+            ),
+            multimodal_hits AS (
+                SELECT
+                    pe.product_id,
+                    1 - (pe.embedding <=> %(multimodal_vector)s::vector) AS multimodal_score
+                FROM product_embeddings pe
+                WHERE pe.embedding_type = 'multimodal' AND pe.model_name = %(embedding_model)s
+                ORDER BY pe.embedding <=> %(multimodal_vector)s::vector
+                LIMIT %(limit)s
             ),
             fused AS (
                 SELECT
-                    COALESCE(t.product_id, i.product_id) AS product_id,
+                    COALESCE(t.product_id, i.product_id, m.product_id) AS product_id,
                     COALESCE(t.text_score, 0) AS text_score,
                     COALESCE(i.image_score, 0) AS image_score,
-                    (COALESCE(t.text_score, 0) * 0.4) + (COALESCE(i.image_score, 0) * 0.6) AS match_score
+                    COALESCE(m.multimodal_score, 0) AS multimodal_score,
+                    (COALESCE(t.text_score, 0) * 0.2)
+                    + (COALESCE(i.image_score, 0) * 0.45)
+                    + (COALESCE(m.multimodal_score, 0) * 0.35) AS match_score
                 FROM text_hits t
                 FULL OUTER JOIN image_hits i ON i.product_id = t.product_id
+                FULL OUTER JOIN multimodal_hits m ON m.product_id = COALESCE(t.product_id, i.product_id)
             )
             SELECT
                 p.id,
+                p.sku,
                 p.title,
                 p.short_description,
                 COALESCE(pm.url, '') AS primary_image_url,
@@ -370,6 +406,7 @@ class PostgresSearchRepository:
                 c.name AS category_name,
                 fused.text_score,
                 fused.image_score,
+                fused.multimodal_score,
                 fused.match_score
             FROM fused
             JOIN products p ON p.id = fused.product_id
@@ -400,6 +437,7 @@ class PostgresSearchRepository:
                 {
                     "text_vector": text_vector,
                     "image_vector": image_vector,
+                    "multimodal_vector": multimodal_vector,
                     "limit": limit,
                     "embedding_model": self.embedding_provider.model_name,
                 },
@@ -412,13 +450,15 @@ class PostgresSearchRepository:
         parsed: ParsedSearchQuery,
         text_vector: str,
         image_vector: str,
+        multimodal_vector: str,
         limit: int,
     ) -> list[tuple]:
-        """Execute multimodal retrieval by fusing text and image semantic signals."""
+        """Execute multimodal retrieval by fusing text, image, and multimodal semantic signals."""
         conditions = ["p.status = 'active'"]
         params: dict[str, object] = {
             "text_vector": text_vector,
             "image_vector": image_vector,
+            "multimodal_vector": multimodal_vector,
             "embedding_model": self.embedding_provider.model_name,
             "candidate_limit": max(limit * 8, 30),
             "limit": limit,
@@ -437,6 +477,7 @@ class PostgresSearchRepository:
             params["max_price"] = parsed.max_price
 
         sql = f"""
+            WITH
             text_hits AS (
                 SELECT
                     pe.product_id,
@@ -455,18 +496,31 @@ class PostgresSearchRepository:
                 ORDER BY pe.embedding <=> %(image_vector)s::vector
                 LIMIT %(candidate_limit)s
             ),
+            multimodal_hits AS (
+                SELECT
+                    pe.product_id,
+                    1 - (pe.embedding <=> %(multimodal_vector)s::vector) AS multimodal_score
+                FROM product_embeddings pe
+                WHERE pe.embedding_type = 'multimodal' AND pe.model_name = %(embedding_model)s
+                ORDER BY pe.embedding <=> %(multimodal_vector)s::vector
+                LIMIT %(candidate_limit)s
+            ),
             fused AS (
                 SELECT
-                    COALESCE(t.product_id, i.product_id) AS product_id,
+                    COALESCE(t.product_id, i.product_id, m.product_id) AS product_id,
                     COALESCE(t.text_score, 0) AS text_score,
                     COALESCE(i.image_score, 0) AS image_score,
-                    (COALESCE(t.text_score, 0) * 0.55)
-                    + (COALESCE(i.image_score, 0) * 0.45) AS match_score
+                    COALESCE(m.multimodal_score, 0) AS multimodal_score,
+                    (COALESCE(t.text_score, 0) * 0.3)
+                    + (COALESCE(i.image_score, 0) * 0.3)
+                    + (COALESCE(m.multimodal_score, 0) * 0.4) AS match_score
                 FROM text_hits t
                 FULL OUTER JOIN image_hits i ON i.product_id = t.product_id
+                FULL OUTER JOIN multimodal_hits m ON m.product_id = COALESCE(t.product_id, i.product_id)
             )
             SELECT
                 p.id,
+                p.sku,
                 p.title,
                 p.short_description,
                 COALESCE(pm.url, '') AS primary_image_url,
@@ -480,6 +534,7 @@ class PostgresSearchRepository:
                 c.name AS category_name,
                 fused.text_score,
                 fused.image_score,
+                fused.multimodal_score,
                 fused.match_score
             FROM fused
             JOIN products p ON p.id = fused.product_id

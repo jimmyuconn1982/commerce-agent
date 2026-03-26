@@ -43,6 +43,7 @@ class Product:
     review_count: int | None = None
     inventory_count: int | None = None
     product_url: str | None = None
+    sku: str | None = None
 
 
 @dataclass(slots=True)
@@ -62,6 +63,7 @@ class ScoredCandidate:
     score: float
     text_score: float
     image_score: float
+    multimodal_score: float
     matched_fields: list[str]
 
 
@@ -103,6 +105,7 @@ class GenerationTrace:
     prompt: str
     selected_product_ids: list[int]
     response: str
+    prompt_context: str = ""
 
 
 @dataclass(slots=True)
@@ -166,6 +169,7 @@ class ProductSearchHit:
     """Joined product card returned by the PostgreSQL text-search repository."""
 
     product_id: int
+    sku: str
     title: str
     short_description: str
     primary_image_url: str
@@ -177,6 +181,7 @@ class ProductSearchHit:
     inventory_count: int
     product_url: str
     category_name: str
-    keyword_score: float
-    semantic_score: float
+    text_score: float
+    image_score: float
+    multimodal_score: float
     match_score: float

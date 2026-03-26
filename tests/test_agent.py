@@ -2,6 +2,7 @@ from pathlib import Path
 
 from commerce_agent.agent import CommerceAgent
 from commerce_agent.chat_responder import FallbackChatResponder
+from commerce_agent.search_responder import FallbackSearchResponder, SearchResponse
 from commerce_agent.models import VisionAnalysis
 from commerce_agent.repository import SearchRepository
 from commerce_agent.vision import BigModelVisionAnalyzer, OpenAIVisionAnalyzer
@@ -26,6 +27,17 @@ class FakeChatResponder:
         return self.response
 
 
+class FakeSearchResponder:
+    def __init__(self, response: str = "Grounded search response.") -> None:
+        self.response = response
+        self.calls: list[tuple[str, str, VisionAnalysis | None, list]] = []
+
+    def generate(self, *, intent: str, prompt: str, analysis: VisionAnalysis | None = None, products: list = None) -> SearchResponse:
+        self.calls.append((intent, prompt, analysis, list(products or [])))
+        selected = [product.id for product in (products or [])[:3]]
+        return SearchResponse(response=self.response, selected_product_ids=selected, prompt_context='{"debug":"fake"}')
+
+
 class StubSearchRepository(SearchRepository):
     def __init__(self) -> None:
         self.queries: list[tuple[str, int]] = []
@@ -48,6 +60,7 @@ class StubSearchRepository(SearchRepository):
             [
                 ProductSearchHit(
                     product_id=723450000000000006,
+                    sku="ELE-HOM-MEC-001",
                     title="Mechanical Keyboard",
                     short_description="Tactile mechanical keyboard with hot-swappable switches.",
                     primary_image_url="images/mechanical-keyboard.jpg",
@@ -59,8 +72,9 @@ class StubSearchRepository(SearchRepository):
                     inventory_count=62,
                     product_url="https://example.com/products/723450000000000006",
                     category_name="electronics",
-                    keyword_score=1.0,
-                    semantic_score=0.5,
+                    text_score=1.0,
+                    image_score=0.5,
+                    multimodal_score=0.75,
                     match_score=0.825,
                 )
             ],
@@ -73,6 +87,7 @@ class StubSearchRepository(SearchRepository):
         return [
             ProductSearchHit(
                 product_id=723450000000000005,
+                sku="FUR-HOM-STD-001",
                 title="Standing Desk",
                 short_description="Electric standing desk with programmable height presets.",
                 primary_image_url="images/standing-desk.jpg",
@@ -84,8 +99,9 @@ class StubSearchRepository(SearchRepository):
                 inventory_count=55,
                 product_url="https://example.com/products/723450000000000005",
                 category_name="furniture",
-                keyword_score=0.0,
-                semantic_score=1.0,
+                text_score=0.4,
+                image_score=1.0,
+                multimodal_score=0.8,
                 match_score=1.0,
             )
         ]
@@ -108,6 +124,7 @@ class StubSearchRepository(SearchRepository):
             [
                 ProductSearchHit(
                     product_id=723450000000000006,
+                    sku="ELE-HOM-MEC-001",
                     title="Mechanical Keyboard",
                     short_description="Tactile mechanical keyboard with hot-swappable switches.",
                     primary_image_url="images/mechanical-keyboard.jpg",
@@ -119,8 +136,9 @@ class StubSearchRepository(SearchRepository):
                     inventory_count=62,
                     product_url="https://example.com/products/723450000000000006",
                     category_name="electronics",
-                    keyword_score=0.9,
-                    semantic_score=0.8,
+                    text_score=0.9,
+                    image_score=0.8,
+                    multimodal_score=0.85,
                     match_score=0.85,
                 )
             ],
@@ -131,6 +149,7 @@ def test_text_search_ranks_direct_match_first() -> None:
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("unused", []),
         search_repository=StubSearchRepository(),
+        search_responder=FakeSearchResponder(),
     )
     results = agent.text_search("keyboard", limit=2)
     assert results
@@ -141,6 +160,7 @@ def test_image_search_matches_visual_description() -> None:
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("wood top office desk", ["desk", "office"]),
         search_repository=StubSearchRepository(),
+        search_responder=FakeSearchResponder(),
     )
     analysis, results = agent.image_search("tests/fixtures/desk.png", limit=3)
     assert analysis.summary == "wood top office desk"
@@ -152,6 +172,7 @@ def test_multimodal_search_blends_text_and_image_intent() -> None:
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("raised keys desk", ["keyboard", "desk"]),
         search_repository=StubSearchRepository(),
+        search_responder=FakeSearchResponder(),
     )
     analysis, results = agent.multimodal_search(
         text_query="office",
@@ -178,6 +199,7 @@ def test_run_pipeline_returns_observable_trace() -> None:
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("compact keyboard on a desk", ["keyboard", "desk"]),
         search_repository=StubSearchRepository(),
+        search_responder=FakeSearchResponder(),
     )
     result = agent.run_pipeline(prompt="keyboard", limit=3)
     assert result.intent == "text-search"
@@ -188,6 +210,7 @@ def test_run_pipeline_returns_observable_trace() -> None:
     assert result.trace.rerank is not None
     assert result.trace.retrieval.candidates
     assert result.trace.generation.selected_product_ids
+    assert result.trace.generation.prompt_context
 
 
 def test_chat_pipeline_does_not_touch_catalog_search() -> None:
@@ -196,6 +219,7 @@ def test_chat_pipeline_does_not_touch_catalog_search() -> None:
         vision_analyzer=FakeVisionAnalyzer("unused", []),
         search_repository=StubSearchRepository(),
         chat_responder=responder,
+        search_responder=FakeSearchResponder(),
     )
     result = agent.run_pipeline(prompt="What can you do?", limit=3)
     assert result.intent == "chat"
@@ -211,6 +235,7 @@ def test_chat_greeting_returns_natural_reply() -> None:
         vision_analyzer=FakeVisionAnalyzer("unused", []),
         search_repository=StubSearchRepository(),
         chat_responder=responder,
+        search_responder=FakeSearchResponder(),
     )
     result = agent.run_pipeline(prompt="你好啊", limit=3)
     assert result.intent == "chat"
@@ -224,6 +249,7 @@ def test_chat_capability_question_returns_capability_summary() -> None:
         vision_analyzer=FakeVisionAnalyzer("unused", []),
         search_repository=StubSearchRepository(),
         chat_responder=responder,
+        search_responder=FakeSearchResponder(),
     )
     result = agent.run_pipeline(prompt="hello，你可以提供哪些服务", limit=3)
     assert result.intent == "chat"
@@ -237,6 +263,7 @@ def test_english_capability_question_returns_capability_summary() -> None:
         vision_analyzer=FakeVisionAnalyzer("unused", []),
         search_repository=StubSearchRepository(),
         chat_responder=responder,
+        search_responder=FakeSearchResponder(),
     )
     result = agent.run_pipeline(prompt="hello, what kind of search can you provide?", limit=3)
     assert result.intent == "chat"
@@ -250,6 +277,7 @@ def test_general_chat_reply_stays_within_commerce_scope() -> None:
         vision_analyzer=FakeVisionAnalyzer("unused", []),
         search_repository=StubSearchRepository(),
         chat_responder=responder,
+        search_responder=FakeSearchResponder(),
     )
     result = agent.run_pipeline(prompt="Can you chat about random world history?", limit=3)
     assert result.intent == "chat"
@@ -267,6 +295,7 @@ def test_multimodal_pipeline_uses_explicit_multimodal_branch() -> None:
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("raised keys desk", ["keyboard", "desk"]),
         search_repository=StubSearchRepository(),
+        search_responder=FakeSearchResponder(),
     )
     result = agent.run_pipeline(prompt="office", image_path="tests/fixtures/keyboard.png", limit=3)
     assert result.intent == "multimodal-search"
@@ -321,6 +350,7 @@ def test_react_paths_are_exposed_as_tools() -> None:
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("unused", []),
         search_repository=StubSearchRepository(),
+        search_responder=FakeSearchResponder(),
     )
     tools = agent.get_tools()
     assert "chat_path" in tools
@@ -334,6 +364,7 @@ def test_text_search_path_uses_search_repository() -> None:
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("unused", []),
         search_repository=repository,
+        search_responder=FakeSearchResponder(),
     )
 
     result = agent.run_pipeline(prompt="keyboard", limit=3)
@@ -342,11 +373,60 @@ def test_text_search_path_uses_search_repository() -> None:
     assert result.matches[0].id == 723450000000000006
 
 
+def test_search_response_filters_matches_to_selected_product_ids() -> None:
+    repository = StubSearchRepository()
+
+    class EmptySelectingResponder(FakeSearchResponder):
+        def generate(self, *, intent: str, prompt: str, analysis: VisionAnalysis | None = None, products: list = None) -> SearchResponse:
+            self.calls.append((intent, prompt, analysis, list(products or [])))
+            return SearchResponse(
+                response="Only the top grounded product should remain.",
+                selected_product_ids=[723450000000000006],
+                prompt_context='{"debug":"selected"}',
+            )
+
+    agent = CommerceAgent(
+        vision_analyzer=FakeVisionAnalyzer("unused", []),
+        search_repository=repository,
+        search_responder=EmptySelectingResponder(),
+    )
+
+    result = agent.run_pipeline(prompt="keyboard", limit=10)
+    assert [product.id for product in result.matches] == [723450000000000006]
+    assert result.trace.generation.selected_product_ids == [723450000000000006]
+
+
+def test_search_response_allows_zero_grounded_matches() -> None:
+    repository = StubSearchRepository()
+
+    class ZeroSelectingResponder(FakeSearchResponder):
+        def generate(self, *, intent: str, prompt: str, analysis: VisionAnalysis | None = None, products: list = None) -> SearchResponse:
+            self.calls.append((intent, prompt, analysis, list(products or [])))
+            return SearchResponse(
+                response="No matching products were found in the database for this request.",
+                selected_product_ids=[],
+                prompt_context='{"debug":"none-selected"}',
+            )
+
+    agent = CommerceAgent(
+        vision_analyzer=FakeVisionAnalyzer("unused", []),
+        search_repository=repository,
+        search_responder=ZeroSelectingResponder(),
+    )
+
+    result = agent.run_pipeline(prompt="I want a compact keyboard for my desk", limit=10)
+    assert result.matches == []
+    assert result.content == "No matching products were found in the database for this request."
+    assert result.trace.generation.selected_product_ids == []
+    assert result.trace.generation.prompt_context == '{"debug":"none-selected"}'
+
+
 def test_image_search_path_uses_search_repository() -> None:
     repository = StubSearchRepository()
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("wood top office desk", ["desk", "office"]),
         search_repository=repository,
+        search_responder=FakeSearchResponder(),
     )
 
     result = agent.run_pipeline(prompt="", image_path="tests/fixtures/desk.png", limit=3)
@@ -360,6 +440,7 @@ def test_multimodal_search_path_uses_search_repository() -> None:
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("raised keys desk", ["keyboard", "desk"]),
         search_repository=repository,
+        search_responder=FakeSearchResponder(),
     )
 
     result = agent.run_pipeline(prompt="office", image_path="tests/fixtures/keyboard.png", limit=3)
@@ -372,30 +453,33 @@ def test_text_search_with_no_matches_returns_fallback_summary() -> None:
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("unused", []),
         search_repository=StubSearchRepository(),
+        search_responder=FakeSearchResponder(),
     )
     summary = agent.tools.generate_search_summary(
-        type("SearchSummaryInputLike", (), {"intent": "text-search", "matches": []})()
+        type("SearchSummaryInputLike", (), {"intent": "text-search", "prompt": "", "analysis": None, "matches": []})()
     )
-    assert summary == "No matching products were found in the database for this text query."
+    assert summary.response == "No matching products were found in the database for this text query."
 
 
 def test_image_search_with_no_matches_returns_fallback_summary() -> None:
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("unused", []),
         search_repository=StubSearchRepository(),
+        search_responder=FakeSearchResponder(),
     )
     summary = agent.tools.generate_search_summary(
-        type("SearchSummaryInputLike", (), {"intent": "image-search", "matches": []})()
+        type("SearchSummaryInputLike", (), {"intent": "image-search", "prompt": "", "analysis": None, "matches": []})()
     )
-    assert summary == "No matching products were found in the database for this image."
+    assert summary.response == "No matching products were found in the database for this image."
 
 
 def test_multimodal_search_with_no_matches_returns_fallback_summary() -> None:
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("unused", []),
         search_repository=StubSearchRepository(),
+        search_responder=FakeSearchResponder(),
     )
     summary = agent.tools.generate_search_summary(
-        type("SearchSummaryInputLike", (), {"intent": "multimodal-search", "matches": []})()
+        type("SearchSummaryInputLike", (), {"intent": "multimodal-search", "prompt": "", "analysis": None, "matches": []})()
     )
-    assert summary == "No matching products were found in the database for this text + image request."
+    assert summary.response == "No matching products were found in the database for this text + image request."

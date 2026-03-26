@@ -9,6 +9,7 @@ class StubAgent:
         self.catalog = type("CatalogStub", (), {"all": lambda self: [self._product]})()
         self.catalog._product = Product(
             id=723450000000000006,
+            sku="ELE-HOM-MEC-001",
             name="Mechanical Keyboard",
             category="electronics",
             rating=4.7,
@@ -82,6 +83,13 @@ def test_debug_index_serves_html() -> None:
     assert "Seed Database Explorer" in response.text
 
 
+def test_product_page_serves_html() -> None:
+    client = TestClient(web_module.app)
+    response = client.get("/products/FUR-ANN-ANN-012")
+    assert response.status_code == 200
+    assert "Loading product" in response.text
+
+
 def test_message_endpoint_routes_to_chat(monkeypatch) -> None:
     monkeypatch.setattr(web_module, "agent", StubAgent())
     client = TestClient(web_module.app)
@@ -120,6 +128,7 @@ def test_debug_seed_summary_returns_counts() -> None:
     body = response.json()
     assert "products" in body
     assert "text_embeddings" in body
+    assert "multimodal_embeddings" in body
 
 
 def test_debug_products_returns_joined_rows() -> None:
@@ -135,6 +144,7 @@ def test_debug_products_returns_joined_rows() -> None:
     assert "search_terms" in first
     assert "cooking_uses" in first
     assert "audience_terms" in first
+    assert "has_multimodal_embedding" in first
 
 
 def test_debug_product_detail_returns_joined_detail() -> None:
@@ -150,6 +160,28 @@ def test_debug_product_detail_returns_joined_detail() -> None:
     assert "search_terms" in body["product"]
     assert "cooking_uses" in body["product"]
     assert "audience_terms" in body["product"]
+
+
+def test_product_detail_returns_joined_detail() -> None:
+    client = TestClient(web_module.app)
+    list_response = client.get("/api/debug/products?limit=1")
+    product_id = list_response.json()["products"][0]["product_id"]
+    response = client.get(f"/api/products/{product_id}")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["product"]["product_id"] == product_id
+    assert "media" in body
+    assert "offers" in body
+
+
+def test_product_detail_supports_sku_lookup() -> None:
+    client = TestClient(web_module.app)
+    list_response = client.get("/api/debug/products?limit=1")
+    first = list_response.json()["products"][0]
+    response = client.get(f"/api/products/{first['sku']}")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["product"]["sku"] == first["sku"]
 
 
 def test_debug_run_uses_same_pipeline_shape(monkeypatch) -> None:

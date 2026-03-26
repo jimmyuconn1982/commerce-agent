@@ -76,6 +76,12 @@ def debug_index() -> FileResponse:
     return FileResponse(STATIC_DIR / "debug.html")
 
 
+@app.get("/products/{product_ref}")
+def product_page(product_ref: str) -> FileResponse:
+    """Serve the storefront-style product detail page."""
+    return FileResponse(STATIC_DIR / "product.html")
+
+
 @app.get("/api/catalog")
 def get_catalog() -> dict[str, object]:
     """Return the current product catalog for frontend bootstrap and debug."""
@@ -96,7 +102,8 @@ def get_seed_summary() -> dict[str, int]:
                     (SELECT COUNT(*) FROM product_media) AS product_media,
                     (SELECT COUNT(*) FROM product_search_documents) AS search_docs,
                     (SELECT COUNT(*) FROM product_embeddings WHERE embedding_type = 'text') AS text_embeddings,
-                    (SELECT COUNT(*) FROM product_embeddings WHERE embedding_type = 'image') AS image_embeddings
+                    (SELECT COUNT(*) FROM product_embeddings WHERE embedding_type = 'image') AS image_embeddings,
+                    (SELECT COUNT(*) FROM product_embeddings WHERE embedding_type = 'multimodal') AS multimodal_embeddings
                 """
             )
             row = cur.fetchone()
@@ -107,6 +114,7 @@ def get_seed_summary() -> dict[str, int]:
         "search_docs": row[3],
         "text_embeddings": row[4],
         "image_embeddings": row[5],
+        "multimodal_embeddings": row[6],
     }
 
 
@@ -151,7 +159,13 @@ def get_debug_products(limit: int = 100) -> dict[str, object]:
                         FROM product_embeddings pe
                         WHERE pe.product_id = p.id
                           AND pe.embedding_type = 'image'
-                    ) AS has_image_embedding
+                    ) AS has_image_embedding,
+                    EXISTS (
+                        SELECT 1
+                        FROM product_embeddings pe
+                        WHERE pe.product_id = p.id
+                          AND pe.embedding_type = 'multimodal'
+                    ) AS has_multimodal_embedding
                 FROM products p
                 JOIN categories c ON c.id = p.category_id
                 LEFT JOIN product_search_documents psd ON psd.product_id = p.id
@@ -214,19 +228,26 @@ def get_debug_products(limit: int = 100) -> dict[str, object]:
             audience_terms=list(audience_terms) if isinstance(audience_terms, list) else [],
             has_text_embedding=bool(row[20]),
             has_image_embedding=bool(row[21]),
+            has_multimodal_embedding=bool(row[22]),
         ).model_dump()
         products.append(payload)
     return {"products": products, "limit": limit}
 
 
-@app.get("/api/debug/products/{product_id}")
-def get_debug_product_detail(product_id: int) -> dict[str, object]:
-    """Return one fully joined product detail for the debug explorer."""
+def _load_product_detail(product_ref: str | int) -> dict[str, object]:
+    """Load one fully joined product detail from PostgreSQL by id or sku."""
     database_url = getattr(agent.search_repository, "database_url", None) or os.getenv("DATABASE_URL", DEFAULT_DATABASE_URL)
+    lookup_sql = "p.id = %(product_id)s"
+    params: dict[str, object]
+    try:
+        params = {"product_id": int(product_ref)}
+    except (TypeError, ValueError):
+        lookup_sql = "p.sku = %(product_sku)s"
+        params = {"product_sku": str(product_ref)}
     with psycopg.connect(database_url) as conn:
         with conn.cursor() as cur:
             cur.execute(
-                """
+                f"""
                 SELECT
                     p.id,
                     p.sku,
@@ -243,13 +264,13 @@ def get_debug_product_detail(product_id: int) -> dict[str, object]:
                 JOIN categories c ON c.id = p.category_id
                 LEFT JOIN product_search_documents psd ON psd.product_id = p.id
                 LEFT JOIN product_review_stats prs ON prs.product_id = p.id
-                WHERE p.id = %(product_id)s
+                WHERE {lookup_sql}
                 """,
-                {"product_id": product_id},
+                params,
             )
             product_row = cur.fetchone()
             if not product_row:
-                raise HTTPException(status_code=404, detail=f"product not found: {product_id}")
+                raise HTTPException(status_code=404, detail=f"product not found: {product_ref}")
 
             cur.execute(
                 """
@@ -258,7 +279,7 @@ def get_debug_product_detail(product_id: int) -> dict[str, object]:
                 WHERE product_id = %(product_id)s
                 ORDER BY sort_order ASC, id ASC
                 """,
-                {"product_id": product_id},
+                {"product_id": product_row[0]},
             )
             media_rows = cur.fetchall()
 
@@ -280,7 +301,7 @@ def get_debug_product_detail(product_id: int) -> dict[str, object]:
                 WHERE po.product_id = %(product_id)s
                 ORDER BY po.is_active DESC, po.price ASC, po.id ASC
                 """,
-                {"product_id": product_id},
+                {"product_id": product_row[0]},
             )
             offer_rows = cur.fetchall()
 
@@ -298,7 +319,7 @@ def get_debug_product_detail(product_id: int) -> dict[str, object]:
                 WHERE product_id = %(product_id)s
                 ORDER BY embedding_type ASC, model_name ASC
                 """,
-                {"product_id": product_id},
+                {"product_id": product_row[0]},
             )
             embedding_rows = cur.fetchall()
 
@@ -362,6 +383,18 @@ def get_debug_product_detail(product_id: int) -> dict[str, object]:
             for row in embedding_rows
         ],
     }
+
+
+@app.get("/api/debug/products/{product_ref}")
+def get_debug_product_detail(product_ref: str) -> dict[str, object]:
+    """Return one fully joined product detail for the debug explorer."""
+    return _load_product_detail(product_ref)
+
+
+@app.get("/api/products/{product_ref}")
+def get_product_detail(product_ref: str) -> dict[str, object]:
+    """Return one product detail for the storefront-style product page."""
+    return _load_product_detail(product_ref)
 
 
 @app.post("/api/debug/run")

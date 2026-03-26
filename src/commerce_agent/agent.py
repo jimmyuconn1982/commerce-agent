@@ -26,6 +26,7 @@ from typing import Callable
 
 from .catalog import Catalog
 from .chat_responder import ChatResponder, build_chat_responder
+from .search_responder import SearchResponder, SearchResponse, build_search_responder
 from .models import (
     GenerationTrace,
     PipelineResult,
@@ -67,11 +68,13 @@ class CommerceAgent:
         vision_analyzer: VisionAnalyzer | None = None,
         search_repository: SearchRepository | None = None,
         chat_responder: ChatResponder | None = None,
+        search_responder: SearchResponder | None = None,
     ) -> None:
         self.catalog = catalog or Catalog.from_json()
         self.vision_analyzer = vision_analyzer
         self.search_repository = search_repository or CatalogSearchRepository(self.catalog)
         self.chat_responder = chat_responder
+        self.search_responder = search_responder
         self.router = build_router(self.catalog)
         self.tools = CommerceTools(self)
 
@@ -240,8 +243,14 @@ class CommerceAgent:
             after = sorted(before, key=lambda item: (item.text_score, item.product.rating), reverse=True)
         elif strategy == "image-score":
             after = sorted(before, key=lambda item: (item.image_score, item.product.rating), reverse=True)
+        elif strategy == "multimodal-score":
+            after = sorted(before, key=lambda item: (item.multimodal_score, item.product.rating), reverse=True)
         else:
-            after = sorted(before, key=lambda item: (item.score, item.product.rating), reverse=True)
+            after = sorted(
+                before,
+                key=lambda item: (item.score, item.multimodal_score, item.text_score, item.image_score, item.product.rating),
+                reverse=True,
+            )
         return RerankTrace(strategy=strategy, candidates_before=before, candidates_after=after)
 
     def run_pipeline(
@@ -464,6 +473,7 @@ class CommerceAgent:
         """Convert one repository hit into the shared retrieval candidate shape."""
         product = Product(
             id=hit.product_id,
+            sku=hit.sku,
             name=hit.title,
             category=hit.category_name,
             rating=round(float(hit.seller_rating or 0), 2),
@@ -483,8 +493,9 @@ class CommerceAgent:
         return ScoredCandidate(
             product=product,
             score=round(float(hit.match_score), 6),
-            text_score=round(float(hit.keyword_score), 6),
-            image_score=round(float(hit.semantic_score), 6),
+            text_score=round(float(hit.text_score), 6),
+            image_score=round(float(hit.image_score), 6),
+            multimodal_score=round(float(hit.multimodal_score), 6),
             matched_fields=["repository"],
         )
 
@@ -498,8 +509,30 @@ class CommerceAgent:
         """Generate a scoped chat reply through the configured responder."""
         return self._get_chat_responder().generate(prompt=prompt, analysis=analysis)
 
+    def _generate_search_response(
+        self,
+        *,
+        intent: str,
+        prompt: str,
+        analysis: VisionAnalysis | None,
+        products: list[Product],
+    ) -> SearchResponse:
+        """Generate a grounded search answer plus selected product ids."""
+        return self._get_search_responder().generate(
+            intent=intent,
+            prompt=prompt,
+            analysis=analysis,
+            products=products,
+        )
+
     def _get_chat_responder(self) -> ChatResponder:
         """Lazily create the configured chat responder."""
         if self.chat_responder is None:
             self.chat_responder = build_chat_responder()
         return self.chat_responder
+
+    def _get_search_responder(self) -> SearchResponder:
+        """Lazily create the configured search responder."""
+        if self.search_responder is None:
+            self.search_responder = build_search_responder()
+        return self.search_responder

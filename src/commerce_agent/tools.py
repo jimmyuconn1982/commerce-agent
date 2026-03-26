@@ -30,6 +30,7 @@ from .models import (
     ToolCallTrace,
     VisionAnalysis,
 )
+from .search_responder import SearchResponse
 
 if TYPE_CHECKING:
     from .agent import CommerceAgent
@@ -84,6 +85,8 @@ class ChatGenerationInput:
 @dataclass(slots=True)
 class SearchSummaryInput:
     intent: str
+    prompt: str
+    analysis: VisionAnalysis | None
     matches: list[Product]
 
 
@@ -195,21 +198,25 @@ class CommerceTools:
             products=data.products,
         )
 
-    def generate_search_summary(self, data: SearchSummaryInput) -> str:
-        """Return a short UI-friendly summary for retrieval paths."""
+    def generate_search_summary(self, data: SearchSummaryInput) -> SearchResponse:
+        """Return the final grounded search answer for retrieval paths."""
         if not data.matches:
             empty_messages = {
                 "text-search": "No matching products were found in the database for this text query.",
                 "image-search": "No matching products were found in the database for this image.",
                 "multimodal-search": "No matching products were found in the database for this text + image request.",
             }
-            return empty_messages.get(data.intent, "No matching products were found in the database.")
-        label = {
-            "text-search": "text",
-            "image-search": "visual",
-            "multimodal-search": "multimodal",
-        }.get(data.intent, "search")
-        return f"Found {len(data.matches)} {label} matches."
+            return SearchResponse(
+                response=empty_messages.get(data.intent, "No matching products were found in the database."),
+                selected_product_ids=[],
+                prompt_context="",
+            )
+        return self.agent._generate_search_response(
+            intent=data.intent,
+            prompt=data.prompt,
+            analysis=data.analysis,
+            products=data.matches,
+        )
 
     def run_chat_path(self, data: ChatPathInput) -> GenerationTrace:
         """Execute the dedicated chat path without touching the catalog."""
@@ -248,12 +255,9 @@ class CommerceTools:
         return self._complete_search_path(
             intent="text-search",
             prompt=data.prompt,
+            analysis=None,
             retrieval=retrieval,
-            rerank=RerankTrace(
-                strategy="repository-order",
-                candidates_before=list(retrieval.candidates),
-                candidates_after=list(retrieval.candidates),
-            ),
+            rerank=self.rerank(RerankInput(candidates=retrieval.candidates, strategy="blended-score")),
             steps=data.steps,
             limit=data.limit,
         )
@@ -274,12 +278,9 @@ class CommerceTools:
         return self._complete_search_path(
             intent="image-search",
             prompt="",
+            analysis=data.image_analysis,
             retrieval=retrieval,
-            rerank=RerankTrace(
-                strategy="repository-order",
-                candidates_before=list(retrieval.candidates),
-                candidates_after=list(retrieval.candidates),
-            ),
+            rerank=self.rerank(RerankInput(candidates=retrieval.candidates, strategy="blended-score")),
             steps=data.steps,
             limit=data.limit,
         )
@@ -305,12 +306,9 @@ class CommerceTools:
         return self._complete_search_path(
             intent="multimodal-search",
             prompt=data.prompt,
+            analysis=data.image_analysis,
             retrieval=retrieval,
-            rerank=RerankTrace(
-                strategy="repository-order",
-                candidates_before=list(retrieval.candidates),
-                candidates_after=list(retrieval.candidates),
-            ),
+            rerank=self.rerank(RerankInput(candidates=retrieval.candidates, strategy="blended-score")),
             steps=data.steps,
             limit=data.limit,
         )
@@ -320,6 +318,7 @@ class CommerceTools:
         *,
         intent: str,
         prompt: str,
+        analysis: VisionAnalysis | None,
         retrieval: RetrievalTrace,
         rerank: RerankTrace,
         steps: list[ToolCallTrace],
@@ -335,20 +334,30 @@ class CommerceTools:
             )
         )
         matches = [candidate.product for candidate in rerank.candidates_after[:limit]]
-        content = self.generate_search_summary(SearchSummaryInput(intent=intent, matches=matches))
+        search_response = self.generate_search_summary(
+            SearchSummaryInput(
+                intent=intent,
+                prompt=prompt,
+                analysis=analysis,
+                matches=matches,
+            )
+        )
+        selected_product_ids = set(search_response.selected_product_ids)
+        matches = [product for product in matches if product.id in selected_product_ids]
         steps.append(
             ToolCallTrace(
-                tool_name="generate_search_summary",
-                thought="Return a concise retrieval summary for the UI.",
+                tool_name="generate_search_response",
+                thought="Generate the final grounded answer from the reranked top-k products.",
                 input_summary=f"matches={len(matches)}",
-                observation_summary=content,
+                observation_summary=search_response.response,
             )
         )
         generation = GenerationTrace(
             mode=intent,
             prompt=prompt,
-            selected_product_ids=[product.id for product in matches],
-            response=content,
+            selected_product_ids=search_response.selected_product_ids,
+            response=search_response.response,
+            prompt_context=search_response.prompt_context,
         )
         return SearchPathResult(
             retrieval=retrieval,

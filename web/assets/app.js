@@ -1,4 +1,4 @@
-const STORAGE_KEY = "commerce-agent-web-state-v4";
+const STORAGE_KEY = "commerce-agent-web-state-v5";
 
 const defaultUsers = [
   { id: "maya", name: "Maya Chen", role: "Trend shopper" },
@@ -177,6 +177,18 @@ function renderMessageBody(container, message) {
     container.appendChild(text);
   }
 
+  if (message.pending) {
+    const pending = document.createElement("div");
+    pending.className = "pending-indicator";
+    pending.innerHTML = `
+      <span class="pending-dot"></span>
+      <span class="pending-dot"></span>
+      <span class="pending-dot"></span>
+      <span class="pending-label">${message.pendingLabel || "Searching"}</span>
+    `;
+    container.appendChild(pending);
+  }
+
   if (message.attachments?.length) {
     const stack = document.createElement("div");
     stack.className = "attachment-stack";
@@ -228,10 +240,12 @@ function renderMessageBody(container, message) {
               <span class="result-meta">${formatReview(product.review_count, product.seller_rating)}</span>
               <span class="result-meta">inventory ${product.inventory_count ?? 0}</span>
             </div>
+            <div class="result-desc">${product.description}</div>
+            <div class="result-foot">
+              <a class="result-link" href="/products/${encodeURIComponent(product.sku || product.id)}">Open product</a>
+            </div>
           </div>
         </div>
-        <div class="result-desc">${product.description}</div>
-        ${product.product_url ? `<a class="result-link" href="${product.product_url}" target="_blank" rel="noreferrer">Open product</a>` : ""}
       `;
       results.appendChild(card);
     }
@@ -262,9 +276,10 @@ function renderMessageBody(container, message) {
         (candidate) => `
           <tr>
             <td>${candidate.product.name}</td>
-            <td>${Number(candidate.score).toFixed(4)}</td>
             <td>${Number(candidate.text_score).toFixed(4)}</td>
             <td>${Number(candidate.image_score).toFixed(4)}</td>
+            <td>${Number(candidate.multimodal_score ?? 0).toFixed(4)}</td>
+            <td>${Number(candidate.score).toFixed(4)}</td>
           </tr>
         `,
       )
@@ -275,16 +290,25 @@ function renderMessageBody(container, message) {
       <div class="debug-inline">
         <span class="debug-pill"><strong>Intent:</strong> ${message.trace.router?.intent || "unknown"}</span>
         <span class="debug-pill"><strong>Router:</strong> ${message.trace.router?.rationale || "n/a"}</span>
+        <span class="debug-pill"><strong>Selected:</strong> ${(message.trace.generation?.selected_product_ids || []).join(", ") || "none"}</span>
       </div>
       <div class="debug-section">
         <div class="debug-label">Steps</div>
         ${steps || '<div class="debug-step-copy">No steps recorded.</div>'}
       </div>
       <div class="debug-section">
+        <div class="debug-label">LLM Context</div>
+        ${
+          message.trace.generation?.prompt_context
+            ? `<pre class="debug-prompt">${escapeHtml(message.trace.generation.prompt_context)}</pre>`
+            : '<div class="debug-step-copy">No prompt context captured.</div>'
+        }
+      </div>
+      <div class="debug-section">
         <div class="debug-label">Top Candidates</div>
         ${
           retrievalRows
-            ? `<table class="debug-table"><thead><tr><th>Product</th><th>Score</th><th>Text</th><th>Image</th></tr></thead><tbody>${retrievalRows}</tbody></table>`
+            ? `<table class="debug-table"><thead><tr><th>Product</th><th>Text</th><th>Image</th><th>Multimodal</th><th>Fused</th></tr></thead><tbody>${retrievalRows}</tbody></table>`
             : '<div class="debug-step-copy">No retrieval candidates.</div>'
         }
       </div>
@@ -328,12 +352,27 @@ function deleteChat(chatId) {
 function appendMessage(message) {
   const chat = currentChat();
   if (!chat) {
-    return;
+    return null;
   }
-  chat.messages.push({ id: crypto.randomUUID(), ...message });
+  const entry = { id: crypto.randomUUID(), ...message };
+  chat.messages.push(entry);
   if (chat.title === "New Chat" || chat.title === "Welcome Session") {
     chat.title = message.content.slice(0, 28) || "Untitled Chat";
   }
+  persistAndRender();
+  return entry.id;
+}
+
+function replaceMessage(messageId, message) {
+  const chat = currentChat();
+  if (!chat) {
+    return;
+  }
+  const index = chat.messages.findIndex((entry) => entry.id === messageId);
+  if (index === -1) {
+    return;
+  }
+  chat.messages[index] = { id: messageId, ...message };
   persistAndRender();
 }
 
@@ -355,6 +394,14 @@ async function sendCurrentMessage() {
     attachments,
   });
 
+  const pendingMessageId = appendMessage({
+    speaker: "assistant",
+    mode: "pending",
+    content: "",
+    pending: true,
+    pendingLabel: file || imageUrl ? "Searching products" : "Thinking",
+  });
+
   el.promptInput.value = "";
   el.imageInput.value = "";
   el.imageUrlInput.value = "";
@@ -365,7 +412,7 @@ async function sendCurrentMessage() {
 
   try {
     const response = await invokeMessage(prompt, file, imageUrl);
-    appendMessage({
+    replaceMessage(pendingMessageId, {
       speaker: "assistant",
       mode: response.intent,
       content: response.content,
@@ -374,7 +421,7 @@ async function sendCurrentMessage() {
       trace: response.trace,
     });
   } catch (error) {
-    appendMessage({
+    replaceMessage(pendingMessageId, {
       speaker: "assistant",
       mode: "error",
       content: error.message,
@@ -485,6 +532,15 @@ function formatReview(reviewCount, sellerRating) {
     parts.push(`${reviewCount} reviews`);
   }
   return parts.join(" · ");
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
 
 function autoResizePrompt() {

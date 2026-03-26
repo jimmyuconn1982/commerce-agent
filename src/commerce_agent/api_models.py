@@ -59,3 +59,4 @@ class DebugProductResponse(BaseModel):
     attributes: dict[str, object] = Field(default_factory=dict)
     has_text_embedding: bool = False
     has_image_embedding: bool = False
+    has_multimodal_embedding: bool = False

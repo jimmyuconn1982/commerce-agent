@@ -31,6 +31,7 @@ function renderSummary(summary) {
     ["Search Docs", summary.search_docs],
     ["Text Embeddings", summary.text_embeddings],
     ["Image Embeddings", summary.image_embeddings],
+    ["Multimodal Embeddings", summary.multimodal_embeddings],
   ];
   statsEl.innerHTML = entries
     .map(
@@ -74,6 +75,7 @@ function renderProductCard(product) {
       <div class="debug-badges">
         <span class="debug-badge ${product.has_text_embedding ? "ok" : ""}">text embedding: ${product.has_text_embedding ? "yes" : "no"}</span>
         <span class="debug-badge ${product.has_image_embedding ? "ok" : ""}">image embedding: ${product.has_image_embedding ? "yes" : "no"}</span>
+        <span class="debug-badge ${product.has_multimodal_embedding ? "ok" : ""}">multimodal embedding: ${product.has_multimodal_embedding ? "yes" : "no"}</span>
       </div>
 
       <div class="debug-section-block">
@@ -266,6 +268,7 @@ function renderRunOutput(payload) {
           <td>${escapeHtml(candidate.product.name)}</td>
           <td>${Number(candidate.text_score).toFixed(4)}</td>
           <td>${Number(candidate.image_score).toFixed(4)}</td>
+          <td>${Number(candidate.multimodal_score ?? 0).toFixed(4)}</td>
           <td><strong>${Number(candidate.score).toFixed(4)}</strong></td>
         </tr>
       `,
@@ -277,6 +280,7 @@ function renderRunOutput(payload) {
       <div class="debug-inline">
         <span class="debug-pill"><strong>Intent:</strong> ${escapeHtml(payload.intent || "unknown")}</span>
         <span class="debug-pill"><strong>Router:</strong> ${escapeHtml(payload.trace?.router?.rationale || "n/a")}</span>
+        <span class="debug-pill"><strong>Selected:</strong> ${escapeHtml((payload.trace?.generation?.selected_product_ids || []).join(", ") || "none")}</span>
       </div>
 
       <div class="debug-section-block">
@@ -290,6 +294,15 @@ function renderRunOutput(payload) {
       </div>
 
       <div class="debug-section-block">
+        <div class="debug-block-label">LLM Context</div>
+        ${
+          payload.trace?.generation?.prompt_context
+            ? `<pre class="debug-prompt">${escapeHtml(payload.trace.generation.prompt_context)}</pre>`
+            : `<div class="debug-empty">No prompt context captured.</div>`
+        }
+      </div>
+
+      <div class="debug-section-block">
         <div class="debug-block-label">Steps</div>
         ${steps || `<div class="debug-empty">No steps recorded.</div>`}
       </div>
@@ -298,7 +311,7 @@ function renderRunOutput(payload) {
         <div class="debug-block-label">Top Candidates</div>
         ${
           candidates
-            ? `<table class="debug-table"><thead><tr><th>Product</th><th>Text semantic</th><th>Image semantic</th><th>Fused</th></tr></thead><tbody>${candidates}</tbody></table>`
+            ? `<table class="debug-table"><thead><tr><th>Product</th><th>Text semantic</th><th>Image semantic</th><th>Multimodal semantic</th><th>Fused</th></tr></thead><tbody>${candidates}</tbody></table>`
             : `<div class="debug-empty">No retrieval candidates.</div>`
         }
       </div>

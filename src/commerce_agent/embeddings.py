@@ -42,6 +42,7 @@ class SemanticIndexBuildResult:
 
     text_embeddings_built: int
     image_embeddings_built: int
+    multimodal_embeddings_built: int
 
 
 class DeterministicEmbeddingProvider:
@@ -248,6 +249,86 @@ def build_image_embeddings(
     return count
 
 
+def build_multimodal_embeddings(
+    database_url: str | None = None,
+    provider: DeterministicEmbeddingProvider | BigModelEmbeddingProvider | None = None,
+) -> int:
+    """Build and upsert product-level multimodal embeddings."""
+    provider = provider or get_embedding_provider()
+    database_url = database_url or os.getenv("DATABASE_URL", DEFAULT_DATABASE_URL)
+    count = 0
+    generator = SnowflakeLikeIdGenerator()
+    rows_to_write: list[dict[str, object]] = []
+
+    with psycopg.connect(database_url) as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT
+                    p.id,
+                    p.title,
+                    p.short_description,
+                    p.long_description,
+                    COALESCE(c.name, '') AS category_name,
+                    COALESCE(psd.search_text, '') AS search_text,
+                    COALESCE(pm.url, '') AS image_url,
+                    COALESCE(pm.alt_text, '') AS alt_text,
+                    p.attributes_jsonb
+                FROM products p
+                LEFT JOIN categories c ON c.id = p.category_id
+                LEFT JOIN product_search_documents psd ON psd.product_id = p.id
+                LEFT JOIN LATERAL (
+                    SELECT pm.url, pm.alt_text
+                    FROM product_media pm
+                    WHERE pm.product_id = p.id AND pm.is_primary = TRUE
+                    ORDER BY pm.sort_order ASC, pm.id ASC
+                    LIMIT 1
+                ) pm ON TRUE
+                ORDER BY p.id
+                """
+            )
+            rows = cur.fetchall()
+        for row in rows:
+            (
+                product_id,
+                title,
+                short_description,
+                long_description,
+                category_name,
+                search_text,
+                image_url,
+                alt_text,
+                attributes,
+            ) = row
+            source_text = _build_weighted_multimodal_embedding_source(
+                title=title,
+                short_description=short_description,
+                long_description=long_description,
+                category_name=category_name,
+                search_text=search_text,
+                image_url=image_url,
+                alt_text=alt_text,
+                attributes=attributes if isinstance(attributes, dict) else {},
+            )
+            embedding = provider.embed_text(source_text)
+            rows_to_write.append(
+                {
+                    "id": generator.stable("multimodal_embedding", f"{product_id}:{provider.model_name}"),
+                    "product_id": product_id,
+                    "embedding_type": "multimodal",
+                    "model_name": provider.model_name,
+                    "model_version": provider.model_version,
+                    "embedding": vector_literal(embedding),
+                    "source_text": source_text,
+                    "source_image_url": image_url or None,
+                }
+            )
+            count += 1
+        DatabaseWriter(conn).replace_embeddings("multimodal", rows_to_write)
+        conn.commit()
+    return count
+
+
 def build_semantic_indexes(
     database_url: str | None = None,
     provider: DeterministicEmbeddingProvider | BigModelEmbeddingProvider | None = None,
@@ -258,6 +339,7 @@ def build_semantic_indexes(
     return SemanticIndexBuildResult(
         text_embeddings_built=build_text_embeddings(database_url, provider=provider),
         image_embeddings_built=build_image_embeddings(database_url, provider=provider),
+        multimodal_embeddings_built=build_multimodal_embeddings(database_url, provider=provider),
     )
 
 
@@ -295,12 +377,19 @@ def build_image_embeddings_cli() -> None:
     print(f"built {count} image embeddings")
 
 
+def build_multimodal_embeddings_cli() -> None:
+    """CLI wrapper for the multimodal embedding build job."""
+    count = build_multimodal_embeddings()
+    print(f"built {count} multimodal embeddings")
+
+
 def build_semantic_indexes_cli() -> None:
     """CLI wrapper for the full local semantic indexing pipeline."""
     result = build_semantic_indexes()
     print(
         f"built {result.text_embeddings_built} text embeddings and "
-        f"{result.image_embeddings_built} image embeddings"
+        f"{result.image_embeddings_built} image embeddings and "
+        f"{result.multimodal_embeddings_built} multimodal embeddings"
     )
 
 
@@ -367,6 +456,39 @@ def _build_weighted_image_embedding_source(
         f"image tags {image_tags}" if image_tags else "",
         f"search terms {search_terms}" if search_terms else "",
         f"audience terms {audience_terms}" if audience_terms else "",
+        image_url,
+    ]
+    return " ".join(part.strip() for part in parts if part and part.strip())
+
+
+def _build_weighted_multimodal_embedding_source(
+    *,
+    title: str,
+    short_description: str,
+    long_description: str,
+    category_name: str,
+    search_text: str,
+    image_url: str,
+    alt_text: str,
+    attributes: dict[str, object],
+) -> str:
+    """Build one product-level multimodal text representation."""
+    search_terms = _join_terms(attributes.get("search_terms"))
+    cooking_uses = _join_terms(attributes.get("cooking_uses"))
+    audience_terms = _join_terms(attributes.get("audience_terms"))
+    image_tags = _join_terms(attributes.get("image_tags"))
+    parts = [
+        title,
+        title,
+        short_description,
+        long_description,
+        category_name,
+        search_text,
+        f"search terms {search_terms}" if search_terms else "",
+        f"cooking uses {cooking_uses}" if cooking_uses else "",
+        f"audience terms {audience_terms}" if audience_terms else "",
+        f"image tags {image_tags}" if image_tags else "",
+        alt_text,
         image_url,
     ]
     return " ".join(part.strip() for part in parts if part and part.strip())
