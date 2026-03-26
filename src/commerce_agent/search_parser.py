@@ -72,11 +72,10 @@ class SearchParser:
 
         category_hints: list[str] = []
         for category in sorted(known_categories or set()):
-            if category in working:
+            if self._contains_term(working, category):
                 category_hints.append(category)
 
         attribute_hints = [term for term in sorted(ATTRIBUTE_TERMS) if term in working]
-
         remaining = self._collapse_spaces(working)
         return ParsedSearchQuery(
             raw_query=query,
@@ -98,3 +97,9 @@ class SearchParser:
     def _collapse_spaces(self, text: str) -> str:
         """Remove duplicate whitespace from the intermediate query text."""
         return re.sub(r"\s+", " ", text).strip()
+
+    def _contains_term(self, text: str, term: str) -> bool:
+        """Match ASCII terms by word boundary and CJK terms by substring."""
+        if re.search(r"[\u4e00-\u9fff]", term):
+            return term in text
+        return re.search(rf"\b{re.escape(term)}\b", text) is not None

@@ -17,3 +17,8 @@ def test_search_parser_extracts_price_category_and_sort() -> None:
 def test_search_parser_keeps_remaining_query() -> None:
     parsed = SearchParser().parse("compact office keyboard")
     assert parsed.remaining_query == "compact office keyboard"
+
+
+def test_search_parser_does_not_hardcode_domain_expansion() -> None:
+    parsed = SearchParser().parse("产品列表中有哪几种食物,可以炒菜用的")
+    assert parsed.remaining_query == "产品列表中有哪几种食物 可以炒菜用的"

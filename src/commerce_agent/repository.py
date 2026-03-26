@@ -151,7 +151,7 @@ class CatalogSearchRepository:
 
 
 class PostgresSearchRepository:
-    """Repository that runs keyword and semantic text search in PostgreSQL."""
+    """Repository that fuses text and image semantic retrieval in PostgreSQL."""
 
     def __init__(
         self,
@@ -163,21 +163,23 @@ class PostgresSearchRepository:
         self.embedding_provider = get_embedding_provider()
 
     def search_text(self, query: str, limit: int = 5) -> tuple[ParsedSearchQuery, list[ProductSearchHit]]:
-        """Parse one text query, run hybrid retrieval, and return product cards."""
+        """Parse one text query, run text+image semantic retrieval, and return product cards."""
         with psycopg.connect(self.database_url) as conn:
             categories = self._load_category_names(conn)
             parsed = self.parser.parse(query, known_categories=categories)
             query_text = parsed.remaining_query or parsed.normalized_query or parsed.raw_query
-            vector = vector_literal(self.embedding_provider.embed_text(query_text))
-            rows = self._search_text_rows(conn, parsed, query_text, vector, limit)
+            text_vector = vector_literal(self.embedding_provider.embed_text(query_text))
+            image_vector = vector_literal(self.embedding_provider.embed_image_reference(query_text))
+            rows = self._search_text_rows(conn, parsed, text_vector, image_vector, limit)
         return parsed, [ProductSearchHit(*row) for row in rows]
 
     def search_image(self, image_analysis: VisionAnalysis, limit: int = 5) -> list[ProductSearchHit]:
-        """Run image semantic retrieval and return ranked product cards."""
-        image_ref = f"{image_analysis.summary} {' '.join(image_analysis.tags)}".strip()
-        vector = vector_literal(self.embedding_provider.embed_image_reference(image_ref))
+        """Run text+image semantic retrieval from image analysis and return ranked product cards."""
+        image_ref = self._image_query_text(image_analysis)
+        text_vector = vector_literal(self.embedding_provider.embed_text(image_ref))
+        image_vector = vector_literal(self.embedding_provider.embed_image_reference(image_ref))
         with psycopg.connect(self.database_url) as conn:
-            rows = self._search_image_rows(conn, vector, limit)
+            rows = self._search_image_rows(conn, text_vector, image_vector, limit)
         return [ProductSearchHit(*row) for row in rows]
 
     def search_multimodal(
@@ -186,16 +188,21 @@ class PostgresSearchRepository:
         image_analysis: VisionAnalysis,
         limit: int = 5,
     ) -> tuple[ParsedSearchQuery, list[ProductSearchHit]]:
-        """Run multimodal retrieval and return ranked product cards."""
+        """Run multimodal retrieval by fusing text semantic and image semantic signals."""
         with psycopg.connect(self.database_url) as conn:
             categories = self._load_category_names(conn)
             parsed = self.parser.parse(query, known_categories=categories)
             query_text = parsed.remaining_query or parsed.normalized_query or parsed.raw_query
-            text_vector = vector_literal(self.embedding_provider.embed_text(query_text))
-            image_ref = f"{image_analysis.summary} {' '.join(image_analysis.tags)}".strip()
+            image_ref = self._image_query_text(image_analysis)
+            fused_text = " ".join(part for part in [query_text, image_ref] if part).strip()
+            text_vector = vector_literal(self.embedding_provider.embed_text(fused_text))
             image_vector = vector_literal(self.embedding_provider.embed_image_reference(image_ref))
-            rows = self._search_multimodal_rows(conn, parsed, query_text, text_vector, image_vector, limit)
+            rows = self._search_multimodal_rows(conn, parsed, text_vector, image_vector, limit)
         return parsed, [ProductSearchHit(*row) for row in rows]
+
+    def _image_query_text(self, image_analysis: VisionAnalysis) -> str:
+        """Build the shared image-side semantic query text from vision output."""
+        return f"{image_analysis.summary} {' '.join(image_analysis.tags)}".strip()
 
     def _load_category_names(self, conn: psycopg.Connection) -> set[str]:
         """Load current category names so the parser can extract hints."""
@@ -207,17 +214,17 @@ class PostgresSearchRepository:
         self,
         conn: psycopg.Connection,
         parsed: ParsedSearchQuery,
-        query_text: str,
-        vector: str,
+        text_vector: str,
+        image_vector: str,
         limit: int,
     ) -> list[tuple]:
-        """Execute the first hybrid text-search query against PostgreSQL."""
+        """Execute text-search retrieval with both text and image semantic channels."""
         conditions = ["p.status = 'active'"]
         params: dict[str, object] = {
-            "query_text": query_text,
-            "vector": vector,
+            "text_vector": text_vector,
+            "image_vector": image_vector,
             "embedding_model": self.embedding_provider.model_name,
-            "candidate_limit": max(limit * 5, 20),
+            "candidate_limit": max(limit * 8, 30),
             "limit": limit,
         }
 
@@ -240,37 +247,32 @@ class PostgresSearchRepository:
             order_by = "prs.average_rating DESC NULLS LAST, f.match_score DESC"
 
         sql = f"""
-            WITH keyword_hits AS (
-                SELECT
-                    psd.product_id,
-                    GREATEST(
-                        ts_rank(psd.search_tsv, websearch_to_tsquery('english', unaccent(%(query_text)s))),
-                        similarity(psd.search_text, %(query_text)s)
-                    ) AS keyword_score
-                FROM product_search_documents psd
-                WHERE
-                    psd.search_tsv @@ websearch_to_tsquery('english', unaccent(%(query_text)s))
-                    OR psd.search_text %% %(query_text)s
-                ORDER BY keyword_score DESC
-                LIMIT %(candidate_limit)s
-            ),
-            semantic_hits AS (
+            WITH text_hits AS (
                 SELECT
                     pe.product_id,
-                    1 - (pe.embedding <=> %(vector)s::vector) AS semantic_score
+                    1 - (pe.embedding <=> %(text_vector)s::vector) AS text_score
                 FROM product_embeddings pe
                 WHERE pe.embedding_type = 'text' AND pe.model_name = %(embedding_model)s
-                ORDER BY pe.embedding <=> %(vector)s::vector
+                ORDER BY pe.embedding <=> %(text_vector)s::vector
+                LIMIT %(candidate_limit)s
+            ),
+            image_hits AS (
+                SELECT
+                    pe.product_id,
+                    1 - (pe.embedding <=> %(image_vector)s::vector) AS image_score
+                FROM product_embeddings pe
+                WHERE pe.embedding_type = 'image' AND pe.model_name = %(embedding_model)s
+                ORDER BY pe.embedding <=> %(image_vector)s::vector
                 LIMIT %(candidate_limit)s
             ),
             fused AS (
                 SELECT
-                    COALESCE(k.product_id, s.product_id) AS product_id,
-                    COALESCE(k.keyword_score, 0) AS keyword_score,
-                    COALESCE(s.semantic_score, 0) AS semantic_score,
-                    (COALESCE(k.keyword_score, 0) * 0.65) + (COALESCE(s.semantic_score, 0) * 0.35) AS match_score
-                FROM keyword_hits k
-                FULL OUTER JOIN semantic_hits s ON s.product_id = k.product_id
+                    COALESCE(t.product_id, i.product_id) AS product_id,
+                    COALESCE(t.text_score, 0) AS text_score,
+                    COALESCE(i.image_score, 0) AS image_score,
+                    (COALESCE(t.text_score, 0) * 0.65) + (COALESCE(i.image_score, 0) * 0.35) AS match_score
+                FROM text_hits t
+                FULL OUTER JOIN image_hits i ON i.product_id = t.product_id
             )
             SELECT
                 p.id,
@@ -285,8 +287,8 @@ class PostgresSearchRepository:
                 po.inventory_count,
                 po.product_url,
                 c.name AS category_name,
-                f.keyword_score,
-                f.semantic_score,
+                f.text_score,
+                f.image_score,
                 f.match_score
             FROM fused f
             JOIN products p ON p.id = f.product_id
@@ -319,12 +321,22 @@ class PostgresSearchRepository:
     def _search_image_rows(
         self,
         conn: psycopg.Connection,
+        text_vector: str,
         image_vector: str,
         limit: int,
     ) -> list[tuple]:
-        """Execute image-only semantic retrieval in PostgreSQL."""
+        """Execute image-search retrieval with both text and image semantic channels."""
         sql = """
-            WITH image_hits AS (
+            WITH text_hits AS (
+                SELECT
+                    pe.product_id,
+                    1 - (pe.embedding <=> %(text_vector)s::vector) AS text_score
+                FROM product_embeddings pe
+                WHERE pe.embedding_type = 'text' AND pe.model_name = %(embedding_model)s
+                ORDER BY pe.embedding <=> %(text_vector)s::vector
+                LIMIT %(limit)s
+            ),
+            image_hits AS (
                 SELECT
                     pe.product_id,
                     1 - (pe.embedding <=> %(image_vector)s::vector) AS image_score
@@ -332,6 +344,16 @@ class PostgresSearchRepository:
                 WHERE pe.embedding_type = 'image' AND pe.model_name = %(embedding_model)s
                 ORDER BY pe.embedding <=> %(image_vector)s::vector
                 LIMIT %(limit)s
+            )
+            ),
+            fused AS (
+                SELECT
+                    COALESCE(t.product_id, i.product_id) AS product_id,
+                    COALESCE(t.text_score, 0) AS text_score,
+                    COALESCE(i.image_score, 0) AS image_score,
+                    (COALESCE(t.text_score, 0) * 0.4) + (COALESCE(i.image_score, 0) * 0.6) AS match_score
+                FROM text_hits t
+                FULL OUTER JOIN image_hits i ON i.product_id = t.product_id
             )
             SELECT
                 p.id,
@@ -346,11 +368,11 @@ class PostgresSearchRepository:
                 po.inventory_count,
                 po.product_url,
                 c.name AS category_name,
-                0::float8 AS keyword_score,
-                image_hits.image_score AS semantic_score,
-                image_hits.image_score AS match_score
-            FROM image_hits
-            JOIN products p ON p.id = image_hits.product_id
+                fused.text_score,
+                fused.image_score,
+                fused.match_score
+            FROM fused
+            JOIN products p ON p.id = fused.product_id
             JOIN categories c ON c.id = p.category_id
             JOIN LATERAL (
                 SELECT pm.url
@@ -369,13 +391,14 @@ class PostgresSearchRepository:
             JOIN sellers s ON s.id = po.seller_id
             LEFT JOIN product_review_stats prs ON prs.product_id = p.id
             WHERE p.status = 'active'
-            ORDER BY image_hits.image_score DESC, prs.average_rating DESC NULLS LAST
+            ORDER BY fused.match_score DESC, prs.average_rating DESC NULLS LAST
             LIMIT %(limit)s
         """
         with conn.cursor() as cur:
             cur.execute(
                 sql,
                 {
+                    "text_vector": text_vector,
                     "image_vector": image_vector,
                     "limit": limit,
                     "embedding_model": self.embedding_provider.model_name,
@@ -387,19 +410,17 @@ class PostgresSearchRepository:
         self,
         conn: psycopg.Connection,
         parsed: ParsedSearchQuery,
-        query_text: str,
         text_vector: str,
         image_vector: str,
         limit: int,
     ) -> list[tuple]:
-        """Execute multimodal retrieval by fusing keyword, text, and image signals."""
+        """Execute multimodal retrieval by fusing text and image semantic signals."""
         conditions = ["p.status = 'active'"]
         params: dict[str, object] = {
-            "query_text": query_text,
             "text_vector": text_vector,
             "image_vector": image_vector,
             "embedding_model": self.embedding_provider.model_name,
-            "candidate_limit": max(limit * 5, 20),
+            "candidate_limit": max(limit * 8, 30),
             "limit": limit,
         }
 
@@ -416,20 +437,6 @@ class PostgresSearchRepository:
             params["max_price"] = parsed.max_price
 
         sql = f"""
-            WITH keyword_hits AS (
-                SELECT
-                    psd.product_id,
-                    GREATEST(
-                        ts_rank(psd.search_tsv, websearch_to_tsquery('english', unaccent(%(query_text)s))),
-                        similarity(psd.search_text, %(query_text)s)
-                    ) AS keyword_score
-                FROM product_search_documents psd
-                WHERE
-                    psd.search_tsv @@ websearch_to_tsquery('english', unaccent(%(query_text)s))
-                    OR psd.search_text %% %(query_text)s
-                ORDER BY keyword_score DESC
-                LIMIT %(candidate_limit)s
-            ),
             text_hits AS (
                 SELECT
                     pe.product_id,
@@ -450,16 +457,13 @@ class PostgresSearchRepository:
             ),
             fused AS (
                 SELECT
-                    COALESCE(k.product_id, t.product_id, i.product_id) AS product_id,
-                    COALESCE(k.keyword_score, 0) AS keyword_score,
+                    COALESCE(t.product_id, i.product_id) AS product_id,
                     COALESCE(t.text_score, 0) AS text_score,
                     COALESCE(i.image_score, 0) AS image_score,
-                    (COALESCE(k.keyword_score, 0) * 0.4)
-                    + (COALESCE(t.text_score, 0) * 0.25)
-                    + (COALESCE(i.image_score, 0) * 0.35) AS match_score
-                FROM keyword_hits k
-                FULL OUTER JOIN text_hits t ON t.product_id = k.product_id
-                FULL OUTER JOIN image_hits i ON i.product_id = COALESCE(k.product_id, t.product_id)
+                    (COALESCE(t.text_score, 0) * 0.55)
+                    + (COALESCE(i.image_score, 0) * 0.45) AS match_score
+                FROM text_hits t
+                FULL OUTER JOIN image_hits i ON i.product_id = t.product_id
             )
             SELECT
                 p.id,
@@ -474,8 +478,8 @@ class PostgresSearchRepository:
                 po.inventory_count,
                 po.product_url,
                 c.name AS category_name,
-                fused.keyword_score,
-                fused.image_score AS semantic_score,
+                fused.text_score,
+                fused.image_score,
                 fused.match_score
             FROM fused
             JOIN products p ON p.id = fused.product_id
