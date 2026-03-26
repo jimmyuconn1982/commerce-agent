@@ -191,6 +191,17 @@ def test_chat_pipeline_does_not_touch_catalog_search() -> None:
     assert result.trace.generation.selected_product_ids == []
 
 
+def test_chat_greeting_returns_natural_reply() -> None:
+    agent = CommerceAgent(
+        vision_analyzer=FakeVisionAnalyzer("unused", []),
+        search_repository=StubSearchRepository(),
+    )
+    result = agent.run_pipeline(prompt="你好啊", limit=3)
+    assert result.intent == "chat"
+    assert "你好，我在" in result.content
+    assert result.trace.retrieval is None
+
+
 def test_multimodal_pipeline_uses_explicit_multimodal_branch() -> None:
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("raised keys desk", ["keyboard", "desk"]),

@@ -493,6 +493,10 @@ class CommerceAgent:
         products: list[Product],
     ) -> str:
         """Build a lightweight conversational response for chat mode."""
+        normalized = prompt.strip().lower()
+        if normalized in {"hi", "hello", "hey", "你好", "你好啊", "嗨", "哈喽"}:
+            return "你好，我在。你可以直接和我聊天，也可以让我帮你做 text、image 或 multimodal 商品搜索。"
+
         lines = ["I can help with general conversation, or assist you in searching the catalog by text, image, or both."]
         if analysis:
             lines.append(f"Image summary: {analysis.summary}")

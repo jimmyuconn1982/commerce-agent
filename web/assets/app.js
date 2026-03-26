@@ -238,6 +238,7 @@ function renderMessageBody(container, message) {
   if (message.trace) {
     const debug = document.createElement("details");
     debug.className = "debug-trace";
+    debug.open = true;
     const steps = (message.trace.react?.steps || [])
       .map(
         (step) => `
