@@ -82,6 +82,16 @@ function renderProductCard(product) {
       </div>
 
       <div class="debug-section-block">
+        <div class="debug-block-label">Search Terms</div>
+        <div class="debug-chip-row">${renderChips(product.search_terms || [])}</div>
+      </div>
+
+      <div class="debug-section-block">
+        <div class="debug-block-label">Cooking Uses</div>
+        <div class="debug-chip-row">${renderChips(product.cooking_uses || [])}</div>
+      </div>
+
+      <div class="debug-section-block">
         <div class="debug-block-label">Image Tags</div>
         <div class="debug-chip-row">${renderChips(product.image_tags || [])}</div>
       </div>
@@ -118,8 +128,19 @@ function renderProductDetail(payload) {
         <div class="debug-chip-row">${renderChips(product.text_tags || [])}</div>
       </div>
       <div class="debug-section-block">
+        <div class="debug-block-label">Search Terms</div>
+        <div class="debug-chip-row">${renderChips(product.search_terms || [])}</div>
+      </div>
+    </div>
+
+    <div class="debug-two-col">
+      <div class="debug-section-block">
         <div class="debug-block-label">Image Tags</div>
         <div class="debug-chip-row">${renderChips(product.image_tags || [])}</div>
+      </div>
+      <div class="debug-section-block">
+        <div class="debug-block-label">Cooking Uses</div>
+        <div class="debug-chip-row">${renderChips(product.cooking_uses || [])}</div>
       </div>
     </div>
 
@@ -233,9 +254,9 @@ function renderRunOutput(payload) {
       (candidate) => `
         <tr>
           <td>${escapeHtml(candidate.product.name)}</td>
-          <td>${Number(candidate.score).toFixed(4)}</td>
           <td>${Number(candidate.text_score).toFixed(4)}</td>
           <td>${Number(candidate.image_score).toFixed(4)}</td>
+          <td><strong>${Number(candidate.score).toFixed(4)}</strong></td>
         </tr>
       `,
     )
@@ -267,7 +288,7 @@ function renderRunOutput(payload) {
         <div class="debug-block-label">Top Candidates</div>
         ${
           candidates
-            ? `<table class="debug-table"><thead><tr><th>Product</th><th>Score</th><th>Text</th><th>Image</th></tr></thead><tbody>${candidates}</tbody></table>`
+            ? `<table class="debug-table"><thead><tr><th>Product</th><th>Text semantic</th><th>Image semantic</th><th>Fused</th></tr></thead><tbody>${candidates}</tbody></table>`
             : `<div class="debug-empty">No retrieval candidates.</div>`
         }
       </div>

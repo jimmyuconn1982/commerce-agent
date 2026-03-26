@@ -53,6 +53,8 @@ class DebugProductResponse(BaseModel):
     search_text: str | None = None
     text_tags: list[str] = Field(default_factory=list)
     image_tags: list[str] = Field(default_factory=list)
+    search_terms: list[str] = Field(default_factory=list)
+    cooking_uses: list[str] = Field(default_factory=list)
     attributes: dict[str, object] = Field(default_factory=dict)
     has_text_embedding: bool = False
     has_image_embedding: bool = False

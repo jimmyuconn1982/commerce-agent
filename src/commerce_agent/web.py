@@ -183,6 +183,8 @@ def get_debug_products(limit: int = 100) -> dict[str, object]:
         attributes = row[19] or {}
         text_tags = attributes.get("tags", []) if isinstance(attributes, dict) else []
         image_tags = attributes.get("image_tags", []) if isinstance(attributes, dict) else []
+        search_terms = attributes.get("search_terms", []) if isinstance(attributes, dict) else []
+        cooking_uses = attributes.get("cooking_uses", []) if isinstance(attributes, dict) else []
         payload = DebugProductResponse(
             product_id=row[0],
             sku=row[1],
@@ -206,6 +208,8 @@ def get_debug_products(limit: int = 100) -> dict[str, object]:
             attributes=attributes if isinstance(attributes, dict) else {},
             text_tags=list(text_tags) if isinstance(text_tags, list) else [],
             image_tags=list(image_tags) if isinstance(image_tags, list) else [],
+            search_terms=list(search_terms) if isinstance(search_terms, list) else [],
+            cooking_uses=list(cooking_uses) if isinstance(cooking_uses, list) else [],
             has_text_embedding=bool(row[20]),
             has_image_embedding=bool(row[21]),
         ).model_dump()
@@ -312,6 +316,8 @@ def get_debug_product_detail(product_id: int) -> dict[str, object]:
             "average_rating": float(product_row[10]) if product_row[10] is not None else None,
             "text_tags": list(attributes.get("tags", [])) if isinstance(attributes, dict) else [],
             "image_tags": list(attributes.get("image_tags", [])) if isinstance(attributes, dict) else [],
+            "search_terms": list(attributes.get("search_terms", [])) if isinstance(attributes, dict) else [],
+            "cooking_uses": list(attributes.get("cooking_uses", [])) if isinstance(attributes, dict) else [],
         },
         "media": [
             {

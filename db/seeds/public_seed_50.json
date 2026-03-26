@@ -53,6 +53,8 @@
           "lash",
           "princess"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 1
       }
@@ -78,6 +80,8 @@
           "with",
           "mirror"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 2
       }
@@ -102,6 +106,8 @@
           "powder",
           "canister"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 3
       }
@@ -125,6 +131,8 @@
           "lipstick",
           "red"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 4
       }
@@ -150,6 +158,8 @@
           "nail",
           "polish"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 5
       }
@@ -175,6 +185,8 @@
           "klein",
           "one"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 6
       }
@@ -201,6 +213,8 @@
           "noir",
           "eau"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 7
       }
@@ -225,6 +239,8 @@
           "dior",
           "adore"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 8
       }
@@ -250,6 +266,8 @@
           "shine",
           "eau"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 9
       }
@@ -275,6 +293,8 @@
           "bloom",
           "eau"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 10
       }
@@ -300,6 +320,8 @@
           "colombo",
           "bed"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 11
       }
@@ -325,6 +347,8 @@
           "colombo",
           "sofa"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 12
       }
@@ -351,6 +375,8 @@
           "african",
           "cherry"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 13
       }
@@ -377,6 +403,8 @@
           "executive",
           "conference"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 14
       }
@@ -402,6 +430,8 @@
           "sink",
           "with"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 15
       }
@@ -423,6 +453,19 @@
           "fruits",
           "groceries",
           "apple"
+        ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking",
+          "fruit",
+          "snack"
+        ],
+        "cooking_uses": [
+          "fresh eating",
+          "dessert",
+          "salad"
         ],
         "source": "dummyjson",
         "source_product_id": 16
@@ -446,6 +489,20 @@
           "groceries",
           "beef",
           "steak"
+        ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking",
+          "protein",
+          "meat",
+          "seafood"
+        ],
+        "cooking_uses": [
+          "stir fry",
+          "main dish",
+          "savory cooking"
         ],
         "source": "dummyjson",
         "source_product_id": 17
@@ -472,6 +529,14 @@
           "cat",
           "food"
         ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking",
+          "pet supplies"
+        ],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 18
       }
@@ -493,6 +558,20 @@
           "meat",
           "groceries",
           "chicken"
+        ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking",
+          "protein",
+          "meat",
+          "seafood"
+        ],
+        "cooking_uses": [
+          "stir fry",
+          "main dish",
+          "savory cooking"
         ],
         "source": "dummyjson",
         "source_product_id": 19
@@ -517,6 +596,19 @@
           "cooking",
           "oil"
         ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking",
+          "cooking oil",
+          "pantry"
+        ],
+        "cooking_uses": [
+          "stir fry",
+          "frying",
+          "saute"
+        ],
         "source": "dummyjson",
         "source_product_id": 20
       }
@@ -538,6 +630,19 @@
           "vegetables",
           "groceries",
           "cucumber"
+        ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking",
+          "vegetable",
+          "produce"
+        ],
+        "cooking_uses": [
+          "stir fry",
+          "side dish",
+          "savory cooking"
         ],
         "source": "dummyjson",
         "source_product_id": 21
@@ -564,6 +669,14 @@
           "dog",
           "food"
         ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking",
+          "pet supplies"
+        ],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 22
       }
@@ -585,6 +698,19 @@
           "dairy",
           "groceries",
           "eggs"
+        ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking",
+          "protein",
+          "breakfast ingredient"
+        ],
+        "cooking_uses": [
+          "stir fry",
+          "fried rice",
+          "quick meal"
         ],
         "source": "dummyjson",
         "source_product_id": 23
@@ -608,6 +734,20 @@
           "groceries",
           "fish",
           "steak"
+        ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking",
+          "protein",
+          "meat",
+          "seafood"
+        ],
+        "cooking_uses": [
+          "stir fry",
+          "main dish",
+          "savory cooking"
         ],
         "source": "dummyjson",
         "source_product_id": 24
@@ -633,6 +773,21 @@
           "bell",
           "pepper"
         ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking",
+          "vegetable",
+          "produce",
+          "aromatic"
+        ],
+        "cooking_uses": [
+          "stir fry",
+          "side dish",
+          "savory cooking",
+          "saute"
+        ],
         "source": "dummyjson",
         "source_product_id": 25
       }
@@ -657,6 +812,21 @@
           "chili",
           "pepper"
         ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking",
+          "vegetable",
+          "produce",
+          "aromatic"
+        ],
+        "cooking_uses": [
+          "stir fry",
+          "side dish",
+          "savory cooking",
+          "saute"
+        ],
         "source": "dummyjson",
         "source_product_id": 26
       }
@@ -679,6 +849,19 @@
           "groceries",
           "honey",
           "jar"
+        ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking",
+          "sweetener",
+          "pantry"
+        ],
+        "cooking_uses": [
+          "sauce",
+          "marinade",
+          "dressing"
         ],
         "source": "dummyjson",
         "source_product_id": 27
@@ -703,6 +886,13 @@
           "ice",
           "cream"
         ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking"
+        ],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 28
       }
@@ -725,6 +915,13 @@
           "groceries",
           "juice"
         ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking"
+        ],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 29
       }
@@ -747,6 +944,13 @@
           "groceries",
           "kiwi"
         ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking"
+        ],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 30
       }
@@ -769,6 +973,13 @@
           "groceries",
           "lemon"
         ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking"
+        ],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 31
       }
@@ -791,6 +1002,13 @@
           "groceries",
           "milk"
         ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking"
+        ],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 32
       }
@@ -813,6 +1031,13 @@
           "groceries",
           "mulberry"
         ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking"
+        ],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 33
       }
@@ -837,6 +1062,16 @@
           "groceries",
           "nescafe"
         ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking",
+          "beverage"
+        ],
+        "cooking_uses": [
+          "drink"
+        ],
         "source": "dummyjson",
         "source_product_id": 34
       }
@@ -858,6 +1093,19 @@
           "vegetables",
           "groceries",
           "potatoes"
+        ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking",
+          "vegetable",
+          "produce"
+        ],
+        "cooking_uses": [
+          "stir fry",
+          "side dish",
+          "savory cooking"
         ],
         "source": "dummyjson",
         "source_product_id": 35
@@ -882,6 +1130,13 @@
           "protein",
           "powder"
         ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking"
+        ],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 36
       }
@@ -905,6 +1160,21 @@
           "red",
           "onions"
         ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking",
+          "vegetable",
+          "produce",
+          "aromatic"
+        ],
+        "cooking_uses": [
+          "stir fry",
+          "side dish",
+          "savory cooking",
+          "soup base"
+        ],
         "source": "dummyjson",
         "source_product_id": 37
       }
@@ -926,6 +1196,19 @@
           "grains",
           "groceries",
           "rice"
+        ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking",
+          "staple",
+          "carb"
+        ],
+        "cooking_uses": [
+          "fried rice",
+          "base ingredient",
+          "meal prep"
         ],
         "source": "dummyjson",
         "source_product_id": 38
@@ -950,6 +1233,13 @@
           "soft",
           "drinks"
         ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking"
+        ],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 39
       }
@@ -972,6 +1262,13 @@
           "groceries",
           "strawberry"
         ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking"
+        ],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 40
       }
@@ -996,6 +1293,13 @@
           "paper",
           "box"
         ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking"
+        ],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 41
       }
@@ -1018,6 +1322,13 @@
           "groceries",
           "water"
         ],
+        "search_terms": [
+          "food",
+          "ingredient",
+          "groceries",
+          "cooking"
+        ],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 42
       }
@@ -1042,6 +1353,8 @@
           "home",
           "decoration"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 43
       }
@@ -1070,6 +1383,8 @@
           "photo",
           "frame"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 44
       }
@@ -1097,6 +1412,8 @@
           "showpiece",
           "plant"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 45
       }
@@ -1123,6 +1440,8 @@
           "plant",
           "pot"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 46
       }
@@ -1149,6 +1468,8 @@
           "table",
           "lamp"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 47
       }
@@ -1175,6 +1496,8 @@
           "bamboo",
           "spatula"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 48
       }
@@ -1202,6 +1525,8 @@
           "aluminium",
           "cup"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 49
       }
@@ -1228,6 +1553,8 @@
           "black",
           "whisk"
         ],
+        "search_terms": [],
+        "cooking_uses": [],
         "source": "dummyjson",
         "source_product_id": 50
       }
@@ -3145,111 +3472,111 @@
     },
     {
       "product_id": 210228194855799993,
-      "search_text": "Apple groceries Apple Fresh and crisp apples, perfect for snacking or incorporating into various recipes. fruits fruits groceries apple"
+      "search_text": "Apple groceries Apple Fresh and crisp apples, perfect for snacking or incorporating into various recipes. fruits fruits groceries apple food ingredient groceries cooking fruit snack fresh eating dessert salad"
     },
     {
       "product_id": 206409247741638036,
-      "search_text": "Beef Steak groceries Beef Steak High-quality beef steak, great for grilling or cooking to your preferred level of doneness. meat meat groceries beef steak"
+      "search_text": "Beef Steak groceries Beef Steak High-quality beef steak, great for grilling or cooking to your preferred level of doneness. meat meat groceries beef steak food ingredient groceries cooking protein meat seafood stir fry main dish savory cooking"
     },
     {
       "product_id": 215777735849472655,
-      "search_text": "Cat Food groceries Cat Food Nutritious cat food formulated to meet the dietary needs of your feline friend. pet supplies cat food pet supplies cat food groceries cat food"
+      "search_text": "Cat Food groceries Cat Food Nutritious cat food formulated to meet the dietary needs of your feline friend. pet supplies cat food pet supplies cat food groceries cat food food ingredient groceries cooking pet supplies"
     },
     {
       "product_id": 181852873795416809,
-      "search_text": "Chicken Meat groceries Chicken Meat Fresh and tender chicken meat, suitable for various culinary preparations. meat meat groceries chicken"
+      "search_text": "Chicken Meat groceries Chicken Meat Fresh and tender chicken meat, suitable for various culinary preparations. meat meat groceries chicken food ingredient groceries cooking protein meat seafood stir fry main dish savory cooking"
     },
     {
       "product_id": 180744227090096304,
-      "search_text": "Cooking Oil groceries Cooking Oil Versatile cooking oil suitable for frying, saut\u00e9ing, and various culinary applications. cooking essentials cooking essentials groceries cooking oil"
+      "search_text": "Cooking Oil groceries Cooking Oil Versatile cooking oil suitable for frying, saut\u00e9ing, and various culinary applications. cooking essentials cooking essentials groceries cooking oil food ingredient groceries cooking cooking oil pantry stir fry frying saute"
     },
     {
       "product_id": 200943831893447646,
-      "search_text": "Cucumber groceries Cucumber Crisp and hydrating cucumbers, ideal for salads, snacks, or as a refreshing side. vegetables vegetables groceries cucumber"
+      "search_text": "Cucumber groceries Cucumber Crisp and hydrating cucumbers, ideal for salads, snacks, or as a refreshing side. vegetables vegetables groceries cucumber food ingredient groceries cooking vegetable produce stir fry side dish savory cooking"
     },
     {
       "product_id": 201248852229704508,
-      "search_text": "Dog Food groceries Dog Food Specially formulated dog food designed to provide essential nutrients for your canine companion. pet supplies dog food pet supplies dog food groceries dog food"
+      "search_text": "Dog Food groceries Dog Food Specially formulated dog food designed to provide essential nutrients for your canine companion. pet supplies dog food pet supplies dog food groceries dog food food ingredient groceries cooking pet supplies"
     },
     {
       "product_id": 198110104800113819,
-      "search_text": "Eggs groceries Eggs Fresh eggs, a versatile ingredient for baking, cooking, or breakfast. dairy dairy groceries eggs"
+      "search_text": "Eggs groceries Eggs Fresh eggs, a versatile ingredient for baking, cooking, or breakfast. dairy dairy groceries eggs food ingredient groceries cooking protein breakfast ingredient stir fry fried rice quick meal"
     },
     {
       "product_id": 197474901721822218,
-      "search_text": "Fish Steak groceries Fish Steak Quality fish steak, suitable for grilling, baking, or pan-searing. seafood seafood groceries fish steak"
+      "search_text": "Fish Steak groceries Fish Steak Quality fish steak, suitable for grilling, baking, or pan-searing. seafood seafood groceries fish steak food ingredient groceries cooking protein meat seafood stir fry main dish savory cooking"
     },
     {
       "product_id": 188355152101089733,
-      "search_text": "Green Bell Pepper groceries Green Bell Pepper Fresh and vibrant green bell pepper, perfect for adding color and flavor to your dishes. vegetables vegetables groceries green bell pepper"
+      "search_text": "Green Bell Pepper groceries Green Bell Pepper Fresh and vibrant green bell pepper, perfect for adding color and flavor to your dishes. vegetables vegetables groceries green bell pepper food ingredient groceries cooking vegetable produce aromatic stir fry side dish savory cooking saute"
     },
     {
       "product_id": 194228920640605781,
-      "search_text": "Green Chili Pepper groceries Green Chili Pepper Spicy green chili pepper, ideal for adding heat to your favorite recipes. vegetables vegetables groceries green chili pepper"
+      "search_text": "Green Chili Pepper groceries Green Chili Pepper Spicy green chili pepper, ideal for adding heat to your favorite recipes. vegetables vegetables groceries green chili pepper food ingredient groceries cooking vegetable produce aromatic stir fry side dish savory cooking saute"
     },
     {
       "product_id": 184252723858532148,
-      "search_text": "Honey Jar groceries Honey Jar Pure and natural honey in a convenient jar, perfect for sweetening beverages or drizzling over food. condiments condiments groceries honey jar"
+      "search_text": "Honey Jar groceries Honey Jar Pure and natural honey in a convenient jar, perfect for sweetening beverages or drizzling over food. condiments condiments groceries honey jar food ingredient groceries cooking sweetener pantry sauce marinade dressing"
     },
     {
       "product_id": 187050350048634887,
-      "search_text": "Ice Cream groceries Ice Cream Creamy and delicious ice cream, available in various flavors for a delightful treat. desserts desserts groceries ice cream"
+      "search_text": "Ice Cream groceries Ice Cream Creamy and delicious ice cream, available in various flavors for a delightful treat. desserts desserts groceries ice cream food ingredient groceries cooking"
     },
     {
       "product_id": 187420430173365465,
-      "search_text": "Juice groceries Juice Refreshing fruit juice, packed with vitamins and great for staying hydrated. beverages beverages groceries juice"
+      "search_text": "Juice groceries Juice Refreshing fruit juice, packed with vitamins and great for staying hydrated. beverages beverages groceries juice food ingredient groceries cooking"
     },
     {
       "product_id": 182730825611825836,
-      "search_text": "Kiwi groceries Kiwi Nutrient-rich kiwi, perfect for snacking or adding a tropical twist to your dishes. fruits fruits groceries kiwi"
+      "search_text": "Kiwi groceries Kiwi Nutrient-rich kiwi, perfect for snacking or adding a tropical twist to your dishes. fruits fruits groceries kiwi food ingredient groceries cooking"
     },
     {
       "product_id": 215418216943797009,
-      "search_text": "Lemon groceries Lemon Zesty and tangy lemons, versatile for cooking, baking, or making refreshing beverages. fruits fruits groceries lemon"
+      "search_text": "Lemon groceries Lemon Zesty and tangy lemons, versatile for cooking, baking, or making refreshing beverages. fruits fruits groceries lemon food ingredient groceries cooking"
     },
     {
       "product_id": 196735040745540077,
-      "search_text": "Milk groceries Milk Fresh and nutritious milk, a staple for various recipes and daily consumption. dairy dairy groceries milk"
+      "search_text": "Milk groceries Milk Fresh and nutritious milk, a staple for various recipes and daily consumption. dairy dairy groceries milk food ingredient groceries cooking"
     },
     {
       "product_id": 213267967202280812,
-      "search_text": "Mulberry groceries Mulberry Sweet and juicy mulberries, perfect for snacking or adding to desserts and cereals. fruits fruits groceries mulberry"
+      "search_text": "Mulberry groceries Mulberry Sweet and juicy mulberries, perfect for snacking or adding to desserts and cereals. fruits fruits groceries mulberry food ingredient groceries cooking"
     },
     {
       "product_id": 188683761445121761,
-      "search_text": "Nescafe Coffee groceries Nescafe Coffee Quality coffee from Nescafe, available in various blends for a rich and satisfying cup. beverages coffee beverages coffee groceries nescafe"
+      "search_text": "Nescafe Coffee groceries Nescafe Coffee Quality coffee from Nescafe, available in various blends for a rich and satisfying cup. beverages coffee beverages coffee groceries nescafe food ingredient groceries cooking beverage drink"
     },
     {
       "product_id": 210458182443853018,
-      "search_text": "Potatoes groceries Potatoes Versatile and starchy potatoes, great for roasting, mashing, or as a side dish. vegetables vegetables groceries potatoes"
+      "search_text": "Potatoes groceries Potatoes Versatile and starchy potatoes, great for roasting, mashing, or as a side dish. vegetables vegetables groceries potatoes food ingredient groceries cooking vegetable produce stir fry side dish savory cooking"
     },
     {
       "product_id": 188084632788118139,
-      "search_text": "Protein Powder groceries Protein Powder Nutrient-packed protein powder, ideal for supplementing your diet with essential proteins. health supplements health supplements groceries protein powder"
+      "search_text": "Protein Powder groceries Protein Powder Nutrient-packed protein powder, ideal for supplementing your diet with essential proteins. health supplements health supplements groceries protein powder food ingredient groceries cooking"
     },
     {
       "product_id": 209221850916049694,
-      "search_text": "Red Onions groceries Red Onions Flavorful and aromatic red onions, perfect for adding depth to your savory dishes. vegetables vegetables groceries red onions"
+      "search_text": "Red Onions groceries Red Onions Flavorful and aromatic red onions, perfect for adding depth to your savory dishes. vegetables vegetables groceries red onions food ingredient groceries cooking vegetable produce aromatic stir fry side dish savory cooking soup base"
     },
     {
       "product_id": 199756538810440647,
-      "search_text": "Rice groceries Rice High-quality rice, a staple for various cuisines and a versatile base for many dishes. grains grains groceries rice"
+      "search_text": "Rice groceries Rice High-quality rice, a staple for various cuisines and a versatile base for many dishes. grains grains groceries rice food ingredient groceries cooking staple carb fried rice base ingredient meal prep"
     },
     {
       "product_id": 199675584682983064,
-      "search_text": "Soft Drinks groceries Soft Drinks Assorted soft drinks in various flavors, perfect for refreshing beverages. beverages beverages groceries soft drinks"
+      "search_text": "Soft Drinks groceries Soft Drinks Assorted soft drinks in various flavors, perfect for refreshing beverages. beverages beverages groceries soft drinks food ingredient groceries cooking"
     },
     {
       "product_id": 210366261969294081,
-      "search_text": "Strawberry groceries Strawberry Sweet and succulent strawberries, great for snacking, desserts, or blending into smoothies. fruits fruits groceries strawberry"
+      "search_text": "Strawberry groceries Strawberry Sweet and succulent strawberries, great for snacking, desserts, or blending into smoothies. fruits fruits groceries strawberry food ingredient groceries cooking"
     },
     {
       "product_id": 193343364595809614,
-      "search_text": "Tissue Paper Box groceries Tissue Paper Box Convenient tissue paper box for everyday use, providing soft and absorbent tissues. household essentials household essentials groceries tissue paper box"
+      "search_text": "Tissue Paper Box groceries Tissue Paper Box Convenient tissue paper box for everyday use, providing soft and absorbent tissues. household essentials household essentials groceries tissue paper box food ingredient groceries cooking"
     },
     {
       "product_id": 190020429939537878,
-      "search_text": "Water groceries Water Pure and refreshing bottled water, essential for staying hydrated throughout the day. beverages beverages groceries water"
+      "search_text": "Water groceries Water Pure and refreshing bottled water, essential for staying hydrated throughout the day. beverages beverages groceries water food ingredient groceries cooking"
     },
     {
       "product_id": 192507276867630127,

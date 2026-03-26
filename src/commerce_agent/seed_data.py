@@ -157,6 +157,7 @@ def build_public_seed(products: list[dict[str, Any]]) -> TinySeedBundle:
         product_id = generator.stable("public_product", f"dummyjson:{source_product['id']}")
         category_name = _normalize_category_name(str(source_product.get("category", "misc")))
         image_tags = _public_image_tags(source_product)
+        metadata = _public_search_metadata(source_product)
         seller_code = _public_seller_code(source_product)
         brand = str(source_product.get("brand") or source_product.get("title") or "Unknown Brand").strip()
         image_url = _primary_image_url(source_product)
@@ -179,6 +180,8 @@ def build_public_seed(products: list[dict[str, Any]]) -> TinySeedBundle:
                 "attributes_jsonb": {
                     "tags": tags,
                     "image_tags": image_tags,
+                    "search_terms": metadata["search_terms"],
+                    "cooking_uses": metadata["cooking_uses"],
                     "source": "dummyjson",
                     "source_product_id": int(source_product["id"]),
                 },
@@ -230,6 +233,8 @@ def build_public_seed(products: list[dict[str, Any]]) -> TinySeedBundle:
                         description,
                         " ".join(tags),
                         " ".join(image_tags),
+                        " ".join(metadata["search_terms"]),
+                        " ".join(metadata["cooking_uses"]),
                     ]
                     if part.strip()
                 ),
@@ -472,6 +477,64 @@ def _public_image_tags(source_product: dict[str, Any]) -> list[str]:
     return result[:8]
 
 
+def _public_search_metadata(source_product: dict[str, Any]) -> dict[str, list[str]]:
+    """Derive richer searchable metadata for local grocery-oriented recall."""
+    category = _normalize_category_name(str(source_product.get("category") or "misc"))
+    title = str(source_product.get("title") or "").lower()
+    description = str(source_product.get("description") or "").lower()
+    tags = [str(tag).strip().lower() for tag in source_product.get("tags", []) if str(tag).strip()]
+    haystack = " ".join([title, description, " ".join(tags), category])
+
+    search_terms: list[str] = []
+    cooking_uses: list[str] = []
+
+    if category == "groceries":
+        search_terms.extend(["food", "ingredient", "groceries", "cooking"])
+
+    grocery_term_map = {
+        ("potato", "onion", "pepper", "cucumber"): (["vegetable", "produce"], ["stir fry", "side dish", "savory cooking"]),
+        ("egg",): (["protein", "breakfast ingredient"], ["stir fry", "fried rice", "quick meal"]),
+        ("rice",): (["staple", "carb"], ["fried rice", "base ingredient", "meal prep"]),
+        ("oil",): (["cooking oil", "pantry"], ["stir fry", "frying", "saute"]),
+        ("beef", "chicken", "fish", "steak"): (["protein", "meat", "seafood"], ["stir fry", "main dish", "savory cooking"]),
+        ("apple",): (["fruit", "snack"], ["fresh eating", "dessert", "salad"]),
+        ("honey",): (["sweetener", "pantry"], ["sauce", "marinade", "dressing"]),
+        ("coffee",): (["beverage"], ["drink"]),
+    }
+
+    for tokens, (extra_terms, uses) in grocery_term_map.items():
+        if any(token in haystack for token in tokens):
+            search_terms.extend(extra_terms)
+            cooking_uses.extend(uses)
+
+    if "pepper" in haystack:
+        search_terms.extend(["aromatic", "vegetable"])
+        cooking_uses.extend(["stir fry", "saute"])
+    if "onion" in haystack:
+        search_terms.extend(["aromatic", "vegetable"])
+        cooking_uses.extend(["stir fry", "soup base"])
+    if "dog food" in haystack or "cat food" in haystack:
+        search_terms.extend(["pet supplies"])
+        cooking_uses = []
+
+    return {
+        "search_terms": _unique_terms(search_terms),
+        "cooking_uses": _unique_terms(cooking_uses),
+    }
+
+
+def _unique_terms(values: list[str]) -> list[str]:
+    """Return a stable deduplicated term list."""
+    seen: set[str] = set()
+    result: list[str] = []
+    for value in values:
+        cleaned = value.strip().lower()
+        if cleaned and cleaned not in seen:
+            seen.add(cleaned)
+            result.append(cleaned)
+    return result
+
+
 def _image_summary_from_product(source_product: dict[str, Any]) -> str:
     title = str(source_product.get("title") or "").strip()
     category = _normalize_category_name(str(source_product.get("category") or "product"))
@@ -496,4 +559,3 @@ def _price_for_product(product: Product) -> float:
     }
     base = category_prices.get(product.category, 49.0)
     return round(base + ((product.id % 11) * 3.5), 2)
-

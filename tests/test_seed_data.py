@@ -60,7 +60,38 @@ def test_build_public_seed_keeps_media_and_search_docs_on_same_product() -> None
     assert bundle.product_search_documents[0]["product_id"] == bundle.products[0]["id"]
     assert bundle.product_media[0]["url"] == "https://cdn.example.com/camera-backpack.webp"
     assert "Camera Backpack" in bundle.product_search_documents[0]["search_text"]
+    assert "search_terms" in bundle.products[0]["attributes_jsonb"]
+    assert "cooking_uses" in bundle.products[0]["attributes_jsonb"]
     assert bundle.products[0]["id"] == build_public_seed(products).products[0]["id"]
+
+
+def test_build_public_seed_adds_cooking_metadata_for_grocery_items() -> None:
+    bundle = build_public_seed(
+        [
+            {
+                "id": 25,
+                "title": "Green Bell Pepper",
+                "description": "Fresh green bell pepper for salads, stir-fries, and other dishes.",
+                "category": "groceries",
+                "price": 1.29,
+                "rating": 4.1,
+                "stock": 33,
+                "tags": ["vegetables"],
+                "brand": "Green Bell Pepper",
+                "sku": "GRO-BRD-GRE-025",
+                "shippingInformation": "Ships in 48 hours",
+                "availabilityStatus": "In Stock",
+                "images": ["https://cdn.example.com/pepper.webp"],
+                "thumbnail": "https://cdn.example.com/pepper-thumb.webp",
+                "reviews": [{"rating": 4}],
+            }
+        ]
+    )
+
+    attributes = bundle.products[0]["attributes_jsonb"]
+    assert "food" in attributes["search_terms"]
+    assert "stir fry" in attributes["cooking_uses"]
+    assert "stir fry" in bundle.product_search_documents[0]["search_text"]
 
 
 def test_write_public_seed_writes_public_bundle(tmp_path: Path, monkeypatch) -> None:
