@@ -3,7 +3,7 @@ from pathlib import Path
 from commerce_agent.agent import CommerceAgent
 from commerce_agent.models import VisionAnalysis
 from commerce_agent.repository import SearchRepository
-from commerce_agent.vision import OpenAIVisionAnalyzer
+from commerce_agent.vision import BigModelVisionAnalyzer, OpenAIVisionAnalyzer
 
 
 class FakeVisionAnalyzer:
@@ -250,6 +250,33 @@ def test_mock_vision_response_allows_image_flow_without_api_key(monkeypatch, tmp
     )
 
     analysis = OpenAIVisionAnalyzer().analyze(image_path)
+    assert analysis.summary == "compact green bag"
+    assert "green" in analysis.tags
+
+
+def test_bigmodel_vision_response_parses_summary_and_tags(monkeypatch, tmp_path) -> None:
+    image_path = tmp_path / "green-bag.png"
+    image_path.write_bytes(b"fake")
+    monkeypatch.setenv("COMMERCE_AGENT_VISION_PROVIDER", "bigmodel")
+    monkeypatch.setenv("COMMERCE_AGENT_VISION_API_KEY", "test-key")
+    monkeypatch.delenv("BIGMODEL_API_KEY", raising=False)
+    monkeypatch.setenv("COMMERCE_AGENT_MOCK_VISION", "0")
+
+    class FakeResponse:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc, tb):
+            return False
+
+        def read(self) -> bytes:
+            return (
+                b'{"choices":[{"message":{"content":"summary: compact green bag\\n'
+                b'tags: bag, green, compact, accessory, leather"}}]}'
+            )
+
+    monkeypatch.setattr("commerce_agent.vision.urlopen", lambda request: FakeResponse())
+    analysis = BigModelVisionAnalyzer(model="glm-4.5v").analyze(image_path)
     assert analysis.summary == "compact green bag"
     assert "green" in analysis.tags
 

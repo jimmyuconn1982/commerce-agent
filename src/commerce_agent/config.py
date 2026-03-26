@@ -50,8 +50,10 @@ class EmbeddingSettings:
 class VisionSettings:
     """Configuration for vision analysis and local mock behavior."""
 
+    provider: str
     model_name: str
     api_key: str
+    base_url: str
     mock_enabled: bool
     mock_response: str
 
@@ -91,8 +93,10 @@ def get_settings() -> CommerceAgentSettings:
             dimensions=int(os.getenv("BIGMODEL_EMBEDDING_DIMENSIONS") or "1024"),
         ),
         vision=VisionSettings(
-            model_name=os.getenv("COMMERCE_AGENT_VISION_MODEL") or "gpt-4.1-mini",
-            api_key=os.getenv("OPENAI_API_KEY", ""),
+            provider=(os.getenv("COMMERCE_AGENT_VISION_PROVIDER") or "bigmodel").strip().lower(),
+            model_name=os.getenv("COMMERCE_AGENT_VISION_MODEL") or "glm-4.5v",
+            api_key=os.getenv("COMMERCE_AGENT_VISION_API_KEY") or os.getenv("BIGMODEL_API_KEY", ""),
+            base_url=(os.getenv("COMMERCE_AGENT_VISION_BASE_URL") or os.getenv("BIGMODEL_BASE_URL") or "https://open.bigmodel.cn/api/paas/v4").rstrip("/"),
             mock_enabled=os.getenv("COMMERCE_AGENT_MOCK_VISION") == "1",
             mock_response=os.getenv("COMMERCE_AGENT_MOCK_VISION_RESPONSE", "").strip(),
         ),

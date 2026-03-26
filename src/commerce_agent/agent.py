@@ -54,7 +54,7 @@ from .tools import (
     TextSearchPathInput,
 )
 from .router import RouterCase, build_router
-from .vision import OpenAIVisionAnalyzer, VisionAnalyzer
+from .vision import VisionAnalyzer, build_vision_analyzer
 
 
 class CommerceAgent:
@@ -404,7 +404,7 @@ class CommerceAgent:
     def _get_vision_analyzer(self) -> VisionAnalyzer:
         """Lazily create the vision adapter when image analysis is needed."""
         if self.vision_analyzer is None:
-            self.vision_analyzer = OpenAIVisionAnalyzer()
+            self.vision_analyzer = build_vision_analyzer()
         return self.vision_analyzer
 
     def _score_text(self, product: Product, tokens: set[str]) -> tuple[float, list[str]]:

@@ -31,6 +31,7 @@ cp .env.example .env
 Then fill in the keys you need:
 
 - `BIGMODEL_API_KEY`
+- `COMMERCE_AGENT_VISION_API_KEY`
 - `OPENAI_API_KEY`
 
 Common settings now live in one place and are loaded through the backend config layer:
@@ -50,9 +51,9 @@ commerce-agent image-search ./example.jpg
 commerce-agent multimodal-search --text "office" --image ./example.jpg
 ```
 
-Image retrieval now uses a real vision step through the OpenAI Responses API. The agent reads a local image file, sends it as a Base64 data URL for image understanding, then reranks the catalog using the returned summary and tags.
+Image retrieval now uses a real vision step through the configured provider. The default local setup uses BigModel vision. The agent reads a local image file, sends it for image understanding, then reranks the catalog using the returned summary and tags.
 
-Set `OPENAI_API_KEY` before using `image-search`, `multimodal-search --image ...`, or `chat --image ...`.
+Set `COMMERCE_AGENT_VISION_API_KEY` or `BIGMODEL_API_KEY` before using `image-search`, `multimodal-search --image ...`, or `chat --image ...`.
 
 If you want to test the image pipeline without a real API key, enable mock vision mode:
 
