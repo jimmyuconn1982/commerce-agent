@@ -29,6 +29,7 @@ from urllib.request import Request, urlopen
 from typing import Any
 
 from .catalog import Catalog
+from .db_write import DatabaseWriter
 from .ids import SnowflakeLikeIdGenerator
 from .models import Product
 
@@ -268,22 +269,15 @@ def load_seed_data(
 ) -> None:
     """Load one normalized seed bundle into PostgreSQL with upserts."""
     import psycopg
-    from psycopg.types.json import Json
 
     data = json.loads(seed_path.read_text(encoding="utf-8"))
     database_url = database_url or os.getenv("DATABASE_URL", DEFAULT_DATABASE_URL)
 
     with psycopg.connect(database_url) as conn:
-        with conn.cursor() as cur:
-            if truncate_first:
-                _truncate_seed_tables(cur)
-            _upsert_categories(cur, data["categories"])
-            _upsert_products(cur, data["products"], Json)
-            _upsert_product_media(cur, data["product_media"])
-            _upsert_sellers(cur, data["sellers"])
-            _upsert_product_offers(cur, data["product_offers"])
-            _upsert_review_stats(cur, data["product_review_stats"])
-            _upsert_search_documents(cur, data["product_search_documents"])
+        writer = DatabaseWriter(conn)
+        if truncate_first:
+            writer.truncate_seed_tables()
+        writer.load_seed_bundle(data)
         conn.commit()
 
 
@@ -503,169 +497,3 @@ def _price_for_product(product: Product) -> float:
     base = category_prices.get(product.category, 49.0)
     return round(base + ((product.id % 11) * 3.5), 2)
 
-
-def _truncate_seed_tables(cur: Any) -> None:
-    cur.execute(
-        """
-        TRUNCATE TABLE
-            product_embeddings,
-            product_search_documents,
-            product_review_stats,
-            product_offers,
-            product_media,
-            products,
-            sellers,
-            categories
-        CASCADE
-        """
-    )
-
-
-def _upsert_categories(cur, rows: list[dict[str, Any]]) -> None:
-    cur.executemany(
-        """
-        INSERT INTO categories (id, name, parent_id)
-        VALUES (%(id)s, %(name)s, %(parent_id)s)
-        ON CONFLICT (id) DO UPDATE
-        SET name = EXCLUDED.name,
-            parent_id = EXCLUDED.parent_id
-        """,
-        rows,
-    )
-
-
-def _upsert_products(cur, rows: list[dict[str, Any]], json_adapter) -> None:
-    payload = []
-    for row in rows:
-        payload.append({**row, "attributes_jsonb": json_adapter(row["attributes_jsonb"])})
-    cur.executemany(
-        """
-        INSERT INTO products (
-            id, sku, title, short_description, long_description, brand,
-            category_id, status, attributes_jsonb
-        )
-        VALUES (
-            %(id)s, %(sku)s, %(title)s, %(short_description)s, %(long_description)s, %(brand)s,
-            %(category_id)s, %(status)s, %(attributes_jsonb)s
-        )
-        ON CONFLICT (id) DO UPDATE
-        SET sku = EXCLUDED.sku,
-            title = EXCLUDED.title,
-            short_description = EXCLUDED.short_description,
-            long_description = EXCLUDED.long_description,
-            brand = EXCLUDED.brand,
-            category_id = EXCLUDED.category_id,
-            status = EXCLUDED.status,
-            attributes_jsonb = EXCLUDED.attributes_jsonb
-        """,
-        payload,
-    )
-
-
-def _upsert_product_media(cur, rows: list[dict[str, Any]]) -> None:
-    cur.executemany(
-        """
-        INSERT INTO product_media (
-            id, product_id, media_type, url, thumbnail_url, sort_order,
-            alt_text, width, height, is_primary
-        )
-        VALUES (
-            %(id)s, %(product_id)s, %(media_type)s, %(url)s, %(thumbnail_url)s, %(sort_order)s,
-            %(alt_text)s, %(width)s, %(height)s, %(is_primary)s
-        )
-        ON CONFLICT (id) DO UPDATE
-        SET product_id = EXCLUDED.product_id,
-            media_type = EXCLUDED.media_type,
-            url = EXCLUDED.url,
-            thumbnail_url = EXCLUDED.thumbnail_url,
-            sort_order = EXCLUDED.sort_order,
-            alt_text = EXCLUDED.alt_text,
-            width = EXCLUDED.width,
-            height = EXCLUDED.height,
-            is_primary = EXCLUDED.is_primary
-        """,
-        rows,
-    )
-
-
-def _upsert_sellers(cur, rows: list[dict[str, Any]]) -> None:
-    cur.executemany(
-        """
-        INSERT INTO sellers (
-            id, seller_code, name, rating, seller_url, location, is_verified
-        )
-        VALUES (
-            %(id)s, %(seller_code)s, %(name)s, %(rating)s, %(seller_url)s, %(location)s, %(is_verified)s
-        )
-        ON CONFLICT (id) DO UPDATE
-        SET seller_code = EXCLUDED.seller_code,
-            name = EXCLUDED.name,
-            rating = EXCLUDED.rating,
-            seller_url = EXCLUDED.seller_url,
-            location = EXCLUDED.location,
-            is_verified = EXCLUDED.is_verified
-        """,
-        rows,
-    )
-
-
-def _upsert_product_offers(cur, rows: list[dict[str, Any]]) -> None:
-    cur.executemany(
-        """
-        INSERT INTO product_offers (
-            id, product_id, seller_id, price, currency, inventory_count,
-            product_url, shipping_info, is_active
-        )
-        VALUES (
-            %(id)s, %(product_id)s, %(seller_id)s, %(price)s, %(currency)s, %(inventory_count)s,
-            %(product_url)s, %(shipping_info)s, %(is_active)s
-        )
-        ON CONFLICT (id) DO UPDATE
-        SET product_id = EXCLUDED.product_id,
-            seller_id = EXCLUDED.seller_id,
-            price = EXCLUDED.price,
-            currency = EXCLUDED.currency,
-            inventory_count = EXCLUDED.inventory_count,
-            product_url = EXCLUDED.product_url,
-            shipping_info = EXCLUDED.shipping_info,
-            is_active = EXCLUDED.is_active
-        """,
-        rows,
-    )
-
-
-def _upsert_review_stats(cur, rows: list[dict[str, Any]]) -> None:
-    cur.executemany(
-        """
-        INSERT INTO product_review_stats (
-            product_id, average_rating, review_count
-        )
-        VALUES (
-            %(product_id)s, %(average_rating)s, %(review_count)s
-        )
-        ON CONFLICT (product_id) DO UPDATE
-        SET average_rating = EXCLUDED.average_rating,
-            review_count = EXCLUDED.review_count
-        """,
-        rows,
-    )
-
-
-def _upsert_search_documents(cur, rows: list[dict[str, Any]]) -> None:
-    for row in rows:
-        cur.execute(
-            """
-            INSERT INTO product_search_documents (
-                product_id, search_text, search_tsv
-            )
-            VALUES (
-                %(product_id)s,
-                %(search_text)s,
-                to_tsvector('english', unaccent(%(search_text)s))
-            )
-            ON CONFLICT (product_id) DO UPDATE
-            SET search_text = EXCLUDED.search_text,
-                search_tsv = to_tsvector('english', unaccent(EXCLUDED.search_text))
-            """,
-            row,
-        )

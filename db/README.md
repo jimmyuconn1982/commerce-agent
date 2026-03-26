@@ -22,6 +22,16 @@ The current setup provides:
   - trigram fallback search
   - vector search
 
+## Write Path Policy
+
+Application-owned database writes must go through [src/commerce_agent/db_write.py](../src/commerce_agent/db_write.py).
+
+Current code paths already using the shared writer:
+- seed loading
+- semantic index builds
+
+Future product ingest, admin writes, and background sync jobs should extend this module instead of issuing ad-hoc SQL writes elsewhere.
+
 ## Apply the Initial Schema
 
 Start the database:

@@ -28,6 +28,7 @@ from urllib.request import Request, urlopen
 
 import psycopg
 
+from .db_write import DatabaseWriter
 from .ids import SnowflakeLikeIdGenerator
 from .seed_data import DEFAULT_DATABASE_URL
 
@@ -141,10 +142,10 @@ def build_text_embeddings(
     database_url = database_url or os.getenv("DATABASE_URL", DEFAULT_DATABASE_URL)
     count = 0
     generator = SnowflakeLikeIdGenerator()
+    rows_to_write: list[dict[str, object]] = []
 
     with psycopg.connect(database_url) as conn:
         with conn.cursor() as cur:
-            cur.execute("DELETE FROM product_embeddings WHERE embedding_type = 'text'")
             cur.execute(
                 """
                 SELECT
@@ -161,35 +162,28 @@ def build_text_embeddings(
                 """
             )
             rows = cur.fetchall()
-            for row in rows:
-                product_id, title, short_description, long_description, category_name, search_text = row
-                source_text = " ".join(
-                    part.strip()
-                    for part in [title, short_description, long_description, category_name, search_text]
-                    if part and part.strip()
-                )
-                embedding = provider.embed_text(source_text)
-                cur.execute(
-                    """
-                    INSERT INTO product_embeddings (
-                        id, product_id, embedding_type, model_name, model_version,
-                        embedding, source_text, source_image_url
-                    )
-                    VALUES (
-                        %(id)s, %(product_id)s, 'text', %(model_name)s, %(model_version)s,
-                        %(embedding)s::vector, %(source_text)s, NULL
-                    )
-                    """,
-                    {
-                        "id": generator.stable("text_embedding", f"{product_id}:{provider.model_name}"),
-                        "product_id": product_id,
-                        "model_name": provider.model_name,
-                        "model_version": provider.model_version,
-                        "embedding": vector_literal(embedding),
-                        "source_text": source_text,
-                    },
-                )
-                count += 1
+        for row in rows:
+            product_id, title, short_description, long_description, category_name, search_text = row
+            source_text = " ".join(
+                part.strip()
+                for part in [title, short_description, long_description, category_name, search_text]
+                if part and part.strip()
+            )
+            embedding = provider.embed_text(source_text)
+            rows_to_write.append(
+                {
+                    "id": generator.stable("text_embedding", f"{product_id}:{provider.model_name}"),
+                    "product_id": product_id,
+                    "embedding_type": "text",
+                    "model_name": provider.model_name,
+                    "model_version": provider.model_version,
+                    "embedding": vector_literal(embedding),
+                    "source_text": source_text,
+                    "source_image_url": None,
+                }
+            )
+            count += 1
+        DatabaseWriter(conn).replace_embeddings("text", rows_to_write)
         conn.commit()
     return count
 
@@ -203,10 +197,10 @@ def build_image_embeddings(
     database_url = database_url or os.getenv("DATABASE_URL", DEFAULT_DATABASE_URL)
     count = 0
     generator = SnowflakeLikeIdGenerator()
+    rows_to_write: list[dict[str, object]] = []
 
     with psycopg.connect(database_url) as conn:
         with conn.cursor() as cur:
-            cur.execute("DELETE FROM product_embeddings WHERE embedding_type = 'image'")
             cur.execute(
                 """
                 SELECT
@@ -220,31 +214,24 @@ def build_image_embeddings(
                 """
             )
             rows = cur.fetchall()
-            for row in rows:
-                product_id, title, image_url, alt_text = row
-                source = " ".join(part.strip() for part in [title, alt_text, image_url] if part and part.strip())
-                embedding = provider.embed_image_reference(source)
-                cur.execute(
-                    """
-                    INSERT INTO product_embeddings (
-                        id, product_id, embedding_type, model_name, model_version,
-                        embedding, source_text, source_image_url
-                    )
-                    VALUES (
-                        %(id)s, %(product_id)s, 'image', %(model_name)s, %(model_version)s,
-                        %(embedding)s::vector, NULL, %(source_image_url)s
-                    )
-                    """,
-                    {
-                        "id": generator.stable("image_embedding", f"{product_id}:{provider.model_name}"),
-                        "product_id": product_id,
-                        "model_name": provider.model_name,
-                        "model_version": provider.model_version,
-                        "embedding": vector_literal(embedding),
-                        "source_image_url": image_url,
-                    },
-                )
-                count += 1
+        for row in rows:
+            product_id, title, image_url, alt_text = row
+            source = " ".join(part.strip() for part in [title, alt_text, image_url] if part and part.strip())
+            embedding = provider.embed_image_reference(source)
+            rows_to_write.append(
+                {
+                    "id": generator.stable("image_embedding", f"{product_id}:{provider.model_name}"),
+                    "product_id": product_id,
+                    "embedding_type": "image",
+                    "model_name": provider.model_name,
+                    "model_version": provider.model_version,
+                    "embedding": vector_literal(embedding),
+                    "source_text": None,
+                    "source_image_url": image_url,
+                }
+            )
+            count += 1
+        DatabaseWriter(conn).replace_embeddings("image", rows_to_write)
         conn.commit()
     return count
 
