@@ -29,6 +29,10 @@ body {
   min-height: 100vh;
 }
 
+.debug-page {
+  background: #f7f7f8;
+}
+
 button,
 input,
 textarea,
@@ -40,6 +44,201 @@ select {
   display: grid;
   grid-template-columns: 260px minmax(0, 1fr);
   min-height: 100vh;
+}
+
+.debug-shell {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.debug-topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.debug-topbar h1 {
+  margin: 4px 0 6px;
+  font-size: 28px;
+}
+
+.debug-topbar p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.debug-eyebrow {
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.debug-home-link {
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  border-radius: 999px;
+  padding: 10px 14px;
+  text-decoration: none;
+}
+
+.debug-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.debug-stat-card {
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px 14px;
+}
+
+.debug-stat-label {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.debug-stat-value {
+  display: block;
+  margin-top: 6px;
+  font-size: 24px;
+}
+
+.debug-toolbar {
+  margin-top: 16px;
+}
+
+.debug-toolbar input {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px 14px;
+}
+
+.debug-product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.debug-product-card {
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 18px;
+  padding: 14px;
+}
+
+.debug-product-top {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.debug-product-image {
+  width: 92px;
+  height: 92px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: #f2f2f2;
+}
+
+.debug-product-copy {
+  min-width: 0;
+}
+
+.debug-product-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.debug-price {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.debug-meta-line {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.debug-badges,
+.debug-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.debug-badge,
+.debug-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 11px;
+  background: #fafafa;
+}
+
+.debug-badge.ok {
+  background: #eef8ef;
+  border-color: #cde6cf;
+}
+
+.debug-chip.muted {
+  color: var(--muted);
+}
+
+.debug-section-block {
+  margin-top: 12px;
+}
+
+.debug-block-label {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.debug-block-copy {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #3a3a3a;
+}
+
+.debug-pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fafafa;
+  padding: 10px;
+  font-size: 11px;
+  line-height: 1.55;
+  font-family: "IBM Plex Mono", monospace;
+  color: #4a4a4a;
+}
+
+.debug-product-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #0f5bd8;
+  text-decoration: none;
 }
 
 .sidebar {

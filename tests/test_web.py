@@ -75,6 +75,13 @@ def test_index_serves_html() -> None:
     assert "Commerce Agent" in response.text
 
 
+def test_debug_index_serves_html() -> None:
+    client = TestClient(web_module.app)
+    response = client.get("/debug")
+    assert response.status_code == 200
+    assert "Seed Database Explorer" in response.text
+
+
 def test_message_endpoint_routes_to_chat(monkeypatch) -> None:
     monkeypatch.setattr(web_module, "agent", StubAgent())
     client = TestClient(web_module.app)
@@ -104,3 +111,24 @@ def test_multimodal_text_only_returns_matches(monkeypatch) -> None:
     body = response.json()
     assert body["analysis"] is None
     assert body["matches"][0]["id"] == 723450000000000006
+
+
+def test_debug_seed_summary_returns_counts() -> None:
+    client = TestClient(web_module.app)
+    response = client.get("/api/debug/seed-summary")
+    assert response.status_code == 200
+    body = response.json()
+    assert "products" in body
+    assert "text_embeddings" in body
+
+
+def test_debug_products_returns_joined_rows() -> None:
+    client = TestClient(web_module.app)
+    response = client.get("/api/debug/products?limit=5")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["products"]
+    first = body["products"][0]
+    assert "title" in first
+    assert "search_text" in first
+    assert "image_tags" in first

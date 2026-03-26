@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Commerce Agent Debug</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/styles.css?v=5" />
+  </head>
+  <body class="debug-page">
+    <main class="debug-shell">
+      <header class="debug-topbar">
+        <div>
+          <div class="debug-eyebrow">Backend GUI</div>
+          <h1>Seed Database Explorer</h1>
+          <p>Inspect current product rows, search text, image tags, and embedding coverage from PostgreSQL.</p>
+        </div>
+        <a class="debug-home-link" href="/">Back to chat</a>
+      </header>
+
+      <section id="debug-stats" class="debug-stats"></section>
+
+      <section class="debug-toolbar">
+        <input id="debug-product-filter" type="search" placeholder="Filter by title, category, brand, tag, or search text" />
+      </section>
+
+      <section id="debug-product-grid" class="debug-product-grid"></section>
+    </main>
+
+    <script src="/assets/debug.js?v=5" type="module"></script>
+  </body>
+</html>
