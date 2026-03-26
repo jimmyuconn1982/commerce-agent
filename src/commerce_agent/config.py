@@ -59,6 +59,16 @@ class VisionSettings:
 
 
 @dataclass(slots=True)
+class ChatSettings:
+    """Configuration for scoped chat generation providers and models."""
+
+    provider: str
+    model_name: str
+    api_key: str
+    base_url: str
+
+
+@dataclass(slots=True)
 class WebSettings:
     """Configuration for the local FastAPI host and port."""
 
@@ -73,6 +83,7 @@ class CommerceAgentSettings:
     router: RouterSettings
     embeddings: EmbeddingSettings
     vision: VisionSettings
+    chat: ChatSettings
     web: WebSettings
 
 
@@ -99,6 +110,12 @@ def get_settings() -> CommerceAgentSettings:
             base_url=(os.getenv("COMMERCE_AGENT_VISION_BASE_URL") or os.getenv("BIGMODEL_BASE_URL") or "https://open.bigmodel.cn/api/paas/v4").rstrip("/"),
             mock_enabled=os.getenv("COMMERCE_AGENT_MOCK_VISION") == "1",
             mock_response=os.getenv("COMMERCE_AGENT_MOCK_VISION_RESPONSE", "").strip(),
+        ),
+        chat=ChatSettings(
+            provider=(os.getenv("COMMERCE_AGENT_CHAT_PROVIDER") or "bigmodel").strip().lower(),
+            model_name=os.getenv("COMMERCE_AGENT_CHAT_MODEL") or "glm-4-flash",
+            api_key=os.getenv("COMMERCE_AGENT_CHAT_API_KEY") or os.getenv("BIGMODEL_API_KEY", ""),
+            base_url=(os.getenv("COMMERCE_AGENT_CHAT_BASE_URL") or os.getenv("BIGMODEL_BASE_URL") or "https://open.bigmodel.cn/api/paas/v4").rstrip("/"),
         ),
         web=WebSettings(
             host=os.getenv("COMMERCE_AGENT_HOST", "127.0.0.1"),

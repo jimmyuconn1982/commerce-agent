@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from commerce_agent.agent import CommerceAgent
+from commerce_agent.chat_responder import FallbackChatResponder
 from commerce_agent.models import VisionAnalysis
 from commerce_agent.repository import SearchRepository
 from commerce_agent.vision import BigModelVisionAnalyzer, OpenAIVisionAnalyzer
@@ -13,6 +14,16 @@ class FakeVisionAnalyzer:
 
     def analyze(self, image_path: Path) -> VisionAnalysis:
         return VisionAnalysis(image_path=image_path, summary=self.summary, tags=self.tags)
+
+
+class FakeChatResponder:
+    def __init__(self, response: str = "Scoped chat reply.") -> None:
+        self.response = response
+        self.calls: list[tuple[str, VisionAnalysis | None]] = []
+
+    def generate(self, prompt: str, analysis: VisionAnalysis | None = None) -> str:
+        self.calls.append((prompt, analysis))
+        return self.response
 
 
 class StubSearchRepository(SearchRepository):
@@ -153,13 +164,14 @@ def test_multimodal_search_blends_text_and_image_intent() -> None:
 
 
 def test_chat_returns_guided_response() -> None:
+    responder = FakeChatResponder("Scoped chat reply.\nImage summary: compact keyboard on a desk")
     agent = CommerceAgent(
-        vision_analyzer=FakeVisionAnalyzer("compact keyboard on a desk", ["keyboard", "desk"])
+        vision_analyzer=FakeVisionAnalyzer("compact keyboard on a desk", ["keyboard", "desk"]),
+        chat_responder=responder,
     )
     reply = agent.chat("I am looking for a compact keyboard for my desk", image_path="tests/fixtures/keyboard.png")
-    assert "Mechanical Keyboard" not in reply
+    assert responder.calls
     assert "Image summary:" in reply
-    assert "commerce-agent scope" in reply.lower() or "commerce agent" in reply.lower()
 
 
 def test_run_pipeline_returns_observable_trace() -> None:
@@ -179,9 +191,11 @@ def test_run_pipeline_returns_observable_trace() -> None:
 
 
 def test_chat_pipeline_does_not_touch_catalog_search() -> None:
+    responder = FakeChatResponder("Capability summary.")
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("unused", []),
         search_repository=StubSearchRepository(),
+        chat_responder=responder,
     )
     result = agent.run_pipeline(prompt="What can you do?", limit=3)
     assert result.intent == "chat"
@@ -192,51 +206,61 @@ def test_chat_pipeline_does_not_touch_catalog_search() -> None:
 
 
 def test_chat_greeting_returns_natural_reply() -> None:
+    responder = FakeChatResponder("Hello from the scoped commerce agent.")
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("unused", []),
         search_repository=StubSearchRepository(),
+        chat_responder=responder,
     )
     result = agent.run_pipeline(prompt="你好啊", limit=3)
     assert result.intent == "chat"
-    assert "commerce agent" in result.content.lower()
-    assert "only 4 capabilities" in result.content.lower()
+    assert result.content == "Hello from the scoped commerce agent."
     assert result.trace.retrieval is None
 
 
 def test_chat_capability_question_returns_capability_summary() -> None:
+    responder = FakeChatResponder("Capability summary.")
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("unused", []),
         search_repository=StubSearchRepository(),
+        chat_responder=responder,
     )
     result = agent.run_pipeline(prompt="hello，你可以提供哪些服务", limit=3)
     assert result.intent == "chat"
-    assert "commerce agent" in result.content.lower() or "commerce agent" in result.content
-    assert "text product search" in result.content.lower()
-    assert "image product search" in result.content.lower()
+    assert result.content == "Capability summary."
     assert result.trace.retrieval is None
 
 
 def test_english_capability_question_returns_capability_summary() -> None:
+    responder = FakeChatResponder("Capability summary.")
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("unused", []),
         search_repository=StubSearchRepository(),
+        chat_responder=responder,
     )
     result = agent.run_pipeline(prompt="hello, what kind of search can you provide?", limit=3)
     assert result.intent == "chat"
-    assert "text product search" in result.content.lower()
-    assert "image product search" in result.content.lower()
+    assert result.content == "Capability summary."
     assert result.trace.retrieval is None
 
 
 def test_general_chat_reply_stays_within_commerce_scope() -> None:
+    responder = FakeChatResponder("Scoped commerce-only reply.")
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("unused", []),
         search_repository=StubSearchRepository(),
+        chat_responder=responder,
     )
     result = agent.run_pipeline(prompt="Can you chat about random world history?", limit=3)
     assert result.intent == "chat"
-    assert "limited to the commerce-agent scope" in result.content.lower()
+    assert result.content == "Scoped commerce-only reply."
     assert result.trace.retrieval is None
+
+
+def test_fallback_chat_responder_stays_in_scope() -> None:
+    reply = FallbackChatResponder().generate("What can you do?")
+    assert "commerce agent" in reply.lower()
+    assert "database" in reply.lower()
 
 
 def test_multimodal_pipeline_uses_explicit_multimodal_branch() -> None:

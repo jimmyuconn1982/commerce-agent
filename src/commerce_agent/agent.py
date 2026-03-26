@@ -25,6 +25,7 @@ from pathlib import Path
 from typing import Callable
 
 from .catalog import Catalog
+from .chat_responder import ChatResponder, build_chat_responder
 from .models import (
     GenerationTrace,
     PipelineResult,
@@ -65,10 +66,12 @@ class CommerceAgent:
         catalog: Catalog | None = None,
         vision_analyzer: VisionAnalyzer | None = None,
         search_repository: SearchRepository | None = None,
+        chat_responder: ChatResponder | None = None,
     ) -> None:
         self.catalog = catalog or Catalog.from_json()
         self.vision_analyzer = vision_analyzer
         self.search_repository = search_repository or CatalogSearchRepository(self.catalog)
+        self.chat_responder = chat_responder
         self.router = build_router(self.catalog)
         self.tools = CommerceTools(self)
 
@@ -492,59 +495,11 @@ class CommerceAgent:
         analysis: VisionAnalysis | None,
         products: list[Product],
     ) -> str:
-        """Build a lightweight conversational response for chat mode."""
-        normalized = prompt.strip().lower()
-        if normalized in {"hi", "hello", "hey", "你好", "你好啊", "嗨", "哈喽"}:
-            return (
-                "Hi, I am a commerce agent. "
-                "I support only 4 capabilities: chat, text product search, image product search, "
-                "and multimodal product search. "
-                "If you want products, I only search items that exist in the database."
-            )
-        if any(
-            clue in normalized
-            for clue in (
-                "what can you do",
-                "what kind of service",
-                "what kind of search",
-                "what kind of searches",
-                "search service",
-                "types of services",
-                "what search can you provide",
-                "what searches can you provide",
-                "what services can you provide",
-                "what services",
-                "你可以提供",
-                "你可以做什么",
-                "提供哪些服务",
-                "提供哪些搜索",
-                "有哪些服务",
-            )
-        ):
-            return (
-                "I am a commerce agent with only 4 capabilities:\n"
-                "1. chat\n"
-                "2. text product search\n"
-                "3. image product search\n"
-                "4. multimodal product search\n"
-                "If you are clearly asking to search products in the database, I will use a search path; "
-                "otherwise I stay in general chat within this scope.\n"
-                "I only search products that already exist in the database."
-            )
-        if analysis:
-            lines = [
-                "My chat capability is limited to the commerce-agent scope.",
-                "I can explain how to use text, image, or multimodal product search, or help clarify how to search from this image.",
-                f"Image summary: {analysis.summary}",
-            ]
-            if analysis.tags:
-                lines.append(f"Image tags: {', '.join(analysis.tags)}")
-            lines.append("If you want products, tell me the product constraints or ask me to search the database from this image.")
-            return "\n".join(lines)
+        """Generate a scoped chat reply through the configured responder."""
+        return self._get_chat_responder().generate(prompt=prompt, analysis=analysis)
 
-        return (
-            "My chat capability is limited to the commerce-agent scope. "
-            "I can explain what I can do, how to use text, image, or multimodal product search, "
-            "and how to turn your request into a database product search. "
-            "If you want products, tell me the product constraints or upload an image so I can search the database."
-        )
+    def _get_chat_responder(self) -> ChatResponder:
+        """Lazily create the configured chat responder."""
+        if self.chat_responder is None:
+            self.chat_responder = build_chat_responder()
+        return self.chat_responder
