@@ -85,6 +85,49 @@ Search outcomes:
 - Candidates are fused, reranked, and then sent to an LLM for the final grounded answer
 - Final UI cards only show the products selected by the LLM
 
+## Deliverables Checklist
+
+This repository currently covers the requested deliverables:
+
+- User-friendly frontend interface
+  - chat-style web UI at `/`
+  - optional debug toggle
+  - product detail page at `/products/{sku}`
+- Documented agent API
+  - unified runtime API and debug API documented below
+  - typed response models in [src/commerce_agent/api_models.py](src/commerce_agent/api_models.py)
+- Code repository with README
+  - English README: [README.md](README.md)
+  - Chinese README: [README.zh-CN.md](README.zh-CN.md)
+
+## Technology Decisions
+
+This project intentionally uses a simple stack that is easy to demo, inspect, and evolve:
+
+- **FastAPI**
+  - small, explicit HTTP surface
+  - easy multipart handling for text + image requests
+  - easy to expose debug endpoints alongside the main API
+- **PostgreSQL + pgvector**
+  - one database for structured product data and vector retrieval
+  - easy joins across products, media, offers, sellers, and review stats
+  - good fit for local development and demo deployment
+- **Model-backed routing / enrichment / generation**
+  - small model for intent routing
+  - model-backed metadata enrichment during seed build
+  - grounded final response generation from reranked products
+- **Render Free for demo hosting**
+  - minimal ops for a one-user demo
+  - easy public URL sharing
+  - acceptable tradeoff despite cold starts and 30-day free Postgres expiry
+
+These choices optimize for:
+
+- demoability
+- backend observability
+- grounded retrieval behavior
+- low deployment friction
+
 ## Technical Implementation Path
 
 The current backend path is:
@@ -388,6 +431,98 @@ Important clarification:
 Important config is centralized in:
 
 - [src/commerce_agent/config.py](src/commerce_agent/config.py)
+
+## Documented Agent API
+
+The backend exposes one main user-facing API plus several debug endpoints.
+
+### Main runtime API
+
+#### `POST /api/message`
+
+Unified chat/search entrypoint.
+
+Form fields:
+
+- `text`: optional text prompt
+- `file`: optional local image upload
+- `image_url`: optional remote image URL
+- `limit`: optional integer, default `10`
+
+Behavior:
+
+- routes to `chat`, `text-search`, `image-search`, or `multimodal-search`
+- returns the grounded answer plus selected products
+
+Example:
+
+```bash
+curl -X POST http://127.0.0.1:8010/api/message \
+  -F 'text=I need fruit' \
+  -F 'limit=5'
+```
+
+Response shape:
+
+- `intent`
+- `content`
+- `analysis`
+- `matches`
+- `trace`
+- `limit`
+
+Schema:
+
+- [src/commerce_agent/api_models.py](src/commerce_agent/api_models.py)
+
+#### `GET /api/products/{product_ref}`
+
+Return one product detail page payload by `sku` or numeric id.
+
+Example:
+
+```bash
+curl http://127.0.0.1:8010/api/products/GRO-BRD-APP-016
+```
+
+### Debug API
+
+#### `GET /api/debug/seed-summary`
+
+Return row counts for:
+
+- categories
+- products
+- product media
+- search docs
+- text embeddings
+- image embeddings
+- multimodal embeddings
+
+#### `GET /api/debug/products`
+
+Return joined product rows for the debug explorer.
+
+Query parameters:
+
+- `limit`: optional, max `500`
+
+#### `GET /api/debug/products/{product_ref}`
+
+Return one fully joined debug product payload by `sku` or numeric id.
+
+#### `POST /api/debug/run`
+
+Run the same pipeline as `/api/message`, but intended for the debug GUI.
+
+Form fields:
+
+- `text`
+- `file`
+- `image_url`
+- `limit`
+
+This endpoint returns the full pipeline trace that the debug page renders.
 
 ## Database Setup
 

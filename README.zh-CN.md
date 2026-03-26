@@ -89,6 +89,49 @@ Provider 说明：
 - 候选先 fusion，再 rerank，最后送给 LLM 做 grounded final answer
 - 前端最终只展示 LLM 选中的 products，不直接把原始 top-k 全量摊给用户
 
+## Deliverables 对照
+
+当前仓库已经覆盖这 3 项交付物：
+
+- 用户友好的前端界面
+  - 聊天式主页面 `/`
+  - debug 开关
+  - 商品详情页 `/products/{sku}`
+- 有文档的 agent API
+  - 主运行时 API 和 debug API 见下文
+  - 返回 schema 定义在 [src/commerce_agent/api_models.py](src/commerce_agent/api_models.py)
+- 带 README 的代码仓库
+  - 英文版: [README.md](README.md)
+  - 中文版: [README.zh-CN.md](README.zh-CN.md)
+
+## 技术选型说明
+
+这个项目选择的技术栈是刻意偏“易于 demo、易于观察、易于演进”的：
+
+- **FastAPI**
+  - HTTP 接口简单直接
+  - 很适合 text + image 的 multipart 请求
+  - 很适合把 debug API 和主 API 放在同一个服务里
+- **PostgreSQL + pgvector**
+  - 用一套数据库同时承载结构化商品数据和向量检索
+  - 很适合产品、图片、seller、offer、review 的 join
+  - 本地开发和 demo 部署都比较顺手
+- **model-backed routing / enrichment / generation**
+  - 用小模型做 intent routing
+  - 在 build seed 时做 metadata enrichment
+  - 最终回答只基于 rerank 后产品做 grounded generation
+- **Render Free 作为 demo 部署**
+  - 一人 demo 足够省事
+  - 能快速给出公网 URL
+  - 接受 cold start 和 30 天数据库时限这个 tradeoff
+
+这些选型重点优化的是：
+
+- demo 展示
+- backend observability
+- grounded retrieval
+- 低部署成本
+
 ## 技术实现路径
 
 当前后端主路径是：
@@ -396,6 +439,98 @@ cp .env.example .env
 统一配置入口在：
 
 - [src/commerce_agent/config.py](src/commerce_agent/config.py)
+
+## 已文档化的 Agent API
+
+后端现在提供一个主运行时 API，再加一组 debug API。
+
+### 主运行时 API
+
+#### `POST /api/message`
+
+统一 chat/search 入口。
+
+表单字段：
+
+- `text`：可选文本输入
+- `file`：可选本地图片上传
+- `image_url`：可选远程图片 URL
+- `limit`：可选整数，默认 `10`
+
+行为：
+
+- 后端自动路由到 `chat`、`text-search`、`image-search` 或 `multimodal-search`
+- 返回 grounded answer 和最终选中的商品
+
+示例：
+
+```bash
+curl -X POST http://127.0.0.1:8010/api/message \
+  -F 'text=I need fruit' \
+  -F 'limit=5'
+```
+
+返回字段：
+
+- `intent`
+- `content`
+- `analysis`
+- `matches`
+- `trace`
+- `limit`
+
+返回 schema 定义：
+
+- [src/commerce_agent/api_models.py](src/commerce_agent/api_models.py)
+
+#### `GET /api/products/{product_ref}`
+
+按 `sku` 或数值 id 返回单个商品详情页对应的数据。
+
+示例：
+
+```bash
+curl http://127.0.0.1:8010/api/products/GRO-BRD-APP-016
+```
+
+### Debug API
+
+#### `GET /api/debug/seed-summary`
+
+返回这些表/索引的行数统计：
+
+- categories
+- products
+- product media
+- search docs
+- text embeddings
+- image embeddings
+- multimodal embeddings
+
+#### `GET /api/debug/products`
+
+返回 debug explorer 使用的 joined product rows。
+
+查询参数：
+
+- `limit`：可选，最大 `500`
+
+#### `GET /api/debug/products/{product_ref}`
+
+按 `sku` 或数值 id 返回单个产品的完整 debug payload。
+
+#### `POST /api/debug/run`
+
+执行和 `/api/message` 相同的 pipeline，但给 debug GUI 使用。
+
+表单字段：
+
+- `text`
+- `file`
+- `image_url`
+- `limit`
+
+这个接口会返回 debug 页面所需的完整 pipeline trace。
 
 ## 数据库部署
 
