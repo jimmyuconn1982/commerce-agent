@@ -32,6 +32,12 @@ Current code paths already using the shared writer:
 
 Future product ingest, admin writes, and background sync jobs should extend this module instead of issuing ad-hoc SQL writes elsewhere.
 
+You can run the policy check locally with:
+
+```bash
+python scripts/check_db_write_policy.py
+```
+
 ## Apply the Initial Schema
 
 Start the database:
