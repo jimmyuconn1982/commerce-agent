@@ -1,4 +1,4 @@
-const STORAGE_KEY = "commerce-agent-web-state-v1";
+const STORAGE_KEY = "commerce-agent-web-state-v2";
 
 const defaultUsers = [
   { id: "maya", name: "Maya Chen", role: "Trend shopper" },
