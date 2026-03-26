@@ -159,7 +159,7 @@ def test_chat_returns_guided_response() -> None:
     reply = agent.chat("I am looking for a compact keyboard for my desk", image_path="tests/fixtures/keyboard.png")
     assert "Mechanical Keyboard" not in reply
     assert "Image summary:" in reply
-    assert "general conversation" in reply.lower()
+    assert "commerce agent" in reply.lower() or "chat 能力" in reply
 
 
 def test_run_pipeline_returns_observable_trace() -> None:
@@ -198,7 +198,8 @@ def test_chat_greeting_returns_natural_reply() -> None:
     )
     result = agent.run_pipeline(prompt="你好啊", limit=3)
     assert result.intent == "chat"
-    assert "你好，我在" in result.content
+    assert "commerce agent" in result.content.lower() or "commerce agent" in result.content
+    assert "只提供 4 类能力" in result.content
     assert result.trace.retrieval is None
 
 
@@ -209,9 +210,9 @@ def test_chat_capability_question_returns_capability_summary() -> None:
     )
     result = agent.run_pipeline(prompt="hello，你可以提供哪些服务", limit=3)
     assert result.intent == "chat"
-    assert "普通聊天" in result.content
-    assert "text search" in result.content
-    assert "image search" in result.content
+    assert "commerce agent" in result.content.lower() or "commerce agent" in result.content
+    assert "text product search" in result.content.lower()
+    assert "image product search" in result.content.lower()
     assert result.trace.retrieval is None
 
 
@@ -222,8 +223,19 @@ def test_english_capability_question_returns_capability_summary() -> None:
     )
     result = agent.run_pipeline(prompt="hello, what kind of search can you provide?", limit=3)
     assert result.intent == "chat"
-    assert "text search" in result.content.lower()
-    assert "image search" in result.content.lower()
+    assert "text product search" in result.content.lower()
+    assert "image product search" in result.content.lower()
+    assert result.trace.retrieval is None
+
+
+def test_general_chat_reply_stays_within_commerce_scope() -> None:
+    agent = CommerceAgent(
+        vision_analyzer=FakeVisionAnalyzer("unused", []),
+        search_repository=StubSearchRepository(),
+    )
+    result = agent.run_pipeline(prompt="Can you chat about random world history?", limit=3)
+    assert result.intent == "chat"
+    assert "只限定在 commerce agent 的范围内" in result.content or "limited to commerce agent" in result.content.lower()
     assert result.trace.retrieval is None
 
 

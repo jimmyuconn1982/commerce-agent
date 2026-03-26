@@ -495,7 +495,12 @@ class CommerceAgent:
         """Build a lightweight conversational response for chat mode."""
         normalized = prompt.strip().lower()
         if normalized in {"hi", "hello", "hey", "你好", "你好啊", "嗨", "哈喽"}:
-            return "你好，我在。你可以直接和我聊天，也可以让我帮你做 text、image 或 multimodal 商品搜索。"
+            return (
+                "你好，我是一个 commerce agent。"
+                "我只提供 4 类能力：普通 chat、text product search、image product search、"
+                "text + image 的 multimodal product search。"
+                "如果你要查商品，我只会在数据库里搜索对应产品。"
+            )
         if any(
             clue in normalized
             for clue in (
@@ -514,19 +519,28 @@ class CommerceAgent:
             )
         ):
             return (
-                "我现在可以做 4 类事情：\n"
-                "1. 普通聊天\n"
-                "2. text search\n"
-                "3. image search\n"
-                "4. text + image 的 multimodal search\n"
-                "你可以直接输入需求，也可以上传图片让我一起检索。"
+                "我是一个 commerce agent，只提供 4 类能力：\n"
+                "1. chat\n"
+                "2. text product search\n"
+                "3. image product search\n"
+                "4. multimodal product search\n"
+                "如果你明确要搜索数据库中的产品，我会走 search 路线；否则我只做范围内的普通 chat。\n"
+                "需要说明的是，我搜索时只会查数据库里已有的产品。"
             )
-
-        lines = ["I can help with general conversation, or assist you in searching the catalog by text, image, or both."]
         if analysis:
-            lines.append(f"Image summary: {analysis.summary}")
+            lines = [
+                "我当前的 chat 能力只限定在 commerce agent 的范围内。",
+                "我可以说明怎么使用 text / image / multimodal product search，或者根据这张图片帮你明确接下来该怎么搜。",
+                f"Image summary: {analysis.summary}",
+            ]
             if analysis.tags:
                 lines.append(f"Image tags: {', '.join(analysis.tags)}")
-        if prompt:
-            lines.append(f"You said: {prompt}")
-        return "\n".join(lines)
+            lines.append("如果你想查商品，请直接说商品需求，或者让我基于这张图去搜索数据库。")
+            return "\n".join(lines)
+
+        return (
+            "我当前的 chat 能力只限定在 commerce agent 的范围内。"
+            "我可以回答：我能提供哪些能力、怎么使用 text / image / multimodal product search、"
+            "以及如何把你的需求转成数据库商品搜索。"
+            "如果你要查商品，请直接告诉我商品条件，或上传图片让我搜索数据库。"
+        )
