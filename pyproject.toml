@@ -29,6 +29,7 @@ commerce-agent-build-semantic-indexes = "commerce_agent.embeddings:build_semanti
 commerce-agent-semantic-index-status = "commerce_agent.embeddings:semantic_index_status_cli"
 commerce-agent-db-text-search = "commerce_agent.repository:search_text_cli"
 commerce-agent-render-setup = "commerce_agent.deploy:render_setup_cli"
+commerce-agent-render-start = "commerce_agent.deploy:render_start_cli"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

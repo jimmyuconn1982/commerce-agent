@@ -487,7 +487,7 @@ COMMERCE_AGENT_PORT=8010 commerce-agent-web
 
 - 创建一个免费的 Render web service
 - 创建一个免费的 Render Postgres
-- 在 predeploy 阶段自动执行：
+- 在首次启动时自动执行 bootstrap：
   - 安装 PostgreSQL extensions
   - 执行 schema migration
   - 拉取并生成 50 条公开产品 seed
@@ -513,11 +513,13 @@ COMMERCE_AGENT_PORT=8010 commerce-agent-web
      - `COMMERCE_AGENT_METADATA_API_KEY`
 5. 等待首次部署完成
 
-首次部署时，下面这个命令会在 predeploy 阶段自动执行：
+首次成功启动时，服务会运行：
 
 ```bash
-commerce-agent-render-setup
+commerce-agent-render-start
 ```
+
+这个命令会先检查数据库是否已经初始化；如果没有，就执行完整 bootstrap，然后再启动 web 服务。
 
 部署完成后，应用可访问：
 

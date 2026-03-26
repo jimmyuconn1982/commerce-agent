@@ -27,6 +27,7 @@ from pathlib import Path
 import psycopg
 
 from .embeddings import build_semantic_indexes, semantic_index_status
+from .web import main as web_main
 from .seed_data import (
     DEFAULT_DATABASE_URL,
     DEFAULT_PUBLIC_SEED_PATH,
@@ -67,6 +68,31 @@ def render_setup(
     return semantic_index_status(database_url=database_url)
 
 
+def render_environment_ready(database_url: str | None = None) -> bool:
+    """Return whether the target database already contains the demo dataset and indexes."""
+    database_url = database_url or os.getenv("DATABASE_URL", DEFAULT_DATABASE_URL)
+    try:
+        with psycopg.connect(database_url) as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                    SELECT
+                        (SELECT COUNT(*) FROM products) AS products,
+                        (SELECT COUNT(*) FROM product_embeddings WHERE embedding_type = 'text') AS text_embeddings,
+                        (SELECT COUNT(*) FROM product_embeddings WHERE embedding_type = 'image') AS image_embeddings,
+                        (SELECT COUNT(*) FROM product_embeddings WHERE embedding_type = 'multimodal') AS multimodal_embeddings
+                    """
+                )
+                row = cur.fetchone()
+    except Exception:
+        return False
+
+    if row is None:
+        return False
+    products, text_count, image_count, multimodal_count = row
+    return products > 0 and text_count > 0 and image_count > 0 and multimodal_count > 0
+
+
 def render_setup_cli() -> None:
     """CLI wrapper for Render predeploy bootstrap."""
     import argparse
@@ -86,3 +112,11 @@ def render_setup_cli() -> None:
         seed_skip=args.seed_skip,
     )
     print(json.dumps(status, indent=2))
+
+
+def render_start_cli() -> None:
+    """Start the demo web app and bootstrap the Render Free database on first launch."""
+    database_url = os.getenv("DATABASE_URL", DEFAULT_DATABASE_URL)
+    if not render_environment_ready(database_url):
+        render_setup(database_url=database_url)
+    web_main()

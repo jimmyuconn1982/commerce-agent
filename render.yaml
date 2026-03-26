@@ -5,8 +5,7 @@ services:
     plan: free
     region: oregon
     buildCommand: pip install -r requirements.txt && pip install -e .
-    preDeployCommand: commerce-agent-render-setup
-    startCommand: commerce-agent-web
+    startCommand: commerce-agent-render-start
     healthCheckPath: /api/debug/seed-summary
     envVars:
       - key: DATABASE_URL

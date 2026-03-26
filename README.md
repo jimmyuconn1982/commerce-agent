@@ -479,7 +479,7 @@ What the Blueprint does:
 
 - creates one free Render web service
 - creates one free Render Postgres instance
-- runs a predeploy bootstrap command:
+- runs a startup bootstrap command on first launch:
   - applies PostgreSQL extensions
   - applies schema migrations
   - fetches and writes the 50-product public seed
@@ -505,11 +505,13 @@ What the Blueprint does:
      - `COMMERCE_AGENT_METADATA_API_KEY`
 5. Wait for the initial deploy to finish
 
-After deployment, the predeploy command below will already have run:
+On the first successful app start, the service runs:
 
 ```bash
-commerce-agent-render-setup
+commerce-agent-render-start
 ```
+
+That command checks whether the database is already initialized. If not, it runs the full bootstrap once and then starts the web app.
 
 The app should then be available at:
 
