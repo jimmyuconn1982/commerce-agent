@@ -1,4 +1,4 @@
-const STORAGE_KEY = "commerce-agent-web-state-v2";
+const STORAGE_KEY = "commerce-agent-web-state-v3";
 
 const defaultUsers = [
   { id: "maya", name: "Maya Chen", role: "Trend shopper" },
@@ -21,6 +21,7 @@ const el = {
   attachImageBtn: document.querySelector("#attach-image-btn"),
   attachUrlBtn: document.querySelector("#attach-url-btn"),
   simUserToggle: document.querySelector("#sim-user-toggle"),
+  debugToggle: document.querySelector("#debug-toggle"),
   userPopover: document.querySelector("#user-popover"),
   attachmentPreview: document.querySelector("#attachment-preview"),
   messageTemplate: document.querySelector("#message-template"),
@@ -39,6 +40,7 @@ function loadState() {
     chatsByUser: { maya: [firstChat], daniel: [], sofia: [] },
     activeUserId: "maya",
     activeChatId: firstChat.id,
+    debugEnabled: false,
   };
 }
 
@@ -136,6 +138,7 @@ function renderChats() {
 function renderMessages() {
   const chat = currentChat();
   el.messages.innerHTML = "";
+  el.debugToggle.checked = Boolean(state.debugEnabled);
 
   if (!chat) {
     return;
@@ -235,18 +238,19 @@ function renderMessageBody(container, message) {
     container.appendChild(results);
   }
 
-  if (message.trace) {
-    const debug = document.createElement("details");
+  if (message.trace && state.debugEnabled) {
+    const debug = document.createElement("section");
     debug.className = "debug-trace";
-    debug.open = true;
     const steps = (message.trace.react?.steps || [])
       .map(
         (step) => `
           <div class="debug-step">
-            <div class="debug-step-title">${step.tool_name}</div>
+            <div class="debug-step-head">
+              <span class="debug-step-title">${step.tool_name}</span>
+            </div>
             <div class="debug-step-copy">${step.thought}</div>
-            <div class="debug-step-copy">${step.input_summary}</div>
-            <div class="debug-step-copy">${step.observation_summary}</div>
+            <div class="debug-step-copy"><strong>In:</strong> ${step.input_summary}</div>
+            <div class="debug-step-copy"><strong>Out:</strong> ${step.observation_summary}</div>
           </div>
         `,
       )
@@ -267,10 +271,10 @@ function renderMessageBody(container, message) {
       .join("");
 
     debug.innerHTML = `
-      <summary>Pipeline trace</summary>
-      <div class="debug-grid">
-        <div class="debug-chip"><strong>Intent</strong><span>${message.trace.router?.intent || "unknown"}</span></div>
-        <div class="debug-chip"><strong>Rationale</strong><span>${message.trace.router?.rationale || "n/a"}</span></div>
+      <div class="debug-head">Pipeline trace</div>
+      <div class="debug-inline">
+        <span class="debug-pill"><strong>Intent:</strong> ${message.trace.router?.intent || "unknown"}</span>
+        <span class="debug-pill"><strong>Router:</strong> ${message.trace.router?.rationale || "n/a"}</span>
       </div>
       <div class="debug-section">
         <div class="debug-label">Steps</div>
@@ -536,6 +540,11 @@ el.attachUrlBtn.addEventListener("click", () => {
 
 el.simUserToggle.addEventListener("click", () => {
   el.userPopover.classList.toggle("hidden");
+});
+
+el.debugToggle.addEventListener("change", () => {
+  state.debugEnabled = el.debugToggle.checked;
+  persistAndRender();
 });
 
 document.addEventListener("click", (event) => {

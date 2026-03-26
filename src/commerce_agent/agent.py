@@ -496,10 +496,10 @@ class CommerceAgent:
         normalized = prompt.strip().lower()
         if normalized in {"hi", "hello", "hey", "你好", "你好啊", "嗨", "哈喽"}:
             return (
-                "你好，我是一个 commerce agent。"
-                "我只提供 4 类能力：普通 chat、text product search、image product search、"
-                "text + image 的 multimodal product search。"
-                "如果你要查商品，我只会在数据库里搜索对应产品。"
+                "Hi, I am a commerce agent. "
+                "I support only 4 capabilities: chat, text product search, image product search, "
+                "and multimodal product search. "
+                "If you want products, I only search items that exist in the database."
             )
         if any(
             clue in normalized
@@ -519,28 +519,29 @@ class CommerceAgent:
             )
         ):
             return (
-                "我是一个 commerce agent，只提供 4 类能力：\n"
+                "I am a commerce agent with only 4 capabilities:\n"
                 "1. chat\n"
                 "2. text product search\n"
                 "3. image product search\n"
                 "4. multimodal product search\n"
-                "如果你明确要搜索数据库中的产品，我会走 search 路线；否则我只做范围内的普通 chat。\n"
-                "需要说明的是，我搜索时只会查数据库里已有的产品。"
+                "If you are clearly asking to search products in the database, I will use a search path; "
+                "otherwise I stay in general chat within this scope.\n"
+                "I only search products that already exist in the database."
             )
         if analysis:
             lines = [
-                "我当前的 chat 能力只限定在 commerce agent 的范围内。",
-                "我可以说明怎么使用 text / image / multimodal product search，或者根据这张图片帮你明确接下来该怎么搜。",
+                "My chat capability is limited to the commerce-agent scope.",
+                "I can explain how to use text, image, or multimodal product search, or help clarify how to search from this image.",
                 f"Image summary: {analysis.summary}",
             ]
             if analysis.tags:
                 lines.append(f"Image tags: {', '.join(analysis.tags)}")
-            lines.append("如果你想查商品，请直接说商品需求，或者让我基于这张图去搜索数据库。")
+            lines.append("If you want products, tell me the product constraints or ask me to search the database from this image.")
             return "\n".join(lines)
 
         return (
-            "我当前的 chat 能力只限定在 commerce agent 的范围内。"
-            "我可以回答：我能提供哪些能力、怎么使用 text / image / multimodal product search、"
-            "以及如何把你的需求转成数据库商品搜索。"
-            "如果你要查商品，请直接告诉我商品条件，或上传图片让我搜索数据库。"
+            "My chat capability is limited to the commerce-agent scope. "
+            "I can explain what I can do, how to use text, image, or multimodal product search, "
+            "and how to turn your request into a database product search. "
+            "If you want products, tell me the product constraints or upload an image so I can search the database."
         )

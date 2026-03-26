@@ -384,63 +384,64 @@ select {
 }
 
 .debug-trace {
-  margin-top: 12px;
+  margin-top: 10px;
   border: 1px solid var(--border);
   border-radius: 14px;
   background: #fafafa;
-  overflow: hidden;
+  padding: 10px 12px;
 }
 
-.debug-trace summary {
-  cursor: pointer;
-  padding: 10px 12px;
+.debug-head {
   font-size: 12px;
   color: var(--muted);
-  list-style: none;
+  margin-bottom: 8px;
 }
 
-.debug-trace summary::-webkit-details-marker {
-  display: none;
+.debug-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
 }
 
-.debug-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  padding: 0 12px 12px;
-}
-
-.debug-chip {
+.debug-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 10px;
+  border-radius: 999px;
+  padding: 4px 8px;
   background: #fff;
+  font-size: 11px;
 }
 
-.debug-chip strong,
 .debug-label,
 .debug-step-title {
-  display: block;
   font-size: 12px;
-  margin-bottom: 4px;
+  font-weight: 600;
 }
 
 .debug-section {
-  padding: 0 12px 12px;
+  margin-top: 8px;
+}
+
+.debug-step-head {
+  margin-bottom: 4px;
 }
 
 .debug-step {
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 10px;
+  padding: 8px 10px;
   background: #fff;
-  margin-bottom: 8px;
+  margin-top: 6px;
 }
 
 .debug-step-copy {
   font-size: 12px;
   color: var(--muted);
   line-height: 1.5;
+  margin-top: 4px;
 }
 
 .debug-table {
@@ -452,7 +453,7 @@ select {
 .debug-table th,
 .debug-table td {
   text-align: left;
-  padding: 8px 6px;
+  padding: 6px 6px;
   border-top: 1px solid var(--border);
 }
 
@@ -605,6 +606,7 @@ select {
 
 .attach-toggle,
 .attach-option,
+.debug-toggle,
 .sim-user-toggle,
 .url-field {
   border: 1px solid var(--border);
@@ -618,6 +620,21 @@ select {
   padding: 0 10px;
   height: 28px;
   font-size: 11px;
+}
+
+.debug-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  height: 28px;
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.debug-toggle input {
+  margin: 0;
 }
 
 .attach-toggle,
