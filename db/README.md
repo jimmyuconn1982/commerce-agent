@@ -48,6 +48,20 @@ docker compose exec -T postgres psql \
   -f /work/db/migrations/0002_embedding_dimension_1024.sql
 ```
 
+If you want the BigModel pipeline to use 2048-d embeddings, then apply:
+
+```bash
+docker compose exec -T postgres psql \
+  -U commerce_agent \
+  -d commerce_agent \
+  -f /work/db/migrations/0003_embedding_dimension_2048.sql
+```
+
+Note:
+- the 2048-d path keeps vector similarity as a direct scan in local PostgreSQL
+- pgvector HNSW indexes reject dimensions above 2000, so ANN indexes are disabled for this mode
+- if you want local ANN indexes, stay on the 1024-d migration instead
+
 Build the local tiny seed bundle:
 
 ```bash
@@ -97,7 +111,7 @@ Build semantic indexes with BigModel embeddings:
 export COMMERCE_AGENT_EMBEDDING_PROVIDER=bigmodel
 export BIGMODEL_API_KEY=YOUR_API_KEY
 export BIGMODEL_EMBEDDING_MODEL=embedding-3
-export BIGMODEL_EMBEDDING_DIMENSIONS=1024
+export BIGMODEL_EMBEDDING_DIMENSIONS=2048
 commerce-agent-build-semantic-indexes
 commerce-agent-semantic-index-status
 ```
