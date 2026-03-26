@@ -28,6 +28,7 @@ from urllib.request import Request, urlopen
 
 import psycopg
 
+from .config import get_settings
 from .db_write import DatabaseWriter
 from .ids import SnowflakeLikeIdGenerator
 from .seed_data import DEFAULT_DATABASE_URL
@@ -86,12 +87,13 @@ class BigModelEmbeddingProvider:
         model_name: str | None = None,
         dimensions: int | None = None,
     ) -> None:
-        self.api_key = api_key or os.getenv("BIGMODEL_API_KEY", "")
+        settings = get_settings().embeddings
+        self.api_key = api_key or settings.api_key
         if not self.api_key:
             raise ValueError("BIGMODEL_API_KEY is required when COMMERCE_AGENT_EMBEDDING_PROVIDER=bigmodel")
-        self.base_url = (base_url or os.getenv("BIGMODEL_BASE_URL") or "https://open.bigmodel.cn/api/paas/v4").rstrip("/")
-        self.model_name = model_name or os.getenv("BIGMODEL_EMBEDDING_MODEL") or "embedding-3"
-        self.dimensions = int(os.getenv("BIGMODEL_EMBEDDING_DIMENSIONS") or dimensions or EMBEDDING_DIMENSION)
+        self.base_url = (base_url or settings.base_url).rstrip("/")
+        self.model_name = model_name or settings.model_name
+        self.dimensions = dimensions or settings.dimensions or EMBEDDING_DIMENSION
         self.model_version = f"dim-{self.dimensions}"
 
     def embed_text(self, text: str) -> list[float]:
@@ -127,7 +129,7 @@ class BigModelEmbeddingProvider:
 
 def get_embedding_provider() -> DeterministicEmbeddingProvider | BigModelEmbeddingProvider:
     """Resolve the active embedding provider from environment settings."""
-    provider_name = (os.getenv("COMMERCE_AGENT_EMBEDDING_PROVIDER") or "deterministic").strip().lower()
+    provider_name = get_settings().embeddings.provider
     if provider_name == "bigmodel":
         return BigModelEmbeddingProvider()
     return DeterministicEmbeddingProvider()

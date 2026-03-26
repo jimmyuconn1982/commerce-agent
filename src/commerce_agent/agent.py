@@ -53,7 +53,7 @@ from .tools import (
     TextSearchInput,
     TextSearchPathInput,
 )
-from .router import HeuristicRouter, RouterCase
+from .router import RouterCase, build_router
 from .vision import OpenAIVisionAnalyzer, VisionAnalyzer
 
 
@@ -69,7 +69,7 @@ class CommerceAgent:
         self.catalog = catalog or Catalog.from_json()
         self.vision_analyzer = vision_analyzer
         self.search_repository = search_repository or CatalogSearchRepository(self.catalog)
-        self.router = HeuristicRouter(self.catalog)
+        self.router = build_router(self.catalog)
         self.tools = CommerceTools(self)
 
     def text_search(
@@ -500,6 +500,11 @@ class CommerceAgent:
             clue in normalized
             for clue in (
                 "what can you do",
+                "what kind of search",
+                "what kind of searches",
+                "what search can you provide",
+                "what searches can you provide",
+                "what services can you provide",
                 "what services",
                 "你可以提供",
                 "你可以做什么",

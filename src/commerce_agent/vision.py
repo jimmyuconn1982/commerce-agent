@@ -20,10 +20,10 @@ Upgrade path:
 
 import base64
 import mimetypes
-import os
 from pathlib import Path
 from typing import Protocol
 
+from .config import get_settings
 from .models import VisionAnalysis
 
 
@@ -40,7 +40,7 @@ class OpenAIVisionAnalyzer:
 
     def __init__(self, model: str | None = None) -> None:
         self._client = None
-        self.model = model or os.getenv("COMMERCE_AGENT_VISION_MODEL", "gpt-4.1-mini")
+        self.model = model or get_settings().vision.model_name
 
     def analyze(self, image_path: Path) -> VisionAnalysis:
         """Analyze one local image and return summary plus visual tags."""
@@ -53,15 +53,16 @@ class OpenAIVisionAnalyzer:
 
         # Mock mode keeps the image pipeline testable before real API access is
         # configured, which is useful for UI and backend integration work.
-        if not os.getenv("OPENAI_API_KEY"):
-            if os.getenv("COMMERCE_AGENT_MOCK_VISION") == "1":
+        settings = get_settings().vision
+        if not settings.api_key:
+            if settings.mock_enabled:
                 return self._mock_analysis(image_path)
             raise ValueError("OPENAI_API_KEY is required for image understanding")
 
         if self._client is None:
             from openai import OpenAI
 
-            self._client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+            self._client = OpenAI(api_key=settings.api_key)
 
         base64_image = base64.b64encode(image_path.read_bytes()).decode("utf-8")
         response = self._client.responses.create(
@@ -91,7 +92,7 @@ class OpenAIVisionAnalyzer:
 
     def _mock_analysis(self, image_path: Path) -> VisionAnalysis:
         """Return a deterministic mock analysis for local development."""
-        raw = os.getenv("COMMERCE_AGENT_MOCK_VISION_RESPONSE", "").strip()
+        raw = get_settings().vision.mock_response
         if raw:
             return self._parse_response(image_path=image_path, text=raw)
 

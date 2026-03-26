@@ -215,6 +215,18 @@ def test_chat_capability_question_returns_capability_summary() -> None:
     assert result.trace.retrieval is None
 
 
+def test_english_capability_question_returns_capability_summary() -> None:
+    agent = CommerceAgent(
+        vision_analyzer=FakeVisionAnalyzer("unused", []),
+        search_repository=StubSearchRepository(),
+    )
+    result = agent.run_pipeline(prompt="hello, what kind of search can you provide?", limit=3)
+    assert result.intent == "chat"
+    assert "text search" in result.content.lower()
+    assert "image search" in result.content.lower()
+    assert result.trace.retrieval is None
+
+
 def test_multimodal_pipeline_uses_explicit_multimodal_branch() -> None:
     agent = CommerceAgent(
         vision_analyzer=FakeVisionAnalyzer("raised keys desk", ["keyboard", "desk"]),

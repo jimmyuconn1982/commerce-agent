@@ -19,9 +19,13 @@ Upgrade path:
 """
 
 from dataclasses import dataclass
+import json
+import os
 import re
+from urllib.request import Request, urlopen
 
 from .catalog import Catalog
+from .config import get_settings
 from .models import RouterTrace
 
 CHAT_PATTERNS = (
@@ -134,6 +138,14 @@ class RouterCase:
 
     prompt: str = ""
     has_image: bool = False
+
+
+class IntentRouter:
+    """Minimal router interface shared by heuristic and model-backed routers."""
+
+    def route(self, case: RouterCase) -> RouterTrace:
+        """Return one routed decision for the provided case."""
+        raise NotImplementedError
 
 
 class HeuristicRouter:
@@ -299,3 +311,133 @@ class HeuristicRouter:
             if re.search(r"[\u4e00-\u9fff]", term) and term in normalized:
                 hits.append(term)
         return hits
+
+
+class BigModelIntentRouter(IntentRouter):
+    """Small-model router with heuristic fallback for robustness."""
+
+    VALID_INTENTS = {"chat", "text-search", "image-search", "multimodal-search"}
+
+    def __init__(
+        self,
+        fallback_router: HeuristicRouter,
+        *,
+        api_key: str | None = None,
+        base_url: str | None = None,
+        model_name: str | None = None,
+    ) -> None:
+        self.fallback_router = fallback_router
+        settings = get_settings().router
+        self.api_key = api_key or settings.api_key
+        self.base_url = (base_url or settings.base_url).rstrip("/")
+        self.model_name = model_name or settings.model_name
+
+    def route(self, case: RouterCase) -> RouterTrace:
+        """Route with a small model first, then fall back to heuristics on failure."""
+        if not self.api_key:
+            fallback = self.fallback_router.route(case)
+            return RouterTrace(
+                prompt=fallback.prompt,
+                has_image=fallback.has_image,
+                intent=fallback.intent,
+                rationale=f"heuristic fallback: {fallback.rationale}",
+            )
+
+        try:
+            intent, rationale = self._classify(case)
+            if intent not in self.VALID_INTENTS:
+                raise ValueError(f"invalid intent {intent!r}")
+            return RouterTrace(
+                prompt=case.prompt,
+                has_image=case.has_image,
+                intent=intent,
+                rationale=f"bigmodel:{self.model_name}; {rationale}",
+            )
+        except Exception as exc:
+            fallback = self.fallback_router.route(case)
+            return RouterTrace(
+                prompt=fallback.prompt,
+                has_image=fallback.has_image,
+                intent=fallback.intent,
+                rationale=f"heuristic fallback after llm error ({exc.__class__.__name__}): {fallback.rationale}",
+            )
+
+    def _classify(self, case: RouterCase) -> tuple[str, str]:
+        """Ask the small model for one of the four supported intents."""
+        body = json.dumps(
+            {
+                "model": self.model_name,
+                "temperature": 0,
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": (
+                            "You are an intent router for a commerce assistant. "
+                            "Classify the request into exactly one of: "
+                            "chat, text-search, image-search, multimodal-search. "
+                            "Return strict JSON with keys intent and rationale. "
+                            "Rules: greetings, capability questions, model questions, and general conversation are chat. "
+                            "Product lookup by text is text-search. "
+                            "Image only is image-search. "
+                            "Text plus image is multimodal-search."
+                        ),
+                    },
+                    {
+                        "role": "user",
+                        "content": json.dumps(
+                            {
+                                "prompt": case.prompt,
+                                "has_image": case.has_image,
+                            },
+                            ensure_ascii=False,
+                        ),
+                    },
+                ],
+                "response_format": {"type": "json_object"},
+            }
+        ).encode("utf-8")
+        request = Request(
+            f"{self.base_url}/chat/completions",
+            data=body,
+            headers={
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+                "User-Agent": "commerce-agent/0.1",
+            },
+            method="POST",
+        )
+        with urlopen(request) as response:
+            payload = json.loads(response.read().decode("utf-8"))
+        content = payload["choices"][0]["message"]["content"]
+        parsed = self._parse_content(content)
+        return str(parsed["intent"]).strip(), str(parsed.get("rationale", "")).strip() or "llm classification"
+
+    def _parse_content(self, content: str) -> dict[str, object]:
+        """Parse strict or wrapped JSON model output."""
+        stripped = content.strip()
+        if stripped.startswith("```"):
+            stripped = re.sub(r"^```(?:json)?\s*", "", stripped)
+            stripped = re.sub(r"\s*```$", "", stripped)
+        if not stripped.startswith("{"):
+            start = stripped.find("{")
+            end = stripped.rfind("}")
+            if start >= 0 and end > start:
+                stripped = stripped[start : end + 1]
+        parsed = json.loads(stripped)
+        if not isinstance(parsed, dict):
+            raise ValueError("router response is not a JSON object")
+        return parsed
+
+
+def build_router(catalog: Catalog) -> IntentRouter:
+    """Resolve the active router implementation from environment settings."""
+    heuristic = HeuristicRouter(catalog)
+    settings = get_settings().router
+    provider = settings.provider
+    if provider == "heuristic":
+        return heuristic
+    if provider == "bigmodel":
+        return BigModelIntentRouter(heuristic)
+    if provider == "auto" and settings.api_key:
+        return BigModelIntentRouter(heuristic)
+    return heuristic

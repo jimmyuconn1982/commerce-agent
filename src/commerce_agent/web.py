@@ -32,6 +32,7 @@ from fastapi.staticfiles import StaticFiles
 
 from .agent import CommerceAgent
 from .api_models import RoutedMessageResponse
+from .config import get_settings
 from .repository import PostgresSearchRepository
 
 STATIC_DIR = Path(__file__).resolve().parents[2] / "web"
@@ -161,6 +162,5 @@ def _suffix_from_content_type(content_type: str) -> str:
 
 def main() -> None:
     """Start the local FastAPI server with environment-based host and port."""
-    host = os.getenv("COMMERCE_AGENT_HOST", "127.0.0.1")
-    port = int(os.getenv("COMMERCE_AGENT_PORT", "8000"))
-    uvicorn.run("commerce_agent.web:app", host=host, port=port, reload=False)
+    settings = get_settings().web
+    uvicorn.run("commerce_agent.web:app", host=settings.host, port=settings.port, reload=False)

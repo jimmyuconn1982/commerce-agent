@@ -30,6 +30,11 @@
     "expected_intent": "chat"
   },
   {
+    "prompt": "hello, what kind of search can you provide?",
+    "has_image": false,
+    "expected_intent": "chat"
+  },
+  {
     "prompt": "",
     "has_image": true,
     "expected_intent": "image-search"
