@@ -1,0 +1,56 @@
+services:
+  - type: web
+    name: commerce-agent-demo
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt && pip install -e .
+    preDeployCommand: commerce-agent-render-setup
+    startCommand: commerce-agent-web
+    healthCheckPath: /api/debug/seed-summary
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: commerce-agent-demo-db
+          property: connectionString
+      - key: COMMERCE_AGENT_HOST
+        value: 0.0.0.0
+      - key: COMMERCE_AGENT_PORT
+        value: 10000
+      - key: COMMERCE_AGENT_ROUTER_PROVIDER
+        value: auto
+      - key: COMMERCE_AGENT_ROUTER_MODEL
+        value: glm-4-flash
+      - key: COMMERCE_AGENT_CHAT_PROVIDER
+        value: bigmodel
+      - key: COMMERCE_AGENT_CHAT_MODEL
+        value: glm-4-flash
+      - key: COMMERCE_AGENT_EMBEDDING_PROVIDER
+        value: bigmodel
+      - key: BIGMODEL_EMBEDDING_MODEL
+        value: embedding-3
+      - key: BIGMODEL_EMBEDDING_DIMENSIONS
+        value: 1024
+      - key: COMMERCE_AGENT_METADATA_PROVIDER
+        value: bigmodel
+      - key: COMMERCE_AGENT_METADATA_MODEL
+        value: glm-4-flash
+      - key: COMMERCE_AGENT_VISION_PROVIDER
+        value: bigmodel
+      - key: COMMERCE_AGENT_VISION_MODEL
+        value: glm-4.5v
+      - key: BIGMODEL_API_KEY
+        sync: false
+      - key: COMMERCE_AGENT_CHAT_API_KEY
+        sync: false
+      - key: COMMERCE_AGENT_VISION_API_KEY
+        sync: false
+      - key: COMMERCE_AGENT_METADATA_API_KEY
+        sync: false
+
+databases:
+  - name: commerce-agent-demo-db
+    databaseName: commerce_agent
+    user: commerce_agent
+    plan: free
+    region: oregon

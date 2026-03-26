@@ -473,6 +473,58 @@ COMMERCE_AGENT_PORT=8010 commerce-agent-web
 - `http://127.0.0.1:8010/`
 - `http://127.0.0.1:8010/debug`
 
+## 部署到 Render Free
+
+如果只是给一个用户看 demo，这个仓库当前最简单的线上方案就是 Render Blueprint。
+
+仓库里已经包含：
+
+- [render.yaml](render.yaml)
+- [Dockerfile](Dockerfile)
+- [src/commerce_agent/deploy.py](src/commerce_agent/deploy.py)
+
+这个 Blueprint 会做的事：
+
+- 创建一个免费的 Render web service
+- 创建一个免费的 Render Postgres
+- 在 predeploy 阶段自动执行：
+  - 安装 PostgreSQL extensions
+  - 执行 schema migration
+  - 拉取并生成 50 条公开产品 seed
+  - 把 seed 导入数据库
+  - 构建 text / image / multimodal semantic index
+
+### Render Free 的限制
+
+- 免费 web service 在空闲后可能会休眠，所以第一次访问会慢
+- 免费 Render Postgres 有 30 天时限
+- 这个方案适合 demo，不适合长期稳定生产使用
+
+### 部署步骤
+
+1. 把仓库 push 到 GitHub
+2. 在 Render 中创建一个新的 Blueprint
+3. 指向这个仓库后，Render 会读取 [render.yaml](render.yaml)
+4. 按提示填写：
+   - `BIGMODEL_API_KEY`
+   - 可选：
+     - `COMMERCE_AGENT_CHAT_API_KEY`
+     - `COMMERCE_AGENT_VISION_API_KEY`
+     - `COMMERCE_AGENT_METADATA_API_KEY`
+5. 等待首次部署完成
+
+首次部署时，下面这个命令会在 predeploy 阶段自动执行：
+
+```bash
+commerce-agent-render-setup
+```
+
+部署完成后，应用可访问：
+
+- `/`
+- `/debug`
+- `/products/{sku}`
+
 ## Docker 本地部署流程
 
 当前仓库已经内置了本地开发用的 Docker PostgreSQL：
@@ -492,6 +544,10 @@ commerce-agent-load-seed --seed-path db/seeds/public_seed_50.json --truncate-fir
 commerce-agent-build-semantic-indexes
 COMMERCE_AGENT_PORT=8010 commerce-agent-web
 ```
+
+如果你也想把应用本身做成容器镜像，仓库里还提供了：
+
+- [Dockerfile](Dockerfile)
 
 ## 测试命令
 

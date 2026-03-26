@@ -465,6 +465,58 @@ Then open:
 - `http://127.0.0.1:8010/`
 - `http://127.0.0.1:8010/debug`
 
+## Deploy to Render Free
+
+For a one-user demo, the simplest hosted option in this repo is a Render Blueprint.
+
+Included deployment assets:
+
+- [render.yaml](render.yaml)
+- [Dockerfile](Dockerfile)
+- [src/commerce_agent/deploy.py](src/commerce_agent/deploy.py)
+
+What the Blueprint does:
+
+- creates one free Render web service
+- creates one free Render Postgres instance
+- runs a predeploy bootstrap command:
+  - applies PostgreSQL extensions
+  - applies schema migrations
+  - fetches and writes the 50-product public seed
+  - loads the seed into the database
+  - builds text, image, and multimodal semantic indexes
+
+### Render Free limitations
+
+- the free web service can spin down after inactivity, so the first request may be slow
+- the free Render Postgres instance has a 30-day limit
+- this is suitable for demo use, not a durable production environment
+
+### Deploy steps
+
+1. Push this repo to GitHub
+2. In Render, create a new Blueprint and point it to this repository
+3. Render will read [render.yaml](render.yaml)
+4. When prompted, fill in:
+   - `BIGMODEL_API_KEY`
+   - optionally:
+     - `COMMERCE_AGENT_CHAT_API_KEY`
+     - `COMMERCE_AGENT_VISION_API_KEY`
+     - `COMMERCE_AGENT_METADATA_API_KEY`
+5. Wait for the initial deploy to finish
+
+After deployment, the predeploy command below will already have run:
+
+```bash
+commerce-agent-render-setup
+```
+
+The app should then be available at:
+
+- `/`
+- `/debug`
+- `/products/{sku}`
+
 ## Docker Deployment
 
 Current repo includes Dockerized PostgreSQL for local development:
@@ -484,6 +536,10 @@ commerce-agent-load-seed --seed-path db/seeds/public_seed_50.json --truncate-fir
 commerce-agent-build-semantic-indexes
 COMMERCE_AGENT_PORT=8010 commerce-agent-web
 ```
+
+If you want a containerized app image as well, this repo also includes:
+
+- [Dockerfile](Dockerfile)
 
 ## Test Commands
 
