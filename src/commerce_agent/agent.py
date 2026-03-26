@@ -505,8 +505,11 @@ class CommerceAgent:
             clue in normalized
             for clue in (
                 "what can you do",
+                "what kind of service",
                 "what kind of search",
                 "what kind of searches",
+                "search service",
+                "types of services",
                 "what search can you provide",
                 "what searches can you provide",
                 "what services can you provide",
