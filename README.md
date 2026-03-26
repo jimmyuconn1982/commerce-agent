@@ -14,10 +14,32 @@ Minimal Python `commerce_agent` focused on chat and retrieval. It supports:
 
 ```bash
 python3 -m pip install -e .
+cp .env.example .env
 commerce-agent chat "I want a compact keyboard for my desk"
 commerce-agent text-search keyboard
 commerce-agent-web
 ```
+
+## Environment Config
+
+Local development supports a project-root `.env` file. Start by copying:
+
+```bash
+cp .env.example .env
+```
+
+Then fill in the keys you need:
+
+- `BIGMODEL_API_KEY`
+- `OPENAI_API_KEY`
+
+Common settings now live in one place and are loaded through the backend config layer:
+
+- router provider / model
+- embedding provider / model / dimensions
+- vision model
+- database URL
+- web host / port
 
 ## Commands
 

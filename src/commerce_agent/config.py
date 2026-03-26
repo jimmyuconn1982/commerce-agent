@@ -20,6 +20,10 @@ Upgrade path:
 from dataclasses import dataclass
 import os
 
+from .env import load_dotenv
+
+load_dotenv()
+
 
 @dataclass(slots=True)
 class RouterSettings:
