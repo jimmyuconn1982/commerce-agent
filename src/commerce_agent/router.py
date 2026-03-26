@@ -377,9 +377,18 @@ class BigModelIntentRouter(IntentRouter):
                             "chat, text-search, image-search, multimodal-search. "
                             "Return strict JSON with keys intent and rationale. "
                             "Rules: greetings, capability questions, model questions, and general conversation are chat. "
+                            "Questions about what the assistant can do, what search types it supports, "
+                            "what services it provides, or how it works are ALWAYS chat, even if they contain "
+                            "the words search, 搜索, service, 服务, find, or recommend. "
                             "Product lookup by text is text-search. "
                             "Image only is image-search. "
-                            "Text plus image is multimodal-search."
+                            "Text plus image is multimodal-search. "
+                            "Examples: "
+                            "1) '你好，你可以提供哪些搜索服务' -> chat "
+                            "2) 'what kind of search can you provide?' -> chat "
+                            "3) '帮我找一个红色帽子' -> text-search "
+                            "4) image with no text -> image-search "
+                            "5) 'find a green bag like this image' with image -> multimodal-search."
                         ),
                     },
                     {
