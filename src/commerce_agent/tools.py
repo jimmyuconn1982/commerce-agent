@@ -197,6 +197,13 @@ class CommerceTools:
 
     def generate_search_summary(self, data: SearchSummaryInput) -> str:
         """Return a short UI-friendly summary for retrieval paths."""
+        if not data.matches:
+            empty_messages = {
+                "text-search": "No matching products were found in the database for this text query.",
+                "image-search": "No matching products were found in the database for this image.",
+                "multimodal-search": "No matching products were found in the database for this text + image request.",
+            }
+            return empty_messages.get(data.intent, "No matching products were found in the database.")
         label = {
             "text-search": "text",
             "image-search": "visual",

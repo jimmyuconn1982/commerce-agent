@@ -366,3 +366,36 @@ def test_multimodal_search_path_uses_search_repository() -> None:
     assert repository.queries == [("multimodal:office:raised keys desk", 3)]
     assert result.intent == "multimodal-search"
     assert result.matches[0].id == 723450000000000006
+
+
+def test_text_search_with_no_matches_returns_fallback_summary() -> None:
+    agent = CommerceAgent(
+        vision_analyzer=FakeVisionAnalyzer("unused", []),
+        search_repository=StubSearchRepository(),
+    )
+    summary = agent.tools.generate_search_summary(
+        type("SearchSummaryInputLike", (), {"intent": "text-search", "matches": []})()
+    )
+    assert summary == "No matching products were found in the database for this text query."
+
+
+def test_image_search_with_no_matches_returns_fallback_summary() -> None:
+    agent = CommerceAgent(
+        vision_analyzer=FakeVisionAnalyzer("unused", []),
+        search_repository=StubSearchRepository(),
+    )
+    summary = agent.tools.generate_search_summary(
+        type("SearchSummaryInputLike", (), {"intent": "image-search", "matches": []})()
+    )
+    assert summary == "No matching products were found in the database for this image."
+
+
+def test_multimodal_search_with_no_matches_returns_fallback_summary() -> None:
+    agent = CommerceAgent(
+        vision_analyzer=FakeVisionAnalyzer("unused", []),
+        search_repository=StubSearchRepository(),
+    )
+    summary = agent.tools.generate_search_summary(
+        type("SearchSummaryInputLike", (), {"intent": "multimodal-search", "matches": []})()
+    )
+    assert summary == "No matching products were found in the database for this text + image request."
