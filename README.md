@@ -117,6 +117,6 @@ To switch semantic indexing from the local mock provider to BigModel embeddings,
 export COMMERCE_AGENT_EMBEDDING_PROVIDER=bigmodel
 export BIGMODEL_API_KEY=YOUR_API_KEY
 export BIGMODEL_EMBEDDING_MODEL=embedding-3
-export BIGMODEL_EMBEDDING_DIMENSIONS=2048
+export BIGMODEL_EMBEDDING_DIMENSIONS=1024
 commerce-agent-build-semantic-indexes
 ```

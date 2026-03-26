@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS product_embeddings (
     embedding_type TEXT NOT NULL CHECK (embedding_type IN ('text', 'image', 'multimodal')),
     model_name TEXT NOT NULL,
     model_version TEXT,
-    embedding VECTOR(2048) NOT NULL,
+    embedding VECTOR(1024) NOT NULL,
     source_text TEXT,
     source_image_url TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -132,9 +132,20 @@ CREATE INDEX IF NOT EXISTS idx_product_embeddings_product_id
 CREATE INDEX IF NOT EXISTS idx_product_embeddings_type
     ON product_embeddings(embedding_type);
 
--- Keep vector indexes out of the default 2048-d schema for now.
--- pgvector HNSW indexes reject dimensions above 2000, and the local
--- development dataset is still small enough for direct vector scans.
+CREATE INDEX IF NOT EXISTS idx_product_embeddings_text_vector
+    ON product_embeddings
+    USING hnsw (embedding vector_cosine_ops)
+    WHERE embedding_type = 'text';
+
+CREATE INDEX IF NOT EXISTS idx_product_embeddings_image_vector
+    ON product_embeddings
+    USING hnsw (embedding vector_cosine_ops)
+    WHERE embedding_type = 'image';
+
+CREATE INDEX IF NOT EXISTS idx_product_embeddings_multimodal_vector
+    ON product_embeddings
+    USING hnsw (embedding vector_cosine_ops)
+    WHERE embedding_type = 'multimodal';
 
 CREATE OR REPLACE FUNCTION set_updated_at()
 RETURNS TRIGGER AS $$
