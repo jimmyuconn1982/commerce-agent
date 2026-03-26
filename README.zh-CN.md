@@ -30,6 +30,41 @@ Provider 说明：
 - 对 router / chat / metadata / vision 这类 model-backed 能力，当前代码期望的是 **OpenAI-compatible API 形态**
 - 所以下面的示例会优先写 BigModel 环境变量，因为这是目前仓库里真正验证过的配置
 
+## 在线 Demo
+
+公开演示地址：
+
+- https://commerce-agent-demo.onrender.com/
+
+说明：
+
+- 当前 demo 使用的是 **50 个 seed products**
+- 目标是方便测试 product search，不是完整电商目录
+- 由于部署在 Render Free，空闲后第一次访问可能会比较慢
+
+当前 seed 产品大类：
+
+- `groceries` — 27 个
+  - 例如：牛肉、鸡肉、鱼排、鸡蛋、牛奶、土豆、米、苹果、猕猴桃、草莓、黄瓜、辣椒
+- `furniture` — 5 个
+  - 例如：沙发、床、床头柜、办公椅
+- `beauty` — 5 个
+  - 例如：睫毛膏、口红、指甲油、散粉
+- `fragrances` — 5 个
+  - 例如：CK One、Gucci Bloom、Dior J'adore
+- `home decoration` — 5 个
+  - 例如：花盆、台灯、相框
+- `kitchen accessories` — 3 个
+  - 例如：竹铲、打蛋器、杯子
+
+建议测试的 query：
+
+- `i need fruit`
+- `有没有牛肉可以推荐的`
+- `recommend a sofa`
+- `find vegetables for cooking`
+- 上传一张图片，再让它找相似产品
+
 ## 页面
 
 主聊天页面：

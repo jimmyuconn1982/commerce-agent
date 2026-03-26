@@ -30,6 +30,41 @@ Provider note:
 - for model-backed routing / chat / metadata / vision, the practical expectation is an **OpenAI-compatible API shape**
 - README examples below therefore use BigModel environment variables because that is the provider actually validated in this repo right now
 
+## Live Demo
+
+Public demo:
+
+- https://commerce-agent-demo.onrender.com/
+
+Demo note:
+
+- this demo currently uses a **50-product seed dataset**
+- it is intended for product-search testing, not as a full ecommerce catalog
+- because it runs on Render Free, the first request after inactivity may be slow
+
+Current seed categories:
+
+- `groceries` — 27 products
+  - examples: beef steak, chicken meat, fish steak, eggs, milk, potatoes, rice, apples, kiwi, strawberry, cucumber, peppers
+- `furniture` — 5 products
+  - examples: sofa, bed, bedside table, executive chair
+- `beauty` — 5 products
+  - examples: mascara, lipstick, nail polish, powder
+- `fragrances` — 5 products
+  - examples: CK One, Gucci Bloom, Dior J'adore
+- `home decoration` — 5 products
+  - examples: plant pot, table lamp, photo frame
+- `kitchen accessories` — 3 products
+  - examples: bamboo spatula, whisk, aluminium cup
+
+Example demo queries:
+
+- `i need fruit`
+- `有没有牛肉可以推荐的`
+- `recommend a sofa`
+- `find vegetables for cooking`
+- upload an image and ask for similar products
+
 ## Pages
 
 Main chat UI:
