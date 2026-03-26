@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/assets/styles.css?v=5" />
+    <link rel="stylesheet" href="/assets/styles.css?v=6" />
   </head>
   <body class="debug-page">
     <main class="debug-shell">
@@ -29,9 +29,40 @@
         <input id="debug-product-filter" type="search" placeholder="Filter by title, category, brand, tag, or search text" />
       </section>
 
+      <section class="debug-lab-grid">
+        <section class="debug-panel">
+          <div class="debug-panel-head">
+            <h2>Search Lab</h2>
+            <p>Run live text, image-url, or multimodal debug requests against the backend.</p>
+          </div>
+          <form id="debug-run-form" class="debug-run-form">
+            <textarea id="debug-run-text" rows="3" placeholder="Try: recommend a red hat"></textarea>
+            <div class="debug-run-row">
+              <input id="debug-run-image-url" type="url" placeholder="Optional image URL for image/multimodal debug" />
+              <input id="debug-run-file" type="file" accept="image/*" />
+            </div>
+            <div class="debug-run-row">
+              <input id="debug-run-limit" type="number" min="1" max="20" value="5" />
+              <button type="submit" class="debug-run-button">Run debug request</button>
+            </div>
+          </form>
+          <div id="debug-run-output" class="debug-run-output"></div>
+        </section>
+
+        <section class="debug-panel">
+          <div class="debug-panel-head">
+            <h2>Product Inspector</h2>
+            <p>Click any product card below to inspect raw search text, media, offers, and embeddings.</p>
+          </div>
+          <div id="debug-product-detail" class="debug-product-detail">
+            <div class="debug-empty">Select a product to inspect its backend records.</div>
+          </div>
+        </section>
+      </section>
+
       <section id="debug-product-grid" class="debug-product-grid"></section>
     </main>
 
-    <script src="/assets/debug.js?v=5" type="module"></script>
+    <script src="/assets/debug.js?v=6" type="module"></script>
   </body>
 </html>

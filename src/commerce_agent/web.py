@@ -212,6 +212,159 @@ def get_debug_products(limit: int = 100) -> dict[str, object]:
         products.append(payload)
     return {"products": products, "limit": limit}
 
+
+@app.get("/api/debug/products/{product_id}")
+def get_debug_product_detail(product_id: int) -> dict[str, object]:
+    """Return one fully joined product detail for the debug explorer."""
+    database_url = getattr(agent.search_repository, "database_url", None) or os.getenv("DATABASE_URL", DEFAULT_DATABASE_URL)
+    with psycopg.connect(database_url) as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT
+                    p.id,
+                    p.sku,
+                    p.title,
+                    c.name AS category_name,
+                    p.brand,
+                    p.short_description,
+                    p.long_description,
+                    p.attributes_jsonb,
+                    COALESCE(psd.search_text, ''),
+                    COALESCE(prs.review_count, 0),
+                    COALESCE(prs.average_rating, 0)
+                FROM products p
+                JOIN categories c ON c.id = p.category_id
+                LEFT JOIN product_search_documents psd ON psd.product_id = p.id
+                LEFT JOIN product_review_stats prs ON prs.product_id = p.id
+                WHERE p.id = %(product_id)s
+                """,
+                {"product_id": product_id},
+            )
+            product_row = cur.fetchone()
+            if not product_row:
+                raise HTTPException(status_code=404, detail=f"product not found: {product_id}")
+
+            cur.execute(
+                """
+                SELECT id, media_type, url, thumbnail_url, sort_order, alt_text, is_primary
+                FROM product_media
+                WHERE product_id = %(product_id)s
+                ORDER BY sort_order ASC, id ASC
+                """,
+                {"product_id": product_id},
+            )
+            media_rows = cur.fetchall()
+
+            cur.execute(
+                """
+                SELECT
+                    po.id,
+                    po.price,
+                    po.currency,
+                    po.inventory_count,
+                    po.product_url,
+                    po.is_active,
+                    s.id AS seller_id,
+                    s.name AS seller_name,
+                    COALESCE(s.rating, 0) AS seller_rating,
+                    s.seller_url
+                FROM product_offers po
+                JOIN sellers s ON s.id = po.seller_id
+                WHERE po.product_id = %(product_id)s
+                ORDER BY po.is_active DESC, po.price ASC, po.id ASC
+                """,
+                {"product_id": product_id},
+            )
+            offer_rows = cur.fetchall()
+
+            cur.execute(
+                """
+                SELECT
+                    id,
+                    embedding_type,
+                    model_name,
+                    model_version,
+                    source_text,
+                    source_image_url,
+                    left(embedding::text, 160) AS embedding_preview
+                FROM product_embeddings
+                WHERE product_id = %(product_id)s
+                ORDER BY embedding_type ASC, model_name ASC
+                """,
+                {"product_id": product_id},
+            )
+            embedding_rows = cur.fetchall()
+
+    attributes = product_row[7] or {}
+    return {
+        "product": {
+            "product_id": product_row[0],
+            "sku": product_row[1],
+            "title": product_row[2],
+            "category_name": product_row[3],
+            "brand": product_row[4],
+            "short_description": product_row[5],
+            "long_description": product_row[6],
+            "attributes": attributes if isinstance(attributes, dict) else {},
+            "search_text": product_row[8],
+            "review_count": product_row[9],
+            "average_rating": float(product_row[10]) if product_row[10] is not None else None,
+            "text_tags": list(attributes.get("tags", [])) if isinstance(attributes, dict) else [],
+            "image_tags": list(attributes.get("image_tags", [])) if isinstance(attributes, dict) else [],
+        },
+        "media": [
+            {
+                "id": row[0],
+                "media_type": row[1],
+                "url": row[2],
+                "thumbnail_url": row[3],
+                "sort_order": row[4],
+                "alt_text": row[5],
+                "is_primary": row[6],
+            }
+            for row in media_rows
+        ],
+        "offers": [
+            {
+                "id": row[0],
+                "price": float(row[1]) if row[1] is not None else None,
+                "currency": row[2],
+                "inventory_count": row[3],
+                "product_url": row[4],
+                "is_active": row[5],
+                "seller_id": row[6],
+                "seller_name": row[7],
+                "seller_rating": float(row[8]) if row[8] is not None else None,
+                "seller_url": row[9],
+            }
+            for row in offer_rows
+        ],
+        "embeddings": [
+            {
+                "id": row[0],
+                "embedding_type": row[1],
+                "model_name": row[2],
+                "model_version": row[3],
+                "source_text": row[4],
+                "source_image_url": row[5],
+                "embedding_preview": row[6],
+            }
+            for row in embedding_rows
+        ],
+    }
+
+
+@app.post("/api/debug/run")
+async def debug_run(
+    text: str = Form(""),
+    file: UploadFile | None = File(None),
+    image_url: str = Form(""),
+    limit: int = Form(5),
+) -> dict[str, object]:
+    """Run one routed request for the debug GUI and always return the full trace."""
+    return await message(text=text, file=file, image_url=image_url, limit=limit)
+
 @app.post("/api/message")
 async def message(
     text: str = Form(""),

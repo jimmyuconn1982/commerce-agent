@@ -132,3 +132,25 @@ def test_debug_products_returns_joined_rows() -> None:
     assert "title" in first
     assert "search_text" in first
     assert "image_tags" in first
+
+
+def test_debug_product_detail_returns_joined_detail() -> None:
+    client = TestClient(web_module.app)
+    list_response = client.get("/api/debug/products?limit=1")
+    product_id = list_response.json()["products"][0]["product_id"]
+    response = client.get(f"/api/debug/products/{product_id}")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["product"]["product_id"] == product_id
+    assert "media" in body
+    assert "embeddings" in body
+
+
+def test_debug_run_uses_same_pipeline_shape(monkeypatch) -> None:
+    monkeypatch.setattr(web_module, "agent", StubAgent())
+    client = TestClient(web_module.app)
+    response = client.post("/api/debug/run", data={"text": "keyboard", "limit": 3})
+    assert response.status_code == 200
+    body = response.json()
+    assert body["intent"] == "text-search"
+    assert body["trace"]["router"]["intent"] == "text-search"
