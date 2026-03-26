@@ -25,6 +25,11 @@
     "expected_intent": "text-search"
   },
   {
+    "prompt": "hello，你可以提供哪些服务",
+    "has_image": false,
+    "expected_intent": "chat"
+  },
+  {
     "prompt": "",
     "has_image": true,
     "expected_intent": "image-search"

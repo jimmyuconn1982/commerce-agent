@@ -496,6 +496,26 @@ class CommerceAgent:
         normalized = prompt.strip().lower()
         if normalized in {"hi", "hello", "hey", "你好", "你好啊", "嗨", "哈喽"}:
             return "你好，我在。你可以直接和我聊天，也可以让我帮你做 text、image 或 multimodal 商品搜索。"
+        if any(
+            clue in normalized
+            for clue in (
+                "what can you do",
+                "what services",
+                "你可以提供",
+                "你可以做什么",
+                "提供哪些服务",
+                "提供哪些搜索",
+                "有哪些服务",
+            )
+        ):
+            return (
+                "我现在可以做 4 类事情：\n"
+                "1. 普通聊天\n"
+                "2. text search\n"
+                "3. image search\n"
+                "4. text + image 的 multimodal search\n"
+                "你可以直接输入需求，也可以上传图片让我一起检索。"
+            )
 
         lines = ["I can help with general conversation, or assist you in searching the catalog by text, image, or both."]
         if analysis:

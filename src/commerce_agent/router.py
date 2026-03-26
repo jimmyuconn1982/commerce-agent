@@ -25,6 +25,9 @@ from .catalog import Catalog
 from .models import RouterTrace
 
 CHAT_PATTERNS = (
+    r"\bhello\b",
+    r"\bhi\b",
+    r"\bhey\b",
     r"\bwhat can you do\b",
     r"\bwho are you\b",
     r"\bwhat model\b",
@@ -36,6 +39,11 @@ CHAT_PATTERNS = (
     r"\b你好\b",
     r"\b你是谁\b",
     r"\b你能做什么\b",
+    r"\b你可以提供\b",
+    r"\b你可以做什么\b",
+    r"\b提供哪些服务\b",
+    r"\b提供哪些搜索\b",
+    r"\b有哪些服务\b",
     r"\b什么模型\b",
     r"\b怎么工作\b",
 )
@@ -265,12 +273,20 @@ class HeuristicRouter:
     def _looks_like_capability_question(self, normalized: str) -> bool:
         """Detect prompts that ask about the assistant itself."""
         capability_clues = (
+            "hello",
+            "hi",
+            "hey",
             "what can you do",
             "who are you",
             "what model",
             "how do you work",
             "你的能力",
             "你能做什么",
+            "你可以提供",
+            "你可以做什么",
+            "提供哪些服务",
+            "提供哪些搜索",
+            "有哪些服务",
             "你是谁",
             "什么模型",
         )
