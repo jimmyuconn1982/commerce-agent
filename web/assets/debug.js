@@ -92,6 +92,11 @@ function renderProductCard(product) {
       </div>
 
       <div class="debug-section-block">
+        <div class="debug-block-label">Audience Terms</div>
+        <div class="debug-chip-row">${renderChips(product.audience_terms || [])}</div>
+      </div>
+
+      <div class="debug-section-block">
         <div class="debug-block-label">Image Tags</div>
         <div class="debug-chip-row">${renderChips(product.image_tags || [])}</div>
       </div>
@@ -142,6 +147,11 @@ function renderProductDetail(payload) {
         <div class="debug-block-label">Cooking Uses</div>
         <div class="debug-chip-row">${renderChips(product.cooking_uses || [])}</div>
       </div>
+    </div>
+
+    <div class="debug-section-block">
+      <div class="debug-block-label">Audience Terms</div>
+      <div class="debug-chip-row">${renderChips(product.audience_terms || [])}</div>
     </div>
 
     <div class="debug-section-block">

@@ -53,8 +53,18 @@
           "lash",
           "princess"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "mascara",
+          "volumizing",
+          "lengthening",
+          "long-lasting",
+          "cruelty-free"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "beauty",
+          "mascara"
+        ],
         "source": "dummyjson",
         "source_product_id": 1
       }
@@ -80,8 +90,18 @@
           "with",
           "mirror"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "eyeshadow palette",
+          "makeup",
+          "mirror",
+          "beauty"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "beauty",
+          "makeup",
+          "personal care"
+        ],
         "source": "dummyjson",
         "source_product_id": 2
       }
@@ -106,8 +126,16 @@
           "powder",
           "canister"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "powder canister",
+          "makeup setting",
+          "matte finish"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "beauty",
+          "makeup"
+        ],
         "source": "dummyjson",
         "source_product_id": 3
       }
@@ -131,8 +159,16 @@
           "lipstick",
           "red"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "red lipstick",
+          "vibrant color",
+          "long-lasting finish"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "beauty",
+          "lipstick"
+        ],
         "source": "dummyjson",
         "source_product_id": 4
       }
@@ -158,8 +194,16 @@
           "nail",
           "polish"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "red nail polish",
+          "vibrant nails",
+          "quick-dry"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "beauty",
+          "nail care"
+        ],
         "source": "dummyjson",
         "source_product_id": 5
       }
@@ -185,8 +229,17 @@
           "klein",
           "one"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "ck one",
+          "calvin klein",
+          "unisex fragrance",
+          "fresh scent"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "perfumes",
+          "fragrances"
+        ],
         "source": "dummyjson",
         "source_product_id": 6
       }
@@ -213,8 +266,18 @@
           "noir",
           "eau"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "coco noir",
+          "chanel fragrance",
+          "grapefruit",
+          "rose",
+          "sandalwood"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "perfumes",
+          "fragrances"
+        ],
         "source": "dummyjson",
         "source_product_id": 7
       }
@@ -239,8 +302,20 @@
           "dior",
           "adore"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "j'adore",
+          "dior fragrance",
+          "ylang-ylang",
+          "rose",
+          "jasmine"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "perfumes",
+          "luxury",
+          "feminine",
+          "sophistication"
+        ],
         "source": "dummyjson",
         "source_product_id": 8
       }
@@ -266,8 +341,20 @@
           "shine",
           "eau"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "dolce shine",
+          "perfume",
+          "fragrance",
+          "mango",
+          "jasmine",
+          "woods"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "beauty",
+          "perfume",
+          "fragrances"
+        ],
         "source": "dummyjson",
         "source_product_id": 9
       }
@@ -293,8 +380,17 @@
           "bloom",
           "eau"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "gucci bloom",
+          "floral fragrance",
+          "tuberose",
+          "jasmine"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "beauty",
+          "perfume"
+        ],
         "source": "dummyjson",
         "source_product_id": 10
       }
@@ -320,8 +416,16 @@
           "colombo",
           "bed"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "annibale colombo",
+          "luxury bed",
+          "elegant bed frame"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "furniture",
+          "home decor"
+        ],
         "source": "dummyjson",
         "source_product_id": 11
       }
@@ -347,8 +451,16 @@
           "colombo",
           "sofa"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "annibale colombo",
+          "sofa",
+          "furniture"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "furniture",
+          "home"
+        ],
         "source": "dummyjson",
         "source_product_id": 12
       }
@@ -375,8 +487,18 @@
           "african",
           "cherry"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "bedside table",
+          "african cherry",
+          "furniture",
+          "storage",
+          "elegant"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "furniture",
+          "home decor"
+        ],
         "source": "dummyjson",
         "source_product_id": 13
       }
@@ -403,8 +525,17 @@
           "executive",
           "conference"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "knoll saarinen",
+          "conference chair",
+          "ergonomic",
+          "office chair"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "furniture",
+          "office"
+        ],
         "source": "dummyjson",
         "source_product_id": 14
       }
@@ -430,8 +561,16 @@
           "sink",
           "with"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "wooden sink",
+          "bathroom mirror",
+          "bathroom furniture"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "furniture",
+          "bathroom"
+        ],
         "source": "dummyjson",
         "source_product_id": 15
       }
@@ -455,17 +594,17 @@
           "apple"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking",
-          "fruit",
-          "snack"
+          "apples",
+          "snacking",
+          "recipes"
         ],
         "cooking_uses": [
-          "fresh eating",
-          "dessert",
-          "salad"
+          "snacking",
+          "recipes"
+        ],
+        "audience_terms": [
+          "human food",
+          "home cooking"
         ],
         "source": "dummyjson",
         "source_product_id": 16
@@ -491,18 +630,17 @@
           "steak"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking",
-          "protein",
-          "meat",
-          "seafood"
+          "beef steak",
+          "grilling",
+          "doneness"
         ],
         "cooking_uses": [
-          "stir fry",
-          "main dish",
-          "savory cooking"
+          "grilling",
+          "cooking"
+        ],
+        "audience_terms": [
+          "human food",
+          "home cooking"
         ],
         "source": "dummyjson",
         "source_product_id": 17
@@ -530,13 +668,13 @@
           "food"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking",
-          "pet supplies"
+          "pet supplies",
+          "cat food"
         ],
         "cooking_uses": [],
+        "audience_terms": [
+          "pet food"
+        ],
         "source": "dummyjson",
         "source_product_id": 18
       }
@@ -560,18 +698,20 @@
           "chicken"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking",
-          "protein",
-          "meat",
-          "seafood"
+          "chicken meat",
+          "fresh chicken",
+          "tender chicken"
         ],
         "cooking_uses": [
-          "stir fry",
-          "main dish",
-          "savory cooking"
+          "stewing",
+          "roasting",
+          "grilling",
+          "saut\u00e9ing"
+        ],
+        "audience_terms": [
+          "human food",
+          "home cooking",
+          "beverage"
         ],
         "source": "dummyjson",
         "source_product_id": 19
@@ -597,17 +737,20 @@
           "oil"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking",
           "cooking oil",
-          "pantry"
+          "frying oil",
+          "saut\u00e9ing oil"
         ],
         "cooking_uses": [
-          "stir fry",
           "frying",
-          "saute"
+          "saut\u00e9ing",
+          "marinating",
+          "baking"
+        ],
+        "audience_terms": [
+          "human food",
+          "home cooking",
+          "beverage"
         ],
         "source": "dummyjson",
         "source_product_id": 20
@@ -632,17 +775,19 @@
           "cucumber"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking",
-          "vegetable",
-          "produce"
+          "cucumber",
+          "salad",
+          "snack",
+          "side"
         ],
         "cooking_uses": [
-          "stir fry",
-          "side dish",
-          "savory cooking"
+          "salads",
+          "snacks",
+          "side dishes"
+        ],
+        "audience_terms": [
+          "human food",
+          "home cooking"
         ],
         "source": "dummyjson",
         "source_product_id": 21
@@ -670,13 +815,15 @@
           "food"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking",
-          "pet supplies"
+          "dog food",
+          "pet nutrition",
+          "canine diet"
         ],
         "cooking_uses": [],
+        "audience_terms": [
+          "pet food",
+          "dog care"
+        ],
         "source": "dummyjson",
         "source_product_id": 22
       }
@@ -700,17 +847,20 @@
           "eggs"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
+          "eggs",
+          "fresh",
+          "baking",
           "cooking",
-          "protein",
-          "breakfast ingredient"
+          "breakfast"
         ],
         "cooking_uses": [
-          "stir fry",
-          "fried rice",
-          "quick meal"
+          "baking",
+          "cooking",
+          "breakfast"
+        ],
+        "audience_terms": [
+          "human food",
+          "home cooking"
         ],
         "source": "dummyjson",
         "source_product_id": 23
@@ -736,18 +886,19 @@
           "steak"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking",
-          "protein",
-          "meat",
-          "seafood"
+          "fish steak",
+          "grilled",
+          "baked",
+          "pan-seared"
         ],
         "cooking_uses": [
-          "stir fry",
-          "main dish",
-          "savory cooking"
+          "grilling",
+          "baking",
+          "pan-searing"
+        ],
+        "audience_terms": [
+          "human food",
+          "seafood"
         ],
         "source": "dummyjson",
         "source_product_id": 24
@@ -774,19 +925,20 @@
           "pepper"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking",
+          "green bell pepper",
           "vegetable",
-          "produce",
-          "aromatic"
+          "colorful pepper"
         ],
         "cooking_uses": [
-          "stir fry",
-          "side dish",
-          "savory cooking",
-          "saute"
+          "salsa",
+          "stir-fry",
+          "grill",
+          "snack"
+        ],
+        "audience_terms": [
+          "human food",
+          "home cooking",
+          "beverage"
         ],
         "source": "dummyjson",
         "source_product_id": 25
@@ -813,19 +965,18 @@
           "pepper"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking",
-          "vegetable",
-          "produce",
-          "aromatic"
+          "green chili pepper",
+          "spicy pepper",
+          "heat additive"
         ],
         "cooking_uses": [
-          "stir fry",
-          "side dish",
-          "savory cooking",
-          "saute"
+          "spice",
+          "condiment",
+          "sauce"
+        ],
+        "audience_terms": [
+          "human food",
+          "home cooking"
         ],
         "source": "dummyjson",
         "source_product_id": 26
@@ -851,17 +1002,22 @@
           "jar"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking",
+          "honey",
+          "jar",
           "sweetener",
-          "pantry"
+          "beverage",
+          "food"
         ],
         "cooking_uses": [
-          "sauce",
-          "marinade",
-          "dressing"
+          "sweetening",
+          "drizzle",
+          "beverage",
+          "dessert"
+        ],
+        "audience_terms": [
+          "human food",
+          "home cooking",
+          "beverage"
         ],
         "source": "dummyjson",
         "source_product_id": 27
@@ -887,12 +1043,18 @@
           "cream"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking"
+          "ice cream",
+          "dessert",
+          "treat"
         ],
-        "cooking_uses": [],
+        "cooking_uses": [
+          "dessert",
+          "snack"
+        ],
+        "audience_terms": [
+          "human food",
+          "desserts"
+        ],
         "source": "dummyjson",
         "source_product_id": 28
       }
@@ -916,12 +1078,16 @@
           "juice"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking"
+          "fruit juice",
+          "refreshing",
+          "vitamins",
+          "hydration"
         ],
         "cooking_uses": [],
+        "audience_terms": [
+          "beverages",
+          "human food"
+        ],
         "source": "dummyjson",
         "source_product_id": 29
       }
@@ -945,12 +1111,18 @@
           "kiwi"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking"
+          "kiwi",
+          "snacking",
+          "tropical twist"
         ],
-        "cooking_uses": [],
+        "cooking_uses": [
+          "snack",
+          "dish ingredient"
+        ],
+        "audience_terms": [
+          "human food",
+          "groceries"
+        ],
         "source": "dummyjson",
         "source_product_id": 30
       }
@@ -974,12 +1146,22 @@
           "lemon"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking"
+          "lemon",
+          "zesty",
+          "tangy",
+          "cooking",
+          "baking",
+          "beverage"
         ],
-        "cooking_uses": [],
+        "cooking_uses": [
+          "cooking",
+          "baking",
+          "beverages"
+        ],
+        "audience_terms": [
+          "human food",
+          "home cooking"
+        ],
         "source": "dummyjson",
         "source_product_id": 31
       }
@@ -1003,12 +1185,20 @@
           "milk"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking"
+          "milk",
+          "dairy",
+          "fresh",
+          "nutritious"
         ],
-        "cooking_uses": [],
+        "cooking_uses": [
+          "dairy",
+          "recipe ingredient",
+          "daily consumption"
+        ],
+        "audience_terms": [
+          "human food",
+          "home cooking"
+        ],
         "source": "dummyjson",
         "source_product_id": 32
       }
@@ -1032,12 +1222,20 @@
           "mulberry"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking"
+          "mulberries",
+          "snacking",
+          "desserts",
+          "cereals"
         ],
-        "cooking_uses": [],
+        "cooking_uses": [
+          "snacking",
+          "desserts",
+          "cereals"
+        ],
+        "audience_terms": [
+          "human food",
+          "groceries"
+        ],
         "source": "dummyjson",
         "source_product_id": 33
       }
@@ -1063,14 +1261,19 @@
           "nescafe"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking",
-          "beverage"
+          "nescafe",
+          "coffee",
+          "beverages"
         ],
         "cooking_uses": [
-          "drink"
+          "brewing",
+          "espresso",
+          "drip coffee"
+        ],
+        "audience_terms": [
+          "human food",
+          "beverage",
+          "home cooking"
         ],
         "source": "dummyjson",
         "source_product_id": 34
@@ -1095,17 +1298,20 @@
           "potatoes"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking",
-          "vegetable",
-          "produce"
+          "potatoes",
+          "starchy",
+          "roasting",
+          "mashing",
+          "side dish"
         ],
         "cooking_uses": [
-          "stir fry",
-          "side dish",
-          "savory cooking"
+          "roasting",
+          "mashing",
+          "side dish"
+        ],
+        "audience_terms": [
+          "human food",
+          "home cooking"
         ],
         "source": "dummyjson",
         "source_product_id": 35
@@ -1131,12 +1337,20 @@
           "powder"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking"
+          "protein powder",
+          "diet supplement",
+          "health supplement"
         ],
-        "cooking_uses": [],
+        "cooking_uses": [
+          "protein shake",
+          "smoothie",
+          "protein bar"
+        ],
+        "audience_terms": [
+          "human food",
+          "fitness",
+          "diet"
+        ],
         "source": "dummyjson",
         "source_product_id": 36
       }
@@ -1161,19 +1375,19 @@
           "onions"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking",
-          "vegetable",
-          "produce",
-          "aromatic"
+          "red onions",
+          "flavorful onions",
+          "aromatic vegetables"
         ],
         "cooking_uses": [
-          "stir fry",
-          "side dish",
-          "savory cooking",
-          "soup base"
+          "sauces",
+          "marinades",
+          "stews"
+        ],
+        "audience_terms": [
+          "human food",
+          "home cooking",
+          "cooking ingredients"
         ],
         "source": "dummyjson",
         "source_product_id": 37
@@ -1198,17 +1412,23 @@
           "rice"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking",
+          "rice",
+          "grain",
           "staple",
-          "carb"
+          "cuisine",
+          "dish"
         ],
         "cooking_uses": [
-          "fried rice",
-          "base ingredient",
-          "meal prep"
+          "side dish",
+          "stuffed",
+          "porridge",
+          "sushi",
+          "paella"
+        ],
+        "audience_terms": [
+          "human food",
+          "home cooking",
+          "groceries"
         ],
         "source": "dummyjson",
         "source_product_id": 38
@@ -1234,12 +1454,15 @@
           "drinks"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking"
+          "soft drinks",
+          "beverages",
+          "refreshing"
         ],
         "cooking_uses": [],
+        "audience_terms": [
+          "beverage",
+          "refreshment"
+        ],
         "source": "dummyjson",
         "source_product_id": 39
       }
@@ -1263,12 +1486,20 @@
           "strawberry"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking"
+          "strawberries",
+          "snacking",
+          "desserts",
+          "smoothies"
         ],
-        "cooking_uses": [],
+        "cooking_uses": [
+          "snacking",
+          "desserts",
+          "smoothies"
+        ],
+        "audience_terms": [
+          "human food",
+          "home cooking"
+        ],
         "source": "dummyjson",
         "source_product_id": 40
       }
@@ -1294,12 +1525,14 @@
           "box"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking"
+          "tissue paper box",
+          "soft tissues",
+          "absorbent tissues"
         ],
         "cooking_uses": [],
+        "audience_terms": [
+          "household essentials"
+        ],
         "source": "dummyjson",
         "source_product_id": 41
       }
@@ -1323,12 +1556,16 @@
           "water"
         ],
         "search_terms": [
-          "food",
-          "ingredient",
-          "groceries",
-          "cooking"
+          "water",
+          "bottled",
+          "refreshing",
+          "hydration"
         ],
         "cooking_uses": [],
+        "audience_terms": [
+          "beverages",
+          "human food"
+        ],
         "source": "dummyjson",
         "source_product_id": 42
       }
@@ -1353,8 +1590,18 @@
           "home",
           "decoration"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "home decor",
+          "swing",
+          "decoration swing",
+          "elegant swing",
+          "whimsical decor"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "home-decoration",
+          "interior-decoration"
+        ],
         "source": "dummyjson",
         "source_product_id": 43
       }
@@ -1383,8 +1630,16 @@
           "photo",
           "frame"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "family tree",
+          "photo frame",
+          "home decor"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "home decoration",
+          "sentimental gifts"
+        ],
         "source": "dummyjson",
         "source_product_id": 44
       }
@@ -1412,8 +1667,16 @@
           "showpiece",
           "plant"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "artificial plant",
+          "home decor",
+          "greenery"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "home-decoration",
+          "home decor"
+        ],
         "source": "dummyjson",
         "source_product_id": 45
       }
@@ -1440,8 +1703,16 @@
           "plant",
           "pot"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "plant pot",
+          "container",
+          "garden decor"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "home decoration",
+          "plant accessories"
+        ],
         "source": "dummyjson",
         "source_product_id": 46
       }
@@ -1468,8 +1739,17 @@
           "table",
           "lamp"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "table lamp",
+          "modern lighting",
+          "ambient lighting",
+          "task lighting"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "home decoration",
+          "interior design"
+        ],
         "source": "dummyjson",
         "source_product_id": 47
       }
@@ -1496,8 +1776,23 @@
           "bamboo",
           "spatula"
         ],
-        "search_terms": [],
-        "cooking_uses": [],
+        "search_terms": [
+          "bamboo spatula",
+          "kitchen tool",
+          "eco-friendly",
+          "flipping",
+          "stirring",
+          "serving"
+        ],
+        "cooking_uses": [
+          "flipping",
+          "stirring",
+          "serving"
+        ],
+        "audience_terms": [
+          "human food",
+          "home cooking"
+        ],
         "source": "dummyjson",
         "source_product_id": 48
       }
@@ -1525,8 +1820,16 @@
           "aluminium",
           "cup"
         ],
-        "search_terms": [],
+        "search_terms": [
+          "black cup",
+          "aluminium drinkware",
+          "modern cup"
+        ],
         "cooking_uses": [],
+        "audience_terms": [
+          "drinkware",
+          "home"
+        ],
         "source": "dummyjson",
         "source_product_id": 49
       }
@@ -1553,8 +1856,21 @@
           "black",
           "whisk"
         ],
-        "search_terms": [],
-        "cooking_uses": [],
+        "search_terms": [
+          "black whisk",
+          "whisking tool",
+          "beating ingredients"
+        ],
+        "cooking_uses": [
+          "whisking",
+          "beating",
+          "mixing"
+        ],
+        "audience_terms": [
+          "human food",
+          "home cooking",
+          "kitchen accessories"
+        ],
         "source": "dummyjson",
         "source_product_id": 50
       }
@@ -3412,203 +3728,203 @@
   "product_search_documents": [
     {
       "product_id": 202420022400056372,
-      "search_text": "Essence Mascara Lash Princess beauty Essence The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula. beauty mascara beauty mascara essence lash princess"
+      "search_text": "Essence Mascara Lash Princess beauty Essence The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula. beauty mascara beauty mascara essence lash princess mascara volumizing lengthening long-lasting cruelty-free beauty mascara"
     },
     {
       "product_id": 199207377809062611,
-      "search_text": "Eyeshadow Palette with Mirror beauty Glamour Beauty The Eyeshadow Palette with Mirror offers a versatile range of eyeshadow shades for creating stunning eye looks. With a built-in mirror, it's convenient for on-the-go makeup application. beauty eyeshadow beauty eyeshadow palette with mirror"
+      "search_text": "Eyeshadow Palette with Mirror beauty Glamour Beauty The Eyeshadow Palette with Mirror offers a versatile range of eyeshadow shades for creating stunning eye looks. With a built-in mirror, it's convenient for on-the-go makeup application. beauty eyeshadow beauty eyeshadow palette with mirror eyeshadow palette makeup mirror beauty beauty makeup personal care"
     },
     {
       "product_id": 205195034292339461,
-      "search_text": "Powder Canister beauty Velvet Touch The Powder Canister is a finely milled setting powder designed to set makeup and control shine. With a lightweight and translucent formula, it provides a smooth and matte finish. beauty face powder beauty face powder powder canister"
+      "search_text": "Powder Canister beauty Velvet Touch The Powder Canister is a finely milled setting powder designed to set makeup and control shine. With a lightweight and translucent formula, it provides a smooth and matte finish. beauty face powder beauty face powder powder canister powder canister makeup setting matte finish beauty makeup"
     },
     {
       "product_id": 192650778603506254,
-      "search_text": "Red Lipstick beauty Chic Cosmetics The Red Lipstick is a classic and bold choice for adding a pop of color to your lips. With a creamy and pigmented formula, it provides a vibrant and long-lasting finish. beauty lipstick beauty lipstick red"
+      "search_text": "Red Lipstick beauty Chic Cosmetics The Red Lipstick is a classic and bold choice for adding a pop of color to your lips. With a creamy and pigmented formula, it provides a vibrant and long-lasting finish. beauty lipstick beauty lipstick red red lipstick vibrant color long-lasting finish beauty lipstick"
     },
     {
       "product_id": 206054511624133246,
-      "search_text": "Red Nail Polish beauty Nail Couture The Red Nail Polish offers a rich and glossy red hue for vibrant and polished nails. With a quick-drying formula, it provides a salon-quality finish at home. beauty nail polish beauty nail polish red nail polish"
+      "search_text": "Red Nail Polish beauty Nail Couture The Red Nail Polish offers a rich and glossy red hue for vibrant and polished nails. With a quick-drying formula, it provides a salon-quality finish at home. beauty nail polish beauty nail polish red nail polish red nail polish vibrant nails quick-dry beauty nail care"
     },
     {
       "product_id": 201943146659636516,
-      "search_text": "Calvin Klein CK One fragrances Calvin Klein CK One by Calvin Klein is a classic unisex fragrance, known for its fresh and clean scent. It's a versatile fragrance suitable for everyday wear. fragrances perfumes fragrances perfumes calvin klein one"
+      "search_text": "Calvin Klein CK One fragrances Calvin Klein CK One by Calvin Klein is a classic unisex fragrance, known for its fresh and clean scent. It's a versatile fragrance suitable for everyday wear. fragrances perfumes fragrances perfumes calvin klein one ck one calvin klein unisex fragrance fresh scent perfumes fragrances"
     },
     {
       "product_id": 205922396616437089,
-      "search_text": "Chanel Coco Noir Eau De fragrances Chanel Coco Noir by Chanel is an elegant and mysterious fragrance, featuring notes of grapefruit, rose, and sandalwood. Perfect for evening occasions. fragrances perfumes fragrances perfumes chanel coco noir eau"
+      "search_text": "Chanel Coco Noir Eau De fragrances Chanel Coco Noir by Chanel is an elegant and mysterious fragrance, featuring notes of grapefruit, rose, and sandalwood. Perfect for evening occasions. fragrances perfumes fragrances perfumes chanel coco noir eau coco noir chanel fragrance grapefruit rose sandalwood perfumes fragrances"
     },
     {
       "product_id": 212641441615737091,
-      "search_text": "Dior J'adore fragrances Dior J'adore by Dior is a luxurious and floral fragrance, known for its blend of ylang-ylang, rose, and jasmine. It embodies femininity and sophistication. fragrances perfumes fragrances perfumes dior adore"
+      "search_text": "Dior J'adore fragrances Dior J'adore by Dior is a luxurious and floral fragrance, known for its blend of ylang-ylang, rose, and jasmine. It embodies femininity and sophistication. fragrances perfumes fragrances perfumes dior adore j'adore dior fragrance ylang-ylang rose jasmine perfumes luxury feminine sophistication"
     },
     {
       "product_id": 209059980294481334,
-      "search_text": "Dolce Shine Eau de fragrances Dolce & Gabbana Dolce Shine by Dolce & Gabbana is a vibrant and fruity fragrance, featuring notes of mango, jasmine, and blonde woods. It's a joyful and youthful scent. fragrances perfumes fragrances perfumes dolce shine eau"
+      "search_text": "Dolce Shine Eau de fragrances Dolce & Gabbana Dolce Shine by Dolce & Gabbana is a vibrant and fruity fragrance, featuring notes of mango, jasmine, and blonde woods. It's a joyful and youthful scent. fragrances perfumes fragrances perfumes dolce shine eau dolce shine perfume fragrance mango jasmine woods beauty perfume fragrances"
     },
     {
       "product_id": 181050738517627732,
-      "search_text": "Gucci Bloom Eau de fragrances Gucci Gucci Bloom by Gucci is a floral and captivating fragrance, with notes of tuberose, jasmine, and Rangoon creeper. It's a modern and romantic scent. fragrances perfumes fragrances perfumes gucci bloom eau"
+      "search_text": "Gucci Bloom Eau de fragrances Gucci Gucci Bloom by Gucci is a floral and captivating fragrance, with notes of tuberose, jasmine, and Rangoon creeper. It's a modern and romantic scent. fragrances perfumes fragrances perfumes gucci bloom eau gucci bloom floral fragrance tuberose jasmine beauty perfume"
     },
     {
       "product_id": 207002437320559046,
-      "search_text": "Annibale Colombo Bed furniture Annibale Colombo The Annibale Colombo Bed is a luxurious and elegant bed frame, crafted with high-quality materials for a comfortable and stylish bedroom. furniture beds furniture beds annibale colombo bed"
+      "search_text": "Annibale Colombo Bed furniture Annibale Colombo The Annibale Colombo Bed is a luxurious and elegant bed frame, crafted with high-quality materials for a comfortable and stylish bedroom. furniture beds furniture beds annibale colombo bed annibale colombo luxury bed elegant bed frame furniture home decor"
     },
     {
       "product_id": 194430863229778894,
-      "search_text": "Annibale Colombo Sofa furniture Annibale Colombo The Annibale Colombo Sofa is a sophisticated and comfortable seating option, featuring exquisite design and premium upholstery for your living room. furniture sofas furniture sofas annibale colombo sofa"
+      "search_text": "Annibale Colombo Sofa furniture Annibale Colombo The Annibale Colombo Sofa is a sophisticated and comfortable seating option, featuring exquisite design and premium upholstery for your living room. furniture sofas furniture sofas annibale colombo sofa annibale colombo sofa furniture furniture home"
     },
     {
       "product_id": 193864189176909032,
-      "search_text": "Bedside Table African Cherry furniture Furniture Co. The Bedside Table in African Cherry is a stylish and functional addition to your bedroom, providing convenient storage space and a touch of elegance. furniture bedside tables furniture bedside tables bedside table african cherry"
+      "search_text": "Bedside Table African Cherry furniture Furniture Co. The Bedside Table in African Cherry is a stylish and functional addition to your bedroom, providing convenient storage space and a touch of elegance. furniture bedside tables furniture bedside tables bedside table african cherry bedside table african cherry furniture storage elegant furniture home decor"
     },
     {
       "product_id": 211093676239465385,
-      "search_text": "Knoll Saarinen Executive Conference Chair furniture Knoll The Knoll Saarinen Executive Conference Chair is a modern and ergonomic chair, perfect for your office or conference room with its timeless design. furniture office chairs furniture office chairs knoll saarinen executive conference"
+      "search_text": "Knoll Saarinen Executive Conference Chair furniture Knoll The Knoll Saarinen Executive Conference Chair is a modern and ergonomic chair, perfect for your office or conference room with its timeless design. furniture office chairs furniture office chairs knoll saarinen executive conference knoll saarinen conference chair ergonomic office chair furniture office"
     },
     {
       "product_id": 207802228998267106,
-      "search_text": "Wooden Bathroom Sink With Mirror furniture Bath Trends The Wooden Bathroom Sink with Mirror is a unique and stylish addition to your bathroom, featuring a wooden sink countertop and a matching mirror. furniture bathroom furniture bathroom wooden sink with"
+      "search_text": "Wooden Bathroom Sink With Mirror furniture Bath Trends The Wooden Bathroom Sink with Mirror is a unique and stylish addition to your bathroom, featuring a wooden sink countertop and a matching mirror. furniture bathroom furniture bathroom wooden sink with wooden sink bathroom mirror bathroom furniture furniture bathroom"
     },
     {
       "product_id": 210228194855799993,
-      "search_text": "Apple groceries Apple Fresh and crisp apples, perfect for snacking or incorporating into various recipes. fruits fruits groceries apple food ingredient groceries cooking fruit snack fresh eating dessert salad"
+      "search_text": "Apple groceries Apple Fresh and crisp apples, perfect for snacking or incorporating into various recipes. fruits fruits groceries apple apples snacking recipes snacking recipes human food home cooking"
     },
     {
       "product_id": 206409247741638036,
-      "search_text": "Beef Steak groceries Beef Steak High-quality beef steak, great for grilling or cooking to your preferred level of doneness. meat meat groceries beef steak food ingredient groceries cooking protein meat seafood stir fry main dish savory cooking"
+      "search_text": "Beef Steak groceries Beef Steak High-quality beef steak, great for grilling or cooking to your preferred level of doneness. meat meat groceries beef steak beef steak grilling doneness grilling cooking human food home cooking"
     },
     {
       "product_id": 215777735849472655,
-      "search_text": "Cat Food groceries Cat Food Nutritious cat food formulated to meet the dietary needs of your feline friend. pet supplies cat food pet supplies cat food groceries cat food food ingredient groceries cooking pet supplies"
+      "search_text": "Cat Food groceries Cat Food Nutritious cat food formulated to meet the dietary needs of your feline friend. pet supplies cat food pet supplies cat food groceries cat food pet supplies cat food pet food"
     },
     {
       "product_id": 181852873795416809,
-      "search_text": "Chicken Meat groceries Chicken Meat Fresh and tender chicken meat, suitable for various culinary preparations. meat meat groceries chicken food ingredient groceries cooking protein meat seafood stir fry main dish savory cooking"
+      "search_text": "Chicken Meat groceries Chicken Meat Fresh and tender chicken meat, suitable for various culinary preparations. meat meat groceries chicken chicken meat fresh chicken tender chicken stewing roasting grilling saut\u00e9ing human food home cooking beverage"
     },
     {
       "product_id": 180744227090096304,
-      "search_text": "Cooking Oil groceries Cooking Oil Versatile cooking oil suitable for frying, saut\u00e9ing, and various culinary applications. cooking essentials cooking essentials groceries cooking oil food ingredient groceries cooking cooking oil pantry stir fry frying saute"
+      "search_text": "Cooking Oil groceries Cooking Oil Versatile cooking oil suitable for frying, saut\u00e9ing, and various culinary applications. cooking essentials cooking essentials groceries cooking oil cooking oil frying oil saut\u00e9ing oil frying saut\u00e9ing marinating baking human food home cooking beverage"
     },
     {
       "product_id": 200943831893447646,
-      "search_text": "Cucumber groceries Cucumber Crisp and hydrating cucumbers, ideal for salads, snacks, or as a refreshing side. vegetables vegetables groceries cucumber food ingredient groceries cooking vegetable produce stir fry side dish savory cooking"
+      "search_text": "Cucumber groceries Cucumber Crisp and hydrating cucumbers, ideal for salads, snacks, or as a refreshing side. vegetables vegetables groceries cucumber cucumber salad snack side salads snacks side dishes human food home cooking"
     },
     {
       "product_id": 201248852229704508,
-      "search_text": "Dog Food groceries Dog Food Specially formulated dog food designed to provide essential nutrients for your canine companion. pet supplies dog food pet supplies dog food groceries dog food food ingredient groceries cooking pet supplies"
+      "search_text": "Dog Food groceries Dog Food Specially formulated dog food designed to provide essential nutrients for your canine companion. pet supplies dog food pet supplies dog food groceries dog food dog food pet nutrition canine diet pet food dog care"
     },
     {
       "product_id": 198110104800113819,
-      "search_text": "Eggs groceries Eggs Fresh eggs, a versatile ingredient for baking, cooking, or breakfast. dairy dairy groceries eggs food ingredient groceries cooking protein breakfast ingredient stir fry fried rice quick meal"
+      "search_text": "Eggs groceries Eggs Fresh eggs, a versatile ingredient for baking, cooking, or breakfast. dairy dairy groceries eggs eggs fresh baking cooking breakfast baking cooking breakfast human food home cooking"
     },
     {
       "product_id": 197474901721822218,
-      "search_text": "Fish Steak groceries Fish Steak Quality fish steak, suitable for grilling, baking, or pan-searing. seafood seafood groceries fish steak food ingredient groceries cooking protein meat seafood stir fry main dish savory cooking"
+      "search_text": "Fish Steak groceries Fish Steak Quality fish steak, suitable for grilling, baking, or pan-searing. seafood seafood groceries fish steak fish steak grilled baked pan-seared grilling baking pan-searing human food seafood"
     },
     {
       "product_id": 188355152101089733,
-      "search_text": "Green Bell Pepper groceries Green Bell Pepper Fresh and vibrant green bell pepper, perfect for adding color and flavor to your dishes. vegetables vegetables groceries green bell pepper food ingredient groceries cooking vegetable produce aromatic stir fry side dish savory cooking saute"
+      "search_text": "Green Bell Pepper groceries Green Bell Pepper Fresh and vibrant green bell pepper, perfect for adding color and flavor to your dishes. vegetables vegetables groceries green bell pepper green bell pepper vegetable colorful pepper salsa stir-fry grill snack human food home cooking beverage"
     },
     {
       "product_id": 194228920640605781,
-      "search_text": "Green Chili Pepper groceries Green Chili Pepper Spicy green chili pepper, ideal for adding heat to your favorite recipes. vegetables vegetables groceries green chili pepper food ingredient groceries cooking vegetable produce aromatic stir fry side dish savory cooking saute"
+      "search_text": "Green Chili Pepper groceries Green Chili Pepper Spicy green chili pepper, ideal for adding heat to your favorite recipes. vegetables vegetables groceries green chili pepper green chili pepper spicy pepper heat additive spice condiment sauce human food home cooking"
     },
     {
       "product_id": 184252723858532148,
-      "search_text": "Honey Jar groceries Honey Jar Pure and natural honey in a convenient jar, perfect for sweetening beverages or drizzling over food. condiments condiments groceries honey jar food ingredient groceries cooking sweetener pantry sauce marinade dressing"
+      "search_text": "Honey Jar groceries Honey Jar Pure and natural honey in a convenient jar, perfect for sweetening beverages or drizzling over food. condiments condiments groceries honey jar honey jar sweetener beverage food sweetening drizzle beverage dessert human food home cooking beverage"
     },
     {
       "product_id": 187050350048634887,
-      "search_text": "Ice Cream groceries Ice Cream Creamy and delicious ice cream, available in various flavors for a delightful treat. desserts desserts groceries ice cream food ingredient groceries cooking"
+      "search_text": "Ice Cream groceries Ice Cream Creamy and delicious ice cream, available in various flavors for a delightful treat. desserts desserts groceries ice cream ice cream dessert treat dessert snack human food desserts"
     },
     {
       "product_id": 187420430173365465,
-      "search_text": "Juice groceries Juice Refreshing fruit juice, packed with vitamins and great for staying hydrated. beverages beverages groceries juice food ingredient groceries cooking"
+      "search_text": "Juice groceries Juice Refreshing fruit juice, packed with vitamins and great for staying hydrated. beverages beverages groceries juice fruit juice refreshing vitamins hydration beverages human food"
     },
     {
       "product_id": 182730825611825836,
-      "search_text": "Kiwi groceries Kiwi Nutrient-rich kiwi, perfect for snacking or adding a tropical twist to your dishes. fruits fruits groceries kiwi food ingredient groceries cooking"
+      "search_text": "Kiwi groceries Kiwi Nutrient-rich kiwi, perfect for snacking or adding a tropical twist to your dishes. fruits fruits groceries kiwi kiwi snacking tropical twist snack dish ingredient human food groceries"
     },
     {
       "product_id": 215418216943797009,
-      "search_text": "Lemon groceries Lemon Zesty and tangy lemons, versatile for cooking, baking, or making refreshing beverages. fruits fruits groceries lemon food ingredient groceries cooking"
+      "search_text": "Lemon groceries Lemon Zesty and tangy lemons, versatile for cooking, baking, or making refreshing beverages. fruits fruits groceries lemon lemon zesty tangy cooking baking beverage cooking baking beverages human food home cooking"
     },
     {
       "product_id": 196735040745540077,
-      "search_text": "Milk groceries Milk Fresh and nutritious milk, a staple for various recipes and daily consumption. dairy dairy groceries milk food ingredient groceries cooking"
+      "search_text": "Milk groceries Milk Fresh and nutritious milk, a staple for various recipes and daily consumption. dairy dairy groceries milk milk dairy fresh nutritious dairy recipe ingredient daily consumption human food home cooking"
     },
     {
       "product_id": 213267967202280812,
-      "search_text": "Mulberry groceries Mulberry Sweet and juicy mulberries, perfect for snacking or adding to desserts and cereals. fruits fruits groceries mulberry food ingredient groceries cooking"
+      "search_text": "Mulberry groceries Mulberry Sweet and juicy mulberries, perfect for snacking or adding to desserts and cereals. fruits fruits groceries mulberry mulberries snacking desserts cereals snacking desserts cereals human food groceries"
     },
     {
       "product_id": 188683761445121761,
-      "search_text": "Nescafe Coffee groceries Nescafe Coffee Quality coffee from Nescafe, available in various blends for a rich and satisfying cup. beverages coffee beverages coffee groceries nescafe food ingredient groceries cooking beverage drink"
+      "search_text": "Nescafe Coffee groceries Nescafe Coffee Quality coffee from Nescafe, available in various blends for a rich and satisfying cup. beverages coffee beverages coffee groceries nescafe nescafe coffee beverages brewing espresso drip coffee human food beverage home cooking"
     },
     {
       "product_id": 210458182443853018,
-      "search_text": "Potatoes groceries Potatoes Versatile and starchy potatoes, great for roasting, mashing, or as a side dish. vegetables vegetables groceries potatoes food ingredient groceries cooking vegetable produce stir fry side dish savory cooking"
+      "search_text": "Potatoes groceries Potatoes Versatile and starchy potatoes, great for roasting, mashing, or as a side dish. vegetables vegetables groceries potatoes potatoes starchy roasting mashing side dish roasting mashing side dish human food home cooking"
     },
     {
       "product_id": 188084632788118139,
-      "search_text": "Protein Powder groceries Protein Powder Nutrient-packed protein powder, ideal for supplementing your diet with essential proteins. health supplements health supplements groceries protein powder food ingredient groceries cooking"
+      "search_text": "Protein Powder groceries Protein Powder Nutrient-packed protein powder, ideal for supplementing your diet with essential proteins. health supplements health supplements groceries protein powder protein powder diet supplement health supplement protein shake smoothie protein bar human food fitness diet"
     },
     {
       "product_id": 209221850916049694,
-      "search_text": "Red Onions groceries Red Onions Flavorful and aromatic red onions, perfect for adding depth to your savory dishes. vegetables vegetables groceries red onions food ingredient groceries cooking vegetable produce aromatic stir fry side dish savory cooking soup base"
+      "search_text": "Red Onions groceries Red Onions Flavorful and aromatic red onions, perfect for adding depth to your savory dishes. vegetables vegetables groceries red onions red onions flavorful onions aromatic vegetables sauces marinades stews human food home cooking cooking ingredients"
     },
     {
       "product_id": 199756538810440647,
-      "search_text": "Rice groceries Rice High-quality rice, a staple for various cuisines and a versatile base for many dishes. grains grains groceries rice food ingredient groceries cooking staple carb fried rice base ingredient meal prep"
+      "search_text": "Rice groceries Rice High-quality rice, a staple for various cuisines and a versatile base for many dishes. grains grains groceries rice rice grain staple cuisine dish side dish stuffed porridge sushi paella human food home cooking groceries"
     },
     {
       "product_id": 199675584682983064,
-      "search_text": "Soft Drinks groceries Soft Drinks Assorted soft drinks in various flavors, perfect for refreshing beverages. beverages beverages groceries soft drinks food ingredient groceries cooking"
+      "search_text": "Soft Drinks groceries Soft Drinks Assorted soft drinks in various flavors, perfect for refreshing beverages. beverages beverages groceries soft drinks soft drinks beverages refreshing beverage refreshment"
     },
     {
       "product_id": 210366261969294081,
-      "search_text": "Strawberry groceries Strawberry Sweet and succulent strawberries, great for snacking, desserts, or blending into smoothies. fruits fruits groceries strawberry food ingredient groceries cooking"
+      "search_text": "Strawberry groceries Strawberry Sweet and succulent strawberries, great for snacking, desserts, or blending into smoothies. fruits fruits groceries strawberry strawberries snacking desserts smoothies snacking desserts smoothies human food home cooking"
     },
     {
       "product_id": 193343364595809614,
-      "search_text": "Tissue Paper Box groceries Tissue Paper Box Convenient tissue paper box for everyday use, providing soft and absorbent tissues. household essentials household essentials groceries tissue paper box food ingredient groceries cooking"
+      "search_text": "Tissue Paper Box groceries Tissue Paper Box Convenient tissue paper box for everyday use, providing soft and absorbent tissues. household essentials household essentials groceries tissue paper box tissue paper box soft tissues absorbent tissues household essentials"
     },
     {
       "product_id": 190020429939537878,
-      "search_text": "Water groceries Water Pure and refreshing bottled water, essential for staying hydrated throughout the day. beverages beverages groceries water food ingredient groceries cooking"
+      "search_text": "Water groceries Water Pure and refreshing bottled water, essential for staying hydrated throughout the day. beverages beverages groceries water water bottled refreshing hydration beverages human food"
     },
     {
       "product_id": 192507276867630127,
-      "search_text": "Decoration Swing home decoration Decoration Swing The Decoration Swing is a charming addition to your home decor. Crafted with intricate details, it adds a touch of elegance and whimsy to any room. home decor swing home decor swing home decoration"
+      "search_text": "Decoration Swing home decoration Decoration Swing The Decoration Swing is a charming addition to your home decor. Crafted with intricate details, it adds a touch of elegance and whimsy to any room. home decor swing home decor swing home decoration home decor swing decoration swing elegant swing whimsical decor home-decoration interior-decoration"
     },
     {
       "product_id": 196586973008997207,
-      "search_text": "Family Tree Photo Frame home decoration Family Tree Photo Frame The Family Tree Photo Frame is a sentimental and stylish way to display your cherished family memories. With multiple photo slots, it tells the story of your loved ones. home decor photo frame home decor photo frame home decoration family tree photo frame"
+      "search_text": "Family Tree Photo Frame home decoration Family Tree Photo Frame The Family Tree Photo Frame is a sentimental and stylish way to display your cherished family memories. With multiple photo slots, it tells the story of your loved ones. home decor photo frame home decor photo frame home decoration family tree photo frame family tree photo frame home decor home decoration sentimental gifts"
     },
     {
       "product_id": 208516438807693204,
-      "search_text": "House Showpiece Plant home decoration House Showpiece Plant The House Showpiece Plant is an artificial plant that brings a touch of nature to your home without the need for maintenance. It adds greenery and style to any space. home decor artificial plants home decor artificial plants home decoration house showpiece plant"
+      "search_text": "House Showpiece Plant home decoration House Showpiece Plant The House Showpiece Plant is an artificial plant that brings a touch of nature to your home without the need for maintenance. It adds greenery and style to any space. home decor artificial plants home decor artificial plants home decoration house showpiece plant artificial plant home decor greenery home-decoration home decor"
     },
     {
       "product_id": 197400711707482917,
-      "search_text": "Plant Pot home decoration Plant Pot The Plant Pot is a stylish container for your favorite plants. With a sleek design, it complements your indoor or outdoor garden, adding a modern touch to your plant display. home decor plant accessories home decor plant accessories home decoration plant pot"
+      "search_text": "Plant Pot home decoration Plant Pot The Plant Pot is a stylish container for your favorite plants. With a sleek design, it complements your indoor or outdoor garden, adding a modern touch to your plant display. home decor plant accessories home decor plant accessories home decoration plant pot plant pot container garden decor home decoration plant accessories"
     },
     {
       "product_id": 193960245022264772,
-      "search_text": "Table Lamp home decoration Table Lamp The Table Lamp is a functional and decorative lighting solution for your living space. With a modern design, it provides both ambient and task lighting, enhancing the atmosphere. home decor lighting home decor lighting home decoration table lamp"
+      "search_text": "Table Lamp home decoration Table Lamp The Table Lamp is a functional and decorative lighting solution for your living space. With a modern design, it provides both ambient and task lighting, enhancing the atmosphere. home decor lighting home decor lighting home decoration table lamp table lamp modern lighting ambient lighting task lighting home decoration interior design"
     },
     {
       "product_id": 214712998869859035,
-      "search_text": "Bamboo Spatula kitchen accessories Bamboo Spatula The Bamboo Spatula is a versatile kitchen tool made from eco-friendly bamboo. Ideal for flipping, stirring, and serving various dishes. kitchen tools utensils kitchen tools utensils kitchen accessories bamboo spatula"
+      "search_text": "Bamboo Spatula kitchen accessories Bamboo Spatula The Bamboo Spatula is a versatile kitchen tool made from eco-friendly bamboo. Ideal for flipping, stirring, and serving various dishes. kitchen tools utensils kitchen tools utensils kitchen accessories bamboo spatula bamboo spatula kitchen tool eco-friendly flipping stirring serving flipping stirring serving human food home cooking"
     },
     {
       "product_id": 187098088571916212,
-      "search_text": "Black Aluminium Cup kitchen accessories Black Aluminium Cup The Black Aluminium Cup is a stylish and durable cup suitable for both hot and cold beverages. Its sleek black design adds a modern touch to your drinkware collection. drinkware cups drinkware cups kitchen accessories black aluminium cup"
+      "search_text": "Black Aluminium Cup kitchen accessories Black Aluminium Cup The Black Aluminium Cup is a stylish and durable cup suitable for both hot and cold beverages. Its sleek black design adds a modern touch to your drinkware collection. drinkware cups drinkware cups kitchen accessories black aluminium cup black cup aluminium drinkware modern cup drinkware home"
     },
     {
       "product_id": 204550040001075400,
-      "search_text": "Black Whisk kitchen accessories Black Whisk The Black Whisk is a kitchen essential for whisking and beating ingredients. Its ergonomic handle and sleek design make it a practical and stylish tool. kitchen tools utensils kitchen tools utensils kitchen accessories black whisk"
+      "search_text": "Black Whisk kitchen accessories Black Whisk The Black Whisk is a kitchen essential for whisking and beating ingredients. Its ergonomic handle and sleek design make it a practical and stylish tool. kitchen tools utensils kitchen tools utensils kitchen accessories black whisk black whisk whisking tool beating ingredients whisking beating mixing human food home cooking kitchen accessories"
     }
   ],
   "product_embeddings": []

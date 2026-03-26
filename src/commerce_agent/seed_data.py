@@ -26,9 +26,10 @@ from pathlib import Path
 import re
 from urllib.parse import quote_plus
 from urllib.request import Request, urlopen
-from typing import Any
+from typing import Any, Protocol
 
 from .catalog import Catalog
+from .config import get_settings
 from .db_write import DatabaseWriter
 from .ids import SnowflakeLikeIdGenerator
 from .models import Product
@@ -50,6 +51,98 @@ class TinySeedBundle:
     product_review_stats: list[dict[str, Any]]
     product_search_documents: list[dict[str, Any]]
     product_embeddings: list[dict[str, Any]]
+
+
+class ProductMetadataEnricher(Protocol):
+    """Protocol for provider-backed product metadata enrichment."""
+
+    def enrich(self, source_product: dict[str, Any]) -> dict[str, list[str]]:
+        """Return retrieval-oriented metadata fields for one source product."""
+        ...
+
+
+class FallbackProductMetadataEnricher:
+    """Small local fallback when model-backed enrichment is unavailable."""
+
+    def enrich(self, source_product: dict[str, Any]) -> dict[str, list[str]]:
+        category = _normalize_category_name(str(source_product.get("category") or "misc"))
+        base_terms = [category] if category else []
+        if category == "groceries":
+            base_terms.extend(["food", "ingredient"])
+            audience_terms = ["human food"]
+        else:
+            audience_terms = [category] if category else []
+        return {
+            "search_terms": _unique_terms(base_terms),
+            "cooking_uses": [],
+            "audience_terms": _unique_terms(audience_terms),
+        }
+
+
+class BigModelProductMetadataEnricher:
+    """BigModel-backed metadata enricher for retrieval-oriented product fields."""
+
+    def __init__(self) -> None:
+        settings = get_settings().metadata
+        self.api_key = settings.api_key
+        self.base_url = settings.base_url
+        self.model_name = settings.model_name
+
+    def enrich(self, source_product: dict[str, Any]) -> dict[str, list[str]]:
+        if not self.api_key:
+            return FallbackProductMetadataEnricher().enrich(source_product)
+
+        payload = {
+            "title": source_product.get("title", ""),
+            "description": source_product.get("description", ""),
+            "category": source_product.get("category", ""),
+            "tags": source_product.get("tags", []),
+            "brand": source_product.get("brand", ""),
+        }
+        body = json.dumps(
+            {
+                "model": self.model_name,
+                "temperature": 0.1,
+                "response_format": {"type": "json_object"},
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": (
+                            "You enrich commerce products for retrieval. "
+                            "Return strict JSON with exactly 3 keys: search_terms, cooking_uses, audience_terms. "
+                            "Each value must be an array of short English strings. "
+                            "search_terms: concise retrieval terms grounded in the product record. "
+                            "cooking_uses: only include if this is suitable for human cooking or meal preparation; otherwise return []. "
+                            "audience_terms: indicate the usage domain, for example human food, pet food, home cooking, beverage, beauty, furniture. "
+                            "Do not invent unsupported facts. Keep each list short."
+                        ),
+                    },
+                    {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
+                ],
+            }
+        ).encode("utf-8")
+        request = Request(
+            f"{self.base_url}/chat/completions",
+            data=body,
+            headers={
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+                "User-Agent": "commerce-agent/0.1",
+            },
+            method="POST",
+        )
+        try:
+            with urlopen(request, timeout=20) as response:
+                response_payload = json.loads(response.read().decode("utf-8"))
+            content = response_payload["choices"][0]["message"]["content"]
+            parsed = json.loads(content)
+            return {
+                "search_terms": _unique_terms(_coerce_str_list(parsed.get("search_terms"))),
+                "cooking_uses": _unique_terms(_coerce_str_list(parsed.get("cooking_uses"))),
+                "audience_terms": _unique_terms(_coerce_str_list(parsed.get("audience_terms"))),
+            }
+        except Exception:
+            return FallbackProductMetadataEnricher().enrich(source_product)
 
 
 def build_tiny_seed(catalog: Catalog) -> TinySeedBundle:
@@ -135,9 +228,14 @@ def fetch_dummyjson_products(limit: int = 50, skip: int = 0) -> list[dict[str, A
     return payload["products"]
 
 
-def build_public_seed(products: list[dict[str, Any]]) -> TinySeedBundle:
+def build_public_seed(
+    products: list[dict[str, Any]],
+    *,
+    metadata_enricher: ProductMetadataEnricher | None = None,
+) -> TinySeedBundle:
     """Build one normalized seed bundle from public product rows."""
     generator = SnowflakeLikeIdGenerator()
+    metadata_enricher = metadata_enricher or build_product_metadata_enricher()
     categories = _build_named_categories(
         sorted({_normalize_category_name(str(item.get("category", "misc"))) for item in products}),
         entity="public_category",
@@ -157,7 +255,7 @@ def build_public_seed(products: list[dict[str, Any]]) -> TinySeedBundle:
         product_id = generator.stable("public_product", f"dummyjson:{source_product['id']}")
         category_name = _normalize_category_name(str(source_product.get("category", "misc")))
         image_tags = _public_image_tags(source_product)
-        metadata = _public_search_metadata(source_product)
+        metadata = metadata_enricher.enrich(source_product)
         seller_code = _public_seller_code(source_product)
         brand = str(source_product.get("brand") or source_product.get("title") or "Unknown Brand").strip()
         image_url = _primary_image_url(source_product)
@@ -182,6 +280,7 @@ def build_public_seed(products: list[dict[str, Any]]) -> TinySeedBundle:
                     "image_tags": image_tags,
                     "search_terms": metadata["search_terms"],
                     "cooking_uses": metadata["cooking_uses"],
+                    "audience_terms": metadata["audience_terms"],
                     "source": "dummyjson",
                     "source_product_id": int(source_product["id"]),
                 },
@@ -235,6 +334,7 @@ def build_public_seed(products: list[dict[str, Any]]) -> TinySeedBundle:
                         " ".join(image_tags),
                         " ".join(metadata["search_terms"]),
                         " ".join(metadata["cooking_uses"]),
+                        " ".join(metadata["audience_terms"]),
                     ]
                     if part.strip()
                 ),
@@ -477,50 +577,12 @@ def _public_image_tags(source_product: dict[str, Any]) -> list[str]:
     return result[:8]
 
 
-def _public_search_metadata(source_product: dict[str, Any]) -> dict[str, list[str]]:
-    """Derive richer searchable metadata for local grocery-oriented recall."""
-    category = _normalize_category_name(str(source_product.get("category") or "misc"))
-    title = str(source_product.get("title") or "").lower()
-    description = str(source_product.get("description") or "").lower()
-    tags = [str(tag).strip().lower() for tag in source_product.get("tags", []) if str(tag).strip()]
-    haystack = " ".join([title, description, " ".join(tags), category])
-
-    search_terms: list[str] = []
-    cooking_uses: list[str] = []
-
-    if category == "groceries":
-        search_terms.extend(["food", "ingredient", "groceries", "cooking"])
-
-    grocery_term_map = {
-        ("potato", "onion", "pepper", "cucumber"): (["vegetable", "produce"], ["stir fry", "side dish", "savory cooking"]),
-        ("egg",): (["protein", "breakfast ingredient"], ["stir fry", "fried rice", "quick meal"]),
-        ("rice",): (["staple", "carb"], ["fried rice", "base ingredient", "meal prep"]),
-        ("oil",): (["cooking oil", "pantry"], ["stir fry", "frying", "saute"]),
-        ("beef", "chicken", "fish", "steak"): (["protein", "meat", "seafood"], ["stir fry", "main dish", "savory cooking"]),
-        ("apple",): (["fruit", "snack"], ["fresh eating", "dessert", "salad"]),
-        ("honey",): (["sweetener", "pantry"], ["sauce", "marinade", "dressing"]),
-        ("coffee",): (["beverage"], ["drink"]),
-    }
-
-    for tokens, (extra_terms, uses) in grocery_term_map.items():
-        if any(token in haystack for token in tokens):
-            search_terms.extend(extra_terms)
-            cooking_uses.extend(uses)
-
-    if "pepper" in haystack:
-        search_terms.extend(["aromatic", "vegetable"])
-        cooking_uses.extend(["stir fry", "saute"])
-    if "onion" in haystack:
-        search_terms.extend(["aromatic", "vegetable"])
-        cooking_uses.extend(["stir fry", "soup base"])
-    if "dog food" in haystack or "cat food" in haystack:
-        search_terms.extend(["pet supplies"])
-        cooking_uses = []
-
-    return {
-        "search_terms": _unique_terms(search_terms),
-        "cooking_uses": _unique_terms(cooking_uses),
-    }
+def build_product_metadata_enricher() -> ProductMetadataEnricher:
+    """Resolve the active metadata enricher from centralized settings."""
+    settings = get_settings().metadata
+    if settings.provider == "bigmodel":
+        return BigModelProductMetadataEnricher()
+    return FallbackProductMetadataEnricher()
 
 
 def _unique_terms(values: list[str]) -> list[str]:
@@ -533,6 +595,13 @@ def _unique_terms(values: list[str]) -> list[str]:
             seen.add(cleaned)
             result.append(cleaned)
     return result
+
+
+def _coerce_str_list(value: object) -> list[str]:
+    """Coerce one unknown JSON field into a plain string list."""
+    if not isinstance(value, list):
+        return []
+    return [str(item) for item in value if str(item).strip()]
 
 
 def _image_summary_from_product(source_product: dict[str, Any]) -> str:

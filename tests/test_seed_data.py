@@ -51,7 +51,15 @@ def test_build_public_seed_keeps_media_and_search_docs_on_same_product() -> None
         }
     ]
 
-    bundle = build_public_seed(products)
+    class StubMetadataEnricher:
+        def enrich(self, source_product):
+            return {
+                "search_terms": ["camera", "travel"],
+                "cooking_uses": [],
+                "audience_terms": ["bags"],
+            }
+
+    bundle = build_public_seed(products, metadata_enricher=StubMetadataEnricher())
 
     assert len(bundle.products) == 1
     assert len(bundle.product_media) == 1
@@ -60,12 +68,21 @@ def test_build_public_seed_keeps_media_and_search_docs_on_same_product() -> None
     assert bundle.product_search_documents[0]["product_id"] == bundle.products[0]["id"]
     assert bundle.product_media[0]["url"] == "https://cdn.example.com/camera-backpack.webp"
     assert "Camera Backpack" in bundle.product_search_documents[0]["search_text"]
-    assert "search_terms" in bundle.products[0]["attributes_jsonb"]
-    assert "cooking_uses" in bundle.products[0]["attributes_jsonb"]
-    assert bundle.products[0]["id"] == build_public_seed(products).products[0]["id"]
+    assert bundle.products[0]["attributes_jsonb"]["search_terms"] == ["camera", "travel"]
+    assert bundle.products[0]["attributes_jsonb"]["cooking_uses"] == []
+    assert bundle.products[0]["attributes_jsonb"]["audience_terms"] == ["bags"]
+    assert bundle.products[0]["id"] == build_public_seed(products, metadata_enricher=StubMetadataEnricher()).products[0]["id"]
 
 
-def test_build_public_seed_adds_cooking_metadata_for_grocery_items() -> None:
+def test_build_public_seed_uses_metadata_enricher_output() -> None:
+    class StubMetadataEnricher:
+        def enrich(self, source_product):
+            return {
+                "search_terms": ["food", "ingredient"],
+                "cooking_uses": ["stir fry"],
+                "audience_terms": ["human food"],
+            }
+
     bundle = build_public_seed(
         [
             {
@@ -85,12 +102,14 @@ def test_build_public_seed_adds_cooking_metadata_for_grocery_items() -> None:
                 "thumbnail": "https://cdn.example.com/pepper-thumb.webp",
                 "reviews": [{"rating": 4}],
             }
-        ]
+        ],
+        metadata_enricher=StubMetadataEnricher(),
     )
 
     attributes = bundle.products[0]["attributes_jsonb"]
     assert "food" in attributes["search_terms"]
     assert "stir fry" in attributes["cooking_uses"]
+    assert "human food" in attributes["audience_terms"]
     assert "stir fry" in bundle.product_search_documents[0]["search_text"]
 
 

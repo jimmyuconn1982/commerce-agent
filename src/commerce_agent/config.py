@@ -69,6 +69,16 @@ class ChatSettings:
 
 
 @dataclass(slots=True)
+class MetadataSettings:
+    """Configuration for product metadata enrichment providers and models."""
+
+    provider: str
+    model_name: str
+    api_key: str
+    base_url: str
+
+
+@dataclass(slots=True)
 class WebSettings:
     """Configuration for the local FastAPI host and port."""
 
@@ -84,6 +94,7 @@ class CommerceAgentSettings:
     embeddings: EmbeddingSettings
     vision: VisionSettings
     chat: ChatSettings
+    metadata: MetadataSettings
     web: WebSettings
 
 
@@ -116,6 +127,12 @@ def get_settings() -> CommerceAgentSettings:
             model_name=os.getenv("COMMERCE_AGENT_CHAT_MODEL") or "glm-4-flash",
             api_key=os.getenv("COMMERCE_AGENT_CHAT_API_KEY") or os.getenv("BIGMODEL_API_KEY", ""),
             base_url=(os.getenv("COMMERCE_AGENT_CHAT_BASE_URL") or os.getenv("BIGMODEL_BASE_URL") or "https://open.bigmodel.cn/api/paas/v4").rstrip("/"),
+        ),
+        metadata=MetadataSettings(
+            provider=(os.getenv("COMMERCE_AGENT_METADATA_PROVIDER") or "bigmodel").strip().lower(),
+            model_name=os.getenv("COMMERCE_AGENT_METADATA_MODEL") or "glm-4-flash",
+            api_key=os.getenv("COMMERCE_AGENT_METADATA_API_KEY") or os.getenv("BIGMODEL_API_KEY", ""),
+            base_url=(os.getenv("COMMERCE_AGENT_METADATA_BASE_URL") or os.getenv("BIGMODEL_BASE_URL") or "https://open.bigmodel.cn/api/paas/v4").rstrip("/"),
         ),
         web=WebSettings(
             host=os.getenv("COMMERCE_AGENT_HOST", "127.0.0.1"),

@@ -134,6 +134,7 @@ def test_debug_products_returns_joined_rows() -> None:
     assert "image_tags" in first
     assert "search_terms" in first
     assert "cooking_uses" in first
+    assert "audience_terms" in first
 
 
 def test_debug_product_detail_returns_joined_detail() -> None:
@@ -148,6 +149,7 @@ def test_debug_product_detail_returns_joined_detail() -> None:
     assert "embeddings" in body
     assert "search_terms" in body["product"]
     assert "cooking_uses" in body["product"]
+    assert "audience_terms" in body["product"]
 
 
 def test_debug_run_uses_same_pipeline_shape(monkeypatch) -> None:

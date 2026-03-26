@@ -26,7 +26,7 @@ class RoutedMessageResponse(BaseModel):
     analysis: dict[str, object] | None = None
     matches: list[dict[str, object]] = Field(default_factory=list)
     trace: dict[str, object] | None = None
-    limit: int = Field(default=5, ge=1, le=20)
+    limit: int = Field(default=10, ge=1, le=20)
 
 
 class DebugProductResponse(BaseModel):
@@ -55,6 +55,7 @@ class DebugProductResponse(BaseModel):
     image_tags: list[str] = Field(default_factory=list)
     search_terms: list[str] = Field(default_factory=list)
     cooking_uses: list[str] = Field(default_factory=list)
+    audience_terms: list[str] = Field(default_factory=list)
     attributes: dict[str, object] = Field(default_factory=dict)
     has_text_embedding: bool = False
     has_image_embedding: bool = False

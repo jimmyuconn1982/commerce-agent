@@ -387,7 +387,7 @@ async function sendCurrentMessage() {
 async function invokeMessage(prompt, file, imageUrl) {
   const form = new FormData();
   form.append("text", prompt);
-  form.append("limit", "5");
+  form.append("limit", "10");
   if (file) {
     form.append("file", file);
   }

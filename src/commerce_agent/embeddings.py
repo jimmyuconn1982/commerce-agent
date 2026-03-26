@@ -156,7 +156,8 @@ def build_text_embeddings(
                     p.short_description,
                     p.long_description,
                     COALESCE(c.name, '') AS category_name,
-                    COALESCE(psd.search_text, '') AS search_text
+                    COALESCE(psd.search_text, '') AS search_text,
+                    p.attributes_jsonb
                 FROM products p
                 LEFT JOIN categories c ON c.id = p.category_id
                 LEFT JOIN product_search_documents psd ON psd.product_id = p.id
@@ -165,11 +166,14 @@ def build_text_embeddings(
             )
             rows = cur.fetchall()
         for row in rows:
-            product_id, title, short_description, long_description, category_name, search_text = row
-            source_text = " ".join(
-                part.strip()
-                for part in [title, short_description, long_description, category_name, search_text]
-                if part and part.strip()
+            product_id, title, short_description, long_description, category_name, search_text, attributes = row
+            source_text = _build_weighted_text_embedding_source(
+                title=title,
+                short_description=short_description,
+                long_description=long_description,
+                category_name=category_name,
+                search_text=search_text,
+                attributes=attributes if isinstance(attributes, dict) else {},
             )
             embedding = provider.embed_text(source_text)
             rows_to_write.append(
@@ -209,7 +213,8 @@ def build_image_embeddings(
                     p.id,
                     p.title,
                     COALESCE(pm.url, '') AS image_url,
-                    COALESCE(pm.alt_text, '') AS alt_text
+                    COALESCE(pm.alt_text, '') AS alt_text,
+                    p.attributes_jsonb
                 FROM products p
                 JOIN product_media pm ON pm.product_id = p.id AND pm.is_primary = TRUE
                 ORDER BY p.id
@@ -217,8 +222,13 @@ def build_image_embeddings(
             )
             rows = cur.fetchall()
         for row in rows:
-            product_id, title, image_url, alt_text = row
-            source = " ".join(part.strip() for part in [title, alt_text, image_url] if part and part.strip())
+            product_id, title, image_url, alt_text, attributes = row
+            source = _build_weighted_image_embedding_source(
+                title=title,
+                image_url=image_url,
+                alt_text=alt_text,
+                attributes=attributes if isinstance(attributes, dict) else {},
+            )
             embedding = provider.embed_image_reference(source)
             rows_to_write.append(
                 {
@@ -304,3 +314,66 @@ def semantic_index_status_cli() -> None:
 def vector_literal(values: list[float]) -> str:
     """Serialize a Python vector into the PostgreSQL vector literal format."""
     return "[" + ",".join(f"{value:.8f}" for value in values) + "]"
+
+
+def _build_weighted_text_embedding_source(
+    *,
+    title: str,
+    short_description: str,
+    long_description: str,
+    category_name: str,
+    search_text: str,
+    attributes: dict[str, object],
+) -> str:
+    """Build a weighted text representation so high-signal product metadata matters more."""
+    search_terms = _join_terms(attributes.get("search_terms"))
+    cooking_uses = _join_terms(attributes.get("cooking_uses"))
+    audience_terms = _join_terms(attributes.get("audience_terms"))
+    text_tags = _join_terms(attributes.get("tags"))
+    image_tags = _join_terms(attributes.get("image_tags"))
+    parts = [
+        title,
+        title,
+        short_description,
+        long_description,
+        category_name,
+        search_text,
+        f"search terms {search_terms}" if search_terms else "",
+        f"search terms {search_terms}" if search_terms else "",
+        f"cooking uses {cooking_uses}" if cooking_uses else "",
+        f"cooking uses {cooking_uses}" if cooking_uses else "",
+        f"audience terms {audience_terms}" if audience_terms else "",
+        f"audience terms {audience_terms}" if audience_terms else "",
+        f"text tags {text_tags}" if text_tags else "",
+        f"image tags {image_tags}" if image_tags else "",
+    ]
+    return " ".join(part.strip() for part in parts if part and part.strip())
+
+
+def _build_weighted_image_embedding_source(
+    *,
+    title: str,
+    image_url: str,
+    alt_text: str,
+    attributes: dict[str, object],
+) -> str:
+    """Build an image-side semantic text that preserves visual and product cues."""
+    image_tags = _join_terms(attributes.get("image_tags"))
+    search_terms = _join_terms(attributes.get("search_terms"))
+    audience_terms = _join_terms(attributes.get("audience_terms"))
+    parts = [
+        title,
+        alt_text,
+        f"image tags {image_tags}" if image_tags else "",
+        f"search terms {search_terms}" if search_terms else "",
+        f"audience terms {audience_terms}" if audience_terms else "",
+        image_url,
+    ]
+    return " ".join(part.strip() for part in parts if part and part.strip())
+
+
+def _join_terms(value: object) -> str:
+    """Join one list-like metadata field into a stable text segment."""
+    if not isinstance(value, list):
+        return ""
+    return " ".join(str(item).strip() for item in value if str(item).strip())
